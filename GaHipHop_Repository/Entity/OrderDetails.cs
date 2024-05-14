@@ -22,7 +22,7 @@ namespace GaHipHop_Repository.Entity
         [ForeignKey("ProductId")]
         public required Product Product { get; set; }
 
-        [ForeignKey("orderId")]
-        public Order order { get; set; }
+        [ForeignKey("OrderId")]
+        public required Order Order { get; set; }
     }
 }
