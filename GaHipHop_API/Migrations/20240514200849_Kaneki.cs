@@ -154,15 +154,14 @@ namespace GaHipHop_API.Migrations
                     CreateDate = table.Column<DateTime>(type: "datetime(6)", nullable: false),
                     TotalPrice = table.Column<double>(type: "double", nullable: false),
                     Status = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    adminId = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4")
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Order", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Order_Admin_adminId",
-                        column: x => x.adminId,
+                        name: "FK_Order_Admin_AdminId",
+                        column: x => x.AdminId,
                         principalTable: "Admin",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -251,15 +250,14 @@ namespace GaHipHop_API.Migrations
                     ProductId = table.Column<long>(type: "bigint", nullable: false),
                     OrderId = table.Column<long>(type: "bigint", nullable: false),
                     OrderQuantity = table.Column<int>(type: "int", nullable: false),
-                    OrderPrice = table.Column<double>(type: "double", nullable: false),
-                    orderId = table.Column<long>(type: "bigint", nullable: false)
+                    OrderPrice = table.Column<double>(type: "double", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_OrderDetails", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_OrderDetails_Order_orderId",
-                        column: x => x.orderId,
+                        name: "FK_OrderDetails_Order_OrderId",
+                        column: x => x.OrderId,
                         principalTable: "Order",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -283,9 +281,9 @@ namespace GaHipHop_API.Migrations
                 column: "Product_Id");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Order_adminId",
+                name: "IX_Order_AdminId",
                 table: "Order",
-                column: "adminId");
+                column: "AdminId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Order_UserId",
@@ -293,9 +291,9 @@ namespace GaHipHop_API.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_OrderDetails_orderId",
+                name: "IX_OrderDetails_OrderId",
                 table: "OrderDetails",
-                column: "orderId");
+                column: "OrderId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_OrderDetails_ProductId",

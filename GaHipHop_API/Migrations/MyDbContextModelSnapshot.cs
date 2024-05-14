@@ -194,14 +194,11 @@ namespace GaHipHop_API.Migrations
                     b.Property<long>("UserId")
                         .HasColumnType("bigint");
 
-                    b.Property<long>("adminId")
-                        .HasColumnType("bigint");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("AdminId");
 
-                    b.HasIndex("adminId");
+                    b.HasIndex("UserId");
 
                     b.ToTable("Order");
                 });
@@ -226,14 +223,11 @@ namespace GaHipHop_API.Migrations
                     b.Property<long>("ProductId")
                         .HasColumnType("bigint");
 
-                    b.Property<long>("orderId")
-                        .HasColumnType("bigint");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("ProductId");
+                    b.HasIndex("OrderId");
 
-                    b.HasIndex("orderId");
+                    b.HasIndex("ProductId");
 
                     b.ToTable("OrderDetails");
                 });
@@ -367,40 +361,40 @@ namespace GaHipHop_API.Migrations
 
             modelBuilder.Entity("GaHipHop_Repository.Entity.Order", b =>
                 {
+                    b.HasOne("GaHipHop_Repository.Entity.Admin", "Admin")
+                        .WithMany()
+                        .HasForeignKey("AdminId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("GaHipHop_Repository.Entity.UserInfo", "UserInfo")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("GaHipHop_Repository.Entity.Admin", "admin")
-                        .WithMany()
-                        .HasForeignKey("adminId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Navigation("Admin");
 
                     b.Navigation("UserInfo");
-
-                    b.Navigation("admin");
                 });
 
             modelBuilder.Entity("GaHipHop_Repository.Entity.OrderDetails", b =>
                 {
+                    b.HasOne("GaHipHop_Repository.Entity.Order", "Order")
+                        .WithMany()
+                        .HasForeignKey("OrderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("GaHipHop_Repository.Entity.Product", "Product")
                         .WithMany()
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("GaHipHop_Repository.Entity.Order", "order")
-                        .WithMany()
-                        .HasForeignKey("orderId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Navigation("Order");
 
                     b.Navigation("Product");
-
-                    b.Navigation("order");
                 });
 
             modelBuilder.Entity("GaHipHop_Repository.Entity.Product", b =>
