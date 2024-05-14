@@ -33,7 +33,7 @@ namespace GaHipHop_Repository.Entity
         [ForeignKey("UserId")]
         public required UserInfo UserInfo { get; set; }
 
-        [ForeignKey("adminId")]
-        public Admin admin { get; set; }
+        [ForeignKey("AdminId")]
+        public required Admin Admin { get; set; }
     }
 }
