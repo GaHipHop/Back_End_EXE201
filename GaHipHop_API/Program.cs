@@ -1,9 +1,10 @@
 ﻿using AutoMapper;
 using GaHipHop_Model.Mapper;
 using GaHipHop_Repository.Entity;
-using GaHipHop_Repository.Interfaces;
+using GaHipHop_Repository.Repository.Interfaces;
 using Microsoft.EntityFrameworkCore;
-using Respository;
+using GaHipHop_Repository;
+using GaHipHop_Repository.Repository;
 
 var builder = WebApplication.CreateBuilder(args);
 
