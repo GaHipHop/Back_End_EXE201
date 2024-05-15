@@ -1,11 +1,12 @@
 ﻿
 using GaHipHop_Repository.Entity;
+using GaHipHop_Repository.Repository;
 
-namespace Respository
+namespace GaHipHop_Repository
 {
     public class UnitOfWork : IDisposable
     {
-        private MyDbContext context = new MyDbContext();
+        private MyDbContext _context = new MyDbContext();
         private GenericRepository<Admin> _adminRepository;
         private GenericRepository<Product> _productRepository;
         private GenericRepository<Contact> _contactRepository;
@@ -29,7 +30,7 @@ namespace Respository
 
                 if (this._adminRepository == null)
                 {
-                    this._adminRepository = new GenericRepository<Admin>(context);
+                    this._adminRepository = new GenericRepository<Admin>(_context);
                 }
                 return _adminRepository;
             }
@@ -41,7 +42,7 @@ namespace Respository
 
                 if (this._productRepository == null)
                 {
-                    this._productRepository = new GenericRepository<Product>(context);
+                    this._productRepository = new GenericRepository<Product>(_context);
                 }
                 return _productRepository;
             }
@@ -53,7 +54,7 @@ namespace Respository
 
                 if (this._contactRepository == null)
                 {
-                    this._contactRepository = new GenericRepository<Contact>(context);
+                    this._contactRepository = new GenericRepository<Contact>(_context);
                 }
                 return _contactRepository;
             }
@@ -65,7 +66,7 @@ namespace Respository
 
                 if (this._discountRepository == null)
                 {
-                    this._discountRepository = new GenericRepository<Discount>(context);
+                    this._discountRepository = new GenericRepository<Discount>(_context);
                 }
                 return _discountRepository;
             }
@@ -77,7 +78,7 @@ namespace Respository
 
                 if (this._imgRepository == null)
                 {
-                    this._imgRepository = new GenericRepository<Img>(context);
+                    this._imgRepository = new GenericRepository<Img>(_context);
                 }
                 return _imgRepository;
             }
@@ -89,7 +90,7 @@ namespace Respository
 
                 if (this._orderDetailsRepository == null)
                 {
-                    this._orderDetailsRepository = new GenericRepository<OrderDetails>(context);
+                    this._orderDetailsRepository = new GenericRepository<OrderDetails>(_context);
                 }
                 return _orderDetailsRepository;
             }
@@ -101,7 +102,7 @@ namespace Respository
 
                 if (this._roleRepository == null)
                 {
-                    this._roleRepository = new GenericRepository<Role>(context);
+                    this._roleRepository = new GenericRepository<Role>(_context);
                 }
                 return _roleRepository;
             }
@@ -113,7 +114,7 @@ namespace Respository
 
                 if (this._userInfoRepository == null)
                 {
-                    this._userInfoRepository = new GenericRepository<UserInfo>(context);
+                    this._userInfoRepository = new GenericRepository<UserInfo>(_context);
                 }
                 return _userInfoRepository;
             }
@@ -125,7 +126,7 @@ namespace Respository
 
                 if (this._orderRepository == null)
                 {
-                    this._orderRepository = new GenericRepository<Order>(context);
+                    this._orderRepository = new GenericRepository<Order>(_context);
                 }
                 return _orderRepository;
             }
@@ -133,7 +134,7 @@ namespace Respository
 
         public void Save()
         {
-            context.SaveChanges();
+            _context.SaveChanges();
         }
 
         private bool disposed = false;
@@ -144,7 +145,7 @@ namespace Respository
             {
                 if (disposing)
                 {
-                    context.Dispose();
+                    _context.Dispose();
                 }
             }
             this.disposed = true;
