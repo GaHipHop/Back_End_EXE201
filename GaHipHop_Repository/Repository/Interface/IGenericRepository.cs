@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq.Expressions;
 
-namespace GaHipHop_Repository.Interfaces
+namespace GaHipHop_Repository.Repository.Interfaces
 {
     public interface IGenericRepository<TEntity> where TEntity : class
     {
