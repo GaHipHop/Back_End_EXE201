@@ -7,7 +7,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Service\Interfaces\" />
+    <ProjectReference Include="..\GaHipHop_Model\GaHipHop_Model.csproj" />
+    <ProjectReference Include="..\GaHipHop_Repository\GaHipHop_Repository.csproj" />
   </ItemGroup>
 
 </Project>
