@@ -1,4 +1,7 @@
 ﻿using AutoMapper;
+using GaHipHop_Model.DTO.Request;
+using GaHipHop_Model.DTO.Respone;
+using GaHipHop_Repository.Entity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,10 +16,11 @@ namespace GaHipHop_Model.Mapper
         public AutoMapperProfile()
         {
             //Request
-            //CreateMap<BidaClubRequest, BidaClub>().ReverseMap();
+            CreateMap<AdminRequest, Admin>().ReverseMap();
 
             //Reponse
-            //CreateMap<BidaClubReponse, BidaClub>().ReverseMap();
+            CreateMap<Admin, AdminResponse>()
+            .ForMember(dest => dest.Role, opt => opt.MapFrom(src => src.Role));
         }
     }
 }
