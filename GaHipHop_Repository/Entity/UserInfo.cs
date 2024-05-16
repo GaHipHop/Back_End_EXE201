@@ -7,6 +7,7 @@ namespace GaHipHop_Repository.Entity
     public class UserInfo
     {
         [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public long Id { get; set; }
 
         [Required]
