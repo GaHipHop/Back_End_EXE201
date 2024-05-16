@@ -7,6 +7,7 @@ namespace GaHipHop_Repository.Entity
     public class Discount
     {
         [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public long Id { get; set; }
 
         [Required]
