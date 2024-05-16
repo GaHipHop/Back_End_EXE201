@@ -1,21 +1,22 @@
 ﻿
 using GaHipHop_Repository.Entity;
 using GaHipHop_Repository.Repository;
+using GaHipHop_Repository.Repository.Interfaces;
 
 namespace GaHipHop_Repository
 {
     public class UnitOfWork : IDisposable
     {
         private MyDbContext _context = new MyDbContext();
-        private GenericRepository<Admin> _adminRepository;
-        private GenericRepository<Product> _productRepository;
-        private GenericRepository<Contact> _contactRepository;
-        private GenericRepository<Discount> _discountRepository;
-        private GenericRepository<Img> _imgRepository;
-        private GenericRepository<Order> _orderRepository;
-        private GenericRepository<OrderDetails> _orderDetailsRepository;
-        private GenericRepository<Role> _roleRepository;
-        private GenericRepository<UserInfo> _userInfoRepository;
+        private IGenericRepository<Admin> _adminRepository;
+        private IGenericRepository<Product> _productRepository;
+        private IGenericRepository<Contact> _contactRepository;
+        private IGenericRepository<Discount> _discountRepository;
+        private IGenericRepository<Img> _imgRepository;
+        private IGenericRepository<Order> _orderRepository;
+        private IGenericRepository<OrderDetails> _orderDetailsRepository;
+        private IGenericRepository<Role> _roleRepository;
+        private IGenericRepository<UserInfo> _userInfoRepository;
 
 
         public UnitOfWork()
@@ -24,7 +25,7 @@ namespace GaHipHop_Repository
             //Ang Phu co ny
         }
 
-        public GenericRepository<Admin> AdminRepository
+        public IGenericRepository<Admin> AdminRepository
         {
             get
             {
@@ -36,7 +37,7 @@ namespace GaHipHop_Repository
                 return _adminRepository;
             }
         }
-        public GenericRepository<Product> ProductRepository
+        public IGenericRepository<Product> ProductRepository
         {
             get
             {
@@ -48,7 +49,7 @@ namespace GaHipHop_Repository
                 return _productRepository;
             }
         }
-        public GenericRepository<Contact> ContactRepository
+        public IGenericRepository<Contact> ContactRepository
         {
             get
             {
@@ -60,7 +61,7 @@ namespace GaHipHop_Repository
                 return _contactRepository;
             }
         }
-        public GenericRepository<Discount> DiscountRepository
+        public IGenericRepository<Discount> DiscountRepository
         {
             get
             {
@@ -72,7 +73,7 @@ namespace GaHipHop_Repository
                 return _discountRepository;
             }
         }
-        public GenericRepository<Img> ImgRepository
+        public IGenericRepository<Img> ImgRepository
         {
             get
             {
@@ -84,7 +85,7 @@ namespace GaHipHop_Repository
                 return _imgRepository;
             }
         }
-        public GenericRepository<OrderDetails> OrderDetailsRepository
+        public IGenericRepository<OrderDetails> OrderDetailsRepository
         {
             get
             {
@@ -96,7 +97,7 @@ namespace GaHipHop_Repository
                 return _orderDetailsRepository;
             }
         }
-        public GenericRepository<Role> RoleRepository
+        public IGenericRepository<Role> RoleRepository
         {
             get
             {
@@ -108,7 +109,7 @@ namespace GaHipHop_Repository
                 return _roleRepository;
             }
         }
-        public GenericRepository<UserInfo> UserInfoRepository
+        public IGenericRepository<UserInfo> UserInfoRepository
         {
             get
             {
@@ -120,7 +121,7 @@ namespace GaHipHop_Repository
                 return _userInfoRepository;
             }
         }
-        public GenericRepository<Order> OrderRepository
+        public IGenericRepository<Order> OrderRepository
         {
             get
             {
