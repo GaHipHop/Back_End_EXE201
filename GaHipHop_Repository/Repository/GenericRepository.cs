@@ -1,11 +1,12 @@
 ﻿using GaHipHop_Repository.Entity;
+using GaHipHop_Repository.Repository.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 
 namespace GaHipHop_Repository.Repository
 {
 
-    public class GenericRepository<TEntity> where TEntity : class
+    public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEntity : class
     {
         internal MyDbContext context;
         internal DbSet<TEntity> dbSet;
@@ -21,8 +22,8 @@ namespace GaHipHop_Repository.Repository
             Expression<Func<TEntity, bool>> filter = null,
             Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null,
             string includeProperties = "",
-            int? pageIndex = null, // Optional parameter for pagination (page number)
-            int? pageSize = null)  // Optional parameter for pagination (number of records per page)
+            int? pageIndex = null,
+            int? pageSize = null)
         {
             IQueryable<TEntity> query = dbSet;
 

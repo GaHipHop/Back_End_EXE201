@@ -7,6 +7,7 @@ namespace GaHipHop_Repository.Entity
     public class Product
     {
         [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public long Id { get; set; }
 
         public long AdminId { get; set; }

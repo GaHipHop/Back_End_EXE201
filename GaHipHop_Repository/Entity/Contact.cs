@@ -7,6 +7,7 @@ namespace GaHipHop_Repository.Entity
     public class Contact
     {
         [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
 
         [Required]

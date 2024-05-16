@@ -30,7 +30,7 @@ namespace GaHipHop_API.Migrations
 
                     MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<long>("Id"));
 
-                    b.Property<string>("Passưord")
+                    b.Property<string>("Password")
                         .IsRequired()
                         .HasColumnType("longtext");
 

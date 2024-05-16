@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GaHipHop_API.Migrations
 {
     [DbContext(typeof(MyDbContext))]
-    [Migration("20240514200752_Dante")]
-    partial class Dante
+    [Migration("20240516171217_Kaneki")]
+    partial class Kaneki
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -33,7 +33,7 @@ namespace GaHipHop_API.Migrations
 
                     MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<long>("Id"));
 
-                    b.Property<string>("Passưord")
+                    b.Property<string>("Password")
                         .IsRequired()
                         .HasColumnType("longtext");
 
