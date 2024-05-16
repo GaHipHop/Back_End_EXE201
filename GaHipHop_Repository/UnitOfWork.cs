@@ -18,10 +18,11 @@ namespace GaHipHop_Repository
         private GenericRepository<UserInfo> _userInfoRepository;
 
 
-        //public UnitOfWork(SqldataContext context)
-        //{
-        //    this.context = context;
-        //}
+        public UnitOfWork()
+        {
+            //Ang Tem GAY lam
+            //Ang Phu co ny
+        }
 
         public GenericRepository<Admin> AdminRepository
         {
