@@ -21,6 +21,7 @@ namespace GaHipHop_Repository
         public UnitOfWork()
         {
             //Ang Tem GAY lam
+            //Ang Phu co ny
         }
 
         public GenericRepository<Admin> AdminRepository
