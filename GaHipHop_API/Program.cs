@@ -1,9 +1,7 @@
 ﻿using AutoMapper;
 using GaHipHop_Model.Mapper;
 using GaHipHop_Repository.Entity;
-using GaHipHop_Repository.Repository.Interfaces;
 using Microsoft.EntityFrameworkCore;
-using GaHipHop_Repository;
 using GaHipHop_Repository.Repository;
 using GaHipHop_Service.Service.Interfaces;
 using GaHipHop_Service.Service;
@@ -13,7 +11,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 
-builder.Services.AddScoped<UnitOfWork>();
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 
