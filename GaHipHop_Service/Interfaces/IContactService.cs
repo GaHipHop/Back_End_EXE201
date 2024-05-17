@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GaHipHop_Repository.Entity;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,5 +9,6 @@ namespace GaHipHop_Service.Interfaces
 {
     public interface IContactService
     {
+        Task<IEnumerable<Contact>> getAllContacts();
     }
 }
