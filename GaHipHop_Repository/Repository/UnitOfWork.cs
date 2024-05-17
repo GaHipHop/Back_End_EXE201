@@ -1,11 +1,8 @@
-﻿
-using GaHipHop_Repository.Entity;
-using GaHipHop_Repository.Repository;
-using GaHipHop_Repository.Repository.Interfaces;
+﻿using GaHipHop_Repository.Entity;
 
-namespace GaHipHop_Repository
+namespace GaHipHop_Repository.Repository
 {
-    public class UnitOfWork : IDisposable
+    public class UnitOfWork : IUnitOfWork
     {
         private MyDbContext _context = new MyDbContext();
         private IGenericRepository<Admin> _adminRepository;
@@ -30,9 +27,9 @@ namespace GaHipHop_Repository
             get
             {
 
-                if (this._adminRepository == null)
+                if (_adminRepository == null)
                 {
-                    this._adminRepository = new GenericRepository<Admin>(_context);
+                    _adminRepository = new GenericRepository<Admin>(_context);
                 }
                 return _adminRepository;
             }
@@ -42,9 +39,9 @@ namespace GaHipHop_Repository
             get
             {
 
-                if (this._productRepository == null)
+                if (_productRepository == null)
                 {
-                    this._productRepository = new GenericRepository<Product>(_context);
+                    _productRepository = new GenericRepository<Product>(_context);
                 }
                 return _productRepository;
             }
@@ -54,9 +51,9 @@ namespace GaHipHop_Repository
             get
             {
 
-                if (this._contactRepository == null)
+                if (_contactRepository == null)
                 {
-                    this._contactRepository = new GenericRepository<Contact>(_context);
+                    _contactRepository = new GenericRepository<Contact>(_context);
                 }
                 return _contactRepository;
             }
@@ -66,9 +63,9 @@ namespace GaHipHop_Repository
             get
             {
 
-                if (this._discountRepository == null)
+                if (_discountRepository == null)
                 {
-                    this._discountRepository = new GenericRepository<Discount>(_context);
+                    _discountRepository = new GenericRepository<Discount>(_context);
                 }
                 return _discountRepository;
             }
@@ -78,9 +75,9 @@ namespace GaHipHop_Repository
             get
             {
 
-                if (this._imgRepository == null)
+                if (_imgRepository == null)
                 {
-                    this._imgRepository = new GenericRepository<Img>(_context);
+                    _imgRepository = new GenericRepository<Img>(_context);
                 }
                 return _imgRepository;
             }
@@ -90,9 +87,9 @@ namespace GaHipHop_Repository
             get
             {
 
-                if (this._orderDetailsRepository == null)
+                if (_orderDetailsRepository == null)
                 {
-                    this._orderDetailsRepository = new GenericRepository<OrderDetails>(_context);
+                    _orderDetailsRepository = new GenericRepository<OrderDetails>(_context);
                 }
                 return _orderDetailsRepository;
             }
@@ -102,9 +99,9 @@ namespace GaHipHop_Repository
             get
             {
 
-                if (this._roleRepository == null)
+                if (_roleRepository == null)
                 {
-                    this._roleRepository = new GenericRepository<Role>(_context);
+                    _roleRepository = new GenericRepository<Role>(_context);
                 }
                 return _roleRepository;
             }
@@ -114,9 +111,9 @@ namespace GaHipHop_Repository
             get
             {
 
-                if (this._userInfoRepository == null)
+                if (_userInfoRepository == null)
                 {
-                    this._userInfoRepository = new GenericRepository<UserInfo>(_context);
+                    _userInfoRepository = new GenericRepository<UserInfo>(_context);
                 }
                 return _userInfoRepository;
             }
@@ -126,13 +123,15 @@ namespace GaHipHop_Repository
             get
             {
 
-                if (this._orderRepository == null)
+                if (_orderRepository == null)
                 {
-                    this._orderRepository = new GenericRepository<Order>(_context);
+                    _orderRepository = new GenericRepository<Order>(_context);
                 }
                 return _orderRepository;
             }
         }
+
+        public IGenericRepository<Category> CategoryRepository => throw new NotImplementedException();
 
         public void Save()
         {
@@ -143,14 +142,14 @@ namespace GaHipHop_Repository
 
         protected virtual void Dispose(bool disposing)
         {
-            if (!this.disposed)
+            if (!disposed)
             {
                 if (disposing)
                 {
                     _context.Dispose();
                 }
             }
-            this.disposed = true;
+            disposed = true;
         }
 
         public void Dispose()

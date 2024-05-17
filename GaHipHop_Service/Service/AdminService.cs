@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
 using GaHipHop_Model.DTO.Request;
 using GaHipHop_Model.DTO.Respone;
-using GaHipHop_Repository;
 using GaHipHop_Repository.Entity;
+using GaHipHop_Repository.Repository;
 using GaHipHop_Service.Service.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -14,10 +14,10 @@ namespace GaHipHop_Service.Service
 {
     public class AdminService : IAdminService
     {
-        private readonly UnitOfWork _unitOfWork;
+        private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
 
-        public AdminService(UnitOfWork unitOfWork, IMapper mapper)
+        public AdminService(IUnitOfWork unitOfWork, IMapper mapper)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;

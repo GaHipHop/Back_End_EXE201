@@ -1,4 +1,8 @@
-﻿using GaHipHop_Service.Interfaces;
+﻿using AutoMapper;
+using GaHipHop_Repository;
+using GaHipHop_Repository.Entity;
+using GaHipHop_Repository.Repository;
+using GaHipHop_Service.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,10 +13,18 @@ namespace GaHipHop_Service.Service
 {
     public class ContactService : IContactService
     {
-        private readonly IContactService _contactService;
-        public ContactService(IContactService contactService)
+        private readonly IUnitOfWork _unitOfWork;
+        private readonly IMapper _mapper;
+        public ContactService(IUnitOfWork unitOfWork, IMapper mapper)
         {
-            _contactService = contactService;
+            _unitOfWork = unitOfWork;
+            _mapper = mapper;
+        }
+
+        public async Task<IEnumerable<Contact>> getAllContacts()
+        {
+            return null;
+            //return await _unitOfWork.ContactRepository.Get();
         }
     }
 }
