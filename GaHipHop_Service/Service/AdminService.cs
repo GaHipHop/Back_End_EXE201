@@ -7,6 +7,7 @@ using GaHipHop_Service.Service.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -61,6 +62,15 @@ namespace GaHipHop_Service.Service
         {
             try
             {
+                bool usernameExists = _unitOfWork.AdminRepository.Exists(a => a.Username == adminRequest.UserName);
+                if (usernameExists)
+                {
+                    return new AdminResponse
+                    {
+                        UserName = "Username already exists.",
+                        Status = false
+                    };
+                }
 
                 var admin = _mapper.Map<Admin>(adminRequest);
 
@@ -87,7 +97,7 @@ namespace GaHipHop_Service.Service
 
                 if (existingAdmin == null)
                 {
-                    throw new Exception("Admin not found");
+                    throw new Exception("Admin not found.");
                 }
 
                 _mapper.Map(adminRequest, existingAdmin);
@@ -111,7 +121,7 @@ namespace GaHipHop_Service.Service
                 var admin = _unitOfWork.AdminRepository.GetByID(id);
                 if (admin == null)
                 {
-                    throw new Exception("Admin not found");
+                    throw new Exception("Admin not found.");
                 }
 
                 admin.Status = false;

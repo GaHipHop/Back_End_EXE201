@@ -85,5 +85,11 @@ namespace GaHipHop_Repository.Repository
             dbSet.Attach(entityToUpdate);
             context.Entry(entityToUpdate).State = EntityState.Modified;
         }
+
+
+        public bool Exists(Expression<Func<TEntity, bool>> filter)
+        {
+            return dbSet.Any(filter);
+        }
     }
 }

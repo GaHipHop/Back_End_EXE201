@@ -1,14 +1,16 @@
-﻿using GaHipHop_Model.DTO.Request;
+﻿using CoreApiResponse;
+using GaHipHop_Model.DTO.Request;
 using GaHipHop_Model.DTO.Respone;
 using GaHipHop_Repository.Entity;
 using GaHipHop_Service.Service.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using System.Net;
 
 namespace GaHipHop_API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class AdminController : ControllerBase
+    public class AdminController : BaseController
     {
         private readonly IAdminService _adminService;
 
@@ -19,61 +21,65 @@ namespace GaHipHop_API.Controllers
 
 
         [HttpGet]
-        public ActionResult<IEnumerable<AdminResponse>> GetAllAdmin()
+        public IActionResult GetAllAdmin()
         {
             var admin = _adminService.GetAllAdmin();
-            return Ok(admin);
+            return CustomResult("Data load Successful",admin);
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<AdminResponse>> GetAdminById(long id)
+        public async Task<IActionResult> GetAdminById(long id)
         {
             try
             {
                 var admin = await _adminService.GetAdminById(id);
-                return Ok(admin);
+
+                return CustomResult("Create admin successful",admin);
             }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                return CustomResult("Not found admin.", HttpStatusCode.NotFound);
             }
         }
 
 
         [HttpPost]
-        public async Task<ActionResult<AdminResponse>> CreateAdmin([FromBody] AdminRequest adminRequest)
+        public async Task<IActionResult> CreateAdmin([FromBody] AdminRequest adminRequest)
         {
             if (!ModelState.IsValid)
             {
-                return BadRequest(ModelState);
+                //return BadRequest(ModelState);
+                return CustomResult(ModelState, HttpStatusCode.BadRequest);
             }
 
             var result = await _adminService.CreateAdmin(adminRequest);
 
-            if (result == null)
+            if (!result.Status)
             {
-                return BadRequest("Failed to create admin.");
+                return CustomResult("Create fail.", new { userName = result.UserName }, HttpStatusCode.Conflict);
             }
 
-            return Ok(result);
+            return CustomResult("Create Successful", result);
+
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult<AdminResponse>> UpdateAdmin(long id, [FromBody] AdminRequest adminRequest)
+        public async Task<IActionResult> UpdateAdmin(long id, [FromBody] AdminRequest adminRequest)
         {
             if (!ModelState.IsValid)
             {
-                return BadRequest(ModelState);
+                //return BadRequest(ModelState);
+                return CustomResult(ModelState,HttpStatusCode.BadRequest);
             }
 
             try
             {
                 var result = await _adminService.UpdateAdmin(id, adminRequest);
-                return Ok(result);
+                return CustomResult("Update Successful",result);
             }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                return CustomResult("Update Admin Fail", HttpStatusCode.BadRequest);
             }
         }
 
@@ -85,16 +91,16 @@ namespace GaHipHop_API.Controllers
                 var result = await _adminService.DeleteAdmin(id);
                 if (result)
                 {
-                    return Ok("Admin deleted successfully");
+                    return CustomResult("Delete Successful.");
                 }
                 else
                 {
-                    return BadRequest("Failed to delete admin");
+                    return CustomResult("Not found admin.", HttpStatusCode.NotFound);
                 }
             }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                return CustomResult("Delete Fail.", HttpStatusCode.BadRequest);
             }
         }
 

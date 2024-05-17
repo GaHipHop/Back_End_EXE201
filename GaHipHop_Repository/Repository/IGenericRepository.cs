@@ -18,6 +18,8 @@ namespace GaHipHop_Repository.Repository
         void Delete(object id);
         void Delete(TEntity entityToDelete);
         void Update(TEntity entityToUpdate);
+
+        bool Exists(Expression<Func<TEntity, bool>> filter);
     }
 }
 
