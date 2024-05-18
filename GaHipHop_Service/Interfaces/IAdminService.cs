@@ -11,6 +11,7 @@ namespace GaHipHop_Service.Interfaces
 {
     public interface IAdminService
     {
+        Task<(string Token, LoginResponse loginResponse)> AuthorizeUser(LoginRequest loginRequest);
         IEnumerable<AdminResponse> GetAllAdmin();
 
         Task<AdminResponse> CreateAdmin(AdminRequest adminRequest);
