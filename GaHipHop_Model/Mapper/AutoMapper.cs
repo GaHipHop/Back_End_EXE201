@@ -23,6 +23,7 @@ namespace GaHipHop_Model.Mapper
             .ForMember(dest => dest.Role, opt => opt.MapFrom(src => src.Role));
 
             CreateMap<Role, RoleResponse>();
+            CreateMap<Admin, LoginResponse>();
             /*CreateMap<Admin, AdminResponse>().ForMember(dest => dest.Role, opt => opt.MapFrom(src => src.Role != null ? new RoleResponse { Id = src.Role.Id, RoleName = src.Role.RoleName } : null));*/
 
         }
