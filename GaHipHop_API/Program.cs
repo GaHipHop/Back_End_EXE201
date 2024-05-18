@@ -15,17 +15,18 @@ builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 
-//Service
-
-builder.Services.AddScoped<IAdminService, AdminService>();
-builder.Services.AddScoped<IContactService, ContactService>();
-
 //Mapper
 var config = new MapperConfiguration(cfg =>
 {
     cfg.AddProfile(new AutoMapperProfile());
 });
 builder.Services.AddSingleton<IMapper>(config.CreateMapper());
+
+//Service
+builder.Services.AddScoped<IAdminService, AdminService>();
+builder.Services.AddScoped<IContactService, ContactService>();
+
+
 
 // Add services to the container.
 var serverVersion = new MySqlServerVersion(new Version(8, 0, 23)); // Replace with your actual MySQL server version

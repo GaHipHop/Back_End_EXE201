@@ -20,11 +20,11 @@ namespace GaHipHop_API.Controllers.Contact
         }
 
         [HttpGet("getAllContacts")]
-        public async Task<IActionResult> getAllContacts()
+        public async Task<IActionResult> GetAllContacts()
         {
             try
             {
-                var contacts = await _contactService.getAllContacts();
+                var contacts = await _contactService.GetAllContacts();
                 if (contacts == null)
                 {
                     return CustomResult("This ID isn't exist", HttpStatusCode.NotFound);
@@ -36,6 +36,25 @@ namespace GaHipHop_API.Controllers.Contact
                 return CustomResult(ex.Message, HttpStatusCode.InternalServerError);
             }
         }
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetContactById(long id)
+        {
+            try
+            {
+                var contact = await _contactService.GetContactById(id);
+                if (contact == null)
+                {
+                    return CustomResult("Id is not exist", contact, HttpStatusCode.NotFound);
+                }
+                return CustomResult("ID found: ", contact, HttpStatusCode.OK);
+            }
+            catch (Exception ex)
+            {
+                return CustomResult(ex.Message, HttpStatusCode.InternalServerError);
+            }
+        }
+
 
         [HttpPost]
         public async Task<IActionResult> CreateContact([FromBody] CreateContactRequest createContactRequest)
@@ -49,9 +68,35 @@ namespace GaHipHop_API.Controllers.Contact
             {
                 return CustomResult(ex.Message, HttpStatusCode.InternalServerError);
             }
-
         }
 
+        [HttpPatch("{id}")]
+        public async Task<IActionResult> UpdateContact(long id, [FromBody] UpdateContactRequest updateContactRequest)
+        {
+            try
+            {
+                ContactReponse subcription = await _contactService.UpdateContact(id, updateContactRequest);
+                return CustomResult("Create Successfull", subcription, HttpStatusCode.OK);
+            }
+            catch (Exception ex)
+            {
+                return CustomResult(ex.Message, HttpStatusCode.InternalServerError);
+            }
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteContact(long id)
+        {
+            try
+            {
+                var deletecontact = await _contactService.DeleteContact(id);
+                return CustomResult("Delete Successfull (Xóa luôn)", DeleteContact, HttpStatusCode.OK);
+            }
+            catch (Exception ex)
+            {
+                return CustomResult(ex.Message, HttpStatusCode.InternalServerError);
+            }
+        }
 
     }
 }
