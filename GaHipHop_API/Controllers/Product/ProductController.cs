@@ -19,14 +19,14 @@ namespace GaHipHop_API.Controllers.Product
             _productService = productService;
         }
 
-        [HttpGet]
+        [HttpGet("GetAllProduct")]
         public IActionResult GetAllProduct()
         {
             var product = _productService.GetAllProduct();
             return CustomResult("Get all data Successfully", product);
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("GetProductById/{id}")]
         public async Task<IActionResult> GetProductById(long id)
         {
             try
@@ -41,7 +41,46 @@ namespace GaHipHop_API.Controllers.Product
             }
         }
 
-        [HttpDelete("{id}")]
+        [HttpPost("CreateProduct")]
+        public async Task<IActionResult> CreateProduct([FromBody] ProductRequest productRequest)
+        {
+            if (!ModelState.IsValid)
+            {
+                return CustomResult(ModelState, HttpStatusCode.BadRequest);
+            }
+
+            var result = await _productService.CreateProduct(productRequest);
+
+            if (!result.Status)
+            {
+                return CustomResult("Create fail.", new { productName = result.ProductName }, HttpStatusCode.Conflict);
+            }
+
+            return CustomResult("Create Successful", result);
+
+        }
+
+        [HttpPatch("UpdateProduct/{id}")]
+        public async Task<IActionResult> UpdateProduct(long id, [FromBody] ProductRequest productRequest)
+        {
+            if (!ModelState.IsValid)
+            {
+                //return BadRequest(ModelState);
+                return CustomResult(ModelState, HttpStatusCode.BadRequest);
+            }
+
+            try
+            {
+                var result = await _productService.UpdateProduct(id, productRequest);
+                return CustomResult("Update Successful", result);
+            }
+            catch (Exception ex)
+            {
+                return CustomResult("Update Product Fail", HttpStatusCode.BadRequest);
+            }
+        }
+
+        [HttpDelete("DeleteProduct/{id}")]
         public async Task<IActionResult> DeleteProduct(long id)
         {
             try
@@ -62,44 +101,7 @@ namespace GaHipHop_API.Controllers.Product
             }
         }
 
-        [HttpPost]
-        public async Task<IActionResult> CreateProduct([FromBody] ProductRequest productRequest)
-        {
-            if (!ModelState.IsValid)
-            {
-                //return BadRequest(ModelState);
-                return CustomResult(ModelState, HttpStatusCode.BadRequest);
-            }
 
-            var result = await _productService.CreateProduct(productRequest);
-
-            if (!result.Status)
-            {
-                return CustomResult("Create fail.", new { productName = result.ProductName }, HttpStatusCode.Conflict);
-            }
-
-            return CustomResult("Create Successful", result);
-
-        }
-
-        [HttpPatch("{id}")]
-        public async Task<IActionResult> UpdateProduct(long id, [FromBody] ProductRequest productRequest)
-        {
-            if (!ModelState.IsValid)
-            {
-                //return BadRequest(ModelState);
-                return CustomResult(ModelState, HttpStatusCode.BadRequest);
-            }
-
-            try
-            {
-                var result = await _productService.UpdateProduct(id, productRequest);
-                return CustomResult("Update Successful", result);
-            }
-            catch (Exception ex)
-            {
-                return CustomResult("Update Product Fail", HttpStatusCode.BadRequest);
-            }
-        }
     }
+
 }
