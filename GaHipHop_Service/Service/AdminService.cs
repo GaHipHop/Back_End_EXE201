@@ -1,9 +1,9 @@
 ﻿using AutoMapper;
 using GaHipHop_Model.DTO.Request;
-using GaHipHop_Model.DTO.Respone;
+using GaHipHop_Model.DTO.Response;
 using GaHipHop_Repository.Entity;
 using GaHipHop_Repository.Repository;
-using GaHipHop_Service.Service.Interfaces;
+using GaHipHop_Service.Interfaces;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System;
