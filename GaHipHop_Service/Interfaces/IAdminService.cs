@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using GaHipHop_Model.DTO.Request;
-using GaHipHop_Model.DTO.Respone;
+using GaHipHop_Model.DTO.Response;
 using GaHipHop_Repository.Entity;
 
-namespace GaHipHop_Service.Service.Interfaces
+namespace GaHipHop_Service.Interfaces
 {
     public interface IAdminService
     {

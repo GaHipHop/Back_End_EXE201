@@ -18,6 +18,8 @@ builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepositor
 //Service
 
 builder.Services.AddScoped<IAdminService, AdminService>();
+builder.Services.AddScoped<IContactService, ContactService>();
+builder.Services.AddScoped<IProductService, ProductService>();
 
 //Mapper
 var config = new MapperConfiguration(cfg =>
@@ -42,10 +44,6 @@ builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-// Service add o day
-//builder.Services.AddScoped<IUserService, UserService>();
-
-builder.Services.AddScoped<IContactService, ContactService>();
 
 //Build CORS
 /*builder.Services.AddCors(p => p.AddPolicy("MyCors", build =>

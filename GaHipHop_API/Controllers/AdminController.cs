@@ -1,8 +1,8 @@
 ﻿using CoreApiResponse;
 using GaHipHop_Model.DTO.Request;
-using GaHipHop_Model.DTO.Respone;
+using GaHipHop_Model.DTO.Response;
 using GaHipHop_Repository.Entity;
-using GaHipHop_Service.Service.Interfaces;
+using GaHipHop_Service.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 

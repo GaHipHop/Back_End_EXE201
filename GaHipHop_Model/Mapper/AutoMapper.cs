@@ -17,6 +17,7 @@ namespace GaHipHop_Model.Mapper
         {
             //Request
             CreateMap<AdminRequest, Admin>().ReverseMap();
+            CreateMap<ProductRequest, Product>().ReverseMap();
 
             //Reponse
             CreateMap<Admin, AdminResponse>()
@@ -25,6 +26,7 @@ namespace GaHipHop_Model.Mapper
             CreateMap<Role, RoleResponse>();
             /*CreateMap<Admin, AdminResponse>().ForMember(dest => dest.Role, opt => opt.MapFrom(src => src.Role != null ? new RoleResponse { Id = src.Role.Id, RoleName = src.Role.RoleName } : null));*/
 
+            CreateMap<Product, ProductResponse>();
         }
     }
 }
