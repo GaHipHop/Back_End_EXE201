@@ -48,19 +48,6 @@ builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-// Service add o day
-//builder.Services.AddScoped<IUserService, UserService>();
-
-builder.Services.AddScoped<IContactService, ContactService>();
-
-//builder.Services.AddScoped<IUserService, UserService>();
-
-builder.Services.AddScoped<IContactService, ContactService>();
-
-//builder.Services.AddScoped<IUserService, UserService>();
-
-builder.Services.AddScoped<IContactService, ContactService>();
-
 //Build CORS
 /*builder.Services.AddCors(p => p.AddPolicy("MyCors", build =>
 {
