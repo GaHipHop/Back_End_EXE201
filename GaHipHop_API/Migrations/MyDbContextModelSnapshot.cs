@@ -65,6 +65,20 @@ namespace GaHipHop_API.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("Admin");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1L,
+                            Address = "Admin Address",
+                            Email = "admin@example.com",
+                            FullName = "Admin User",
+                            Password = "1",
+                            Phone = "123456789",
+                            RoleId = 1L,
+                            Status = true,
+                            Username = "admin"
+                        });
                 });
 
             modelBuilder.Entity("GaHipHop_Repository.Entity.Category", b =>
@@ -85,6 +99,20 @@ namespace GaHipHop_API.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Category");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1L,
+                            CategoryName = "Category 1",
+                            Status = true
+                        },
+                        new
+                        {
+                            Id = 2L,
+                            CategoryName = "Category 2",
+                            Status = true
+                        });
                 });
 
             modelBuilder.Entity("GaHipHop_Repository.Entity.Contact", b =>
@@ -122,6 +150,28 @@ namespace GaHipHop_API.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Contact");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1L,
+                            Email = "contact1@example.com",
+                            Facebook = "facebook1",
+                            Instagram = "instagram1",
+                            Phone = "123456789",
+                            Shoppee = "shoppee1",
+                            Tiktok = "tiktok1"
+                        },
+                        new
+                        {
+                            Id = 2L,
+                            Email = "contact2@example.com",
+                            Facebook = "facebook2",
+                            Instagram = "instagram2",
+                            Phone = "987654321",
+                            Shoppee = "shoppee2",
+                            Tiktok = "tiktok2"
+                        });
                 });
 
             modelBuilder.Entity("GaHipHop_Repository.Entity.Discount", b =>
@@ -144,6 +194,22 @@ namespace GaHipHop_API.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Discount");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1L,
+                            ExpiredDate = new DateTime(2024, 6, 18, 23, 54, 28, 568, DateTimeKind.Local).AddTicks(7423),
+                            Percent = 10f,
+                            Status = true
+                        },
+                        new
+                        {
+                            Id = 2L,
+                            ExpiredDate = new DateTime(2024, 7, 18, 23, 54, 28, 568, DateTimeKind.Local).AddTicks(7444),
+                            Percent = 20f,
+                            Status = true
+                        });
                 });
 
             modelBuilder.Entity("GaHipHop_Repository.Entity.Img", b =>
@@ -154,8 +220,9 @@ namespace GaHipHop_API.Migrations
 
                     MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<long>("Id"));
 
-                    b.Property<long>("ColorName")
-                        .HasColumnType("bigint");
+                    b.Property<string>("ColorName")
+                        .IsRequired()
+                        .HasColumnType("longtext");
 
                     b.Property<string>("Image")
                         .IsRequired()
@@ -164,14 +231,20 @@ namespace GaHipHop_API.Migrations
                     b.Property<long>("ProductId")
                         .HasColumnType("bigint");
 
-                    b.Property<long>("Product_Id")
-                        .HasColumnType("bigint");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("Product_Id");
+                    b.HasIndex("ProductId");
 
                     b.ToTable("Img");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1L,
+                            ColorName = "Red",
+                            Image = "image1.jpg",
+                            ProductId = 1L
+                        });
                 });
 
             modelBuilder.Entity("GaHipHop_Repository.Entity.Order", b =>
@@ -217,6 +290,20 @@ namespace GaHipHop_API.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Order");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1L,
+                            AdminId = 1L,
+                            CreateDate = new DateTime(2024, 5, 18, 23, 54, 28, 568, DateTimeKind.Local).AddTicks(7502),
+                            OrderCode = "ORD001",
+                            OrderRequirement = "Requirement 1",
+                            PaymentMethod = "Credit Card",
+                            Status = "Confirmed",
+                            TotalPrice = 100.0,
+                            UserId = 1L
+                        });
                 });
 
             modelBuilder.Entity("GaHipHop_Repository.Entity.OrderDetails", b =>
@@ -246,6 +333,16 @@ namespace GaHipHop_API.Migrations
                     b.HasIndex("ProductId");
 
                     b.ToTable("OrderDetails");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1L,
+                            OrderId = 1L,
+                            OrderPrice = 100.0,
+                            OrderQuantity = 1,
+                            ProductId = 1L
+                        });
                 });
 
             modelBuilder.Entity("GaHipHop_Repository.Entity.Product", b =>
@@ -297,6 +394,22 @@ namespace GaHipHop_API.Migrations
                     b.HasIndex("DiscountId");
 
                     b.ToTable("Product");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1L,
+                            AdminId = 1L,
+                            CategoryId = 1L,
+                            CreateDate = new DateTime(2024, 5, 18, 23, 54, 28, 568, DateTimeKind.Local).AddTicks(7483),
+                            DiscountId = 1L,
+                            ModifiedDate = new DateTime(2024, 5, 18, 23, 54, 28, 568, DateTimeKind.Local).AddTicks(7484),
+                            ProductDescription = "Description for Product 1",
+                            ProductName = "Product 1",
+                            ProductPrice = 100.0,
+                            ProductQuantity = 10,
+                            Status = true
+                        });
                 });
 
             modelBuilder.Entity("GaHipHop_Repository.Entity.Role", b =>
@@ -314,6 +427,23 @@ namespace GaHipHop_API.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Role");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1L,
+                            RoleName = "Admin"
+                        },
+                        new
+                        {
+                            Id = 2L,
+                            RoleName = "Manager"
+                        },
+                        new
+                        {
+                            Id = 3L,
+                            RoleName = "Staff"
+                        });
                 });
 
             modelBuilder.Entity("GaHipHop_Repository.Entity.UserInfo", b =>
@@ -351,6 +481,18 @@ namespace GaHipHop_API.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("UserInfo");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1L,
+                            Address = "Address 1",
+                            Email = "user1@example.com",
+                            Phone = "123456789",
+                            Province = "Province 1",
+                            UserName = "user1",
+                            Wards = "Wards 1"
+                        });
                 });
 
             modelBuilder.Entity("GaHipHop_Repository.Entity.Admin", b =>
@@ -368,7 +510,7 @@ namespace GaHipHop_API.Migrations
                 {
                     b.HasOne("GaHipHop_Repository.Entity.Product", "Product")
                         .WithMany()
-                        .HasForeignKey("Product_Id")
+                        .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

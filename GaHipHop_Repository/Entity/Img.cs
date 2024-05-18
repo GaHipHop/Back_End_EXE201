@@ -13,13 +13,13 @@ namespace GaHipHop_Repository.Entity
         public long ProductId { get; set; }
 
         [Required]
-        public long ColorName { get; set; }
+        public string ColorName { get; set; }
 
         [Required]
         public string Image { get; set; }
 
-        [ForeignKey("Product_Id")]
-        public required Product Product { get; set; }
+        [ForeignKey("ProductId")]
+        public virtual Product Product { get; set; }
 
     }
 }

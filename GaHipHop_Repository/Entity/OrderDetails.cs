@@ -21,9 +21,9 @@ namespace GaHipHop_Repository.Entity
         public double OrderPrice { get; set; }
 
         [ForeignKey("ProductId")]
-        public required Product Product { get; set; }
+        public virtual Product Product { get; set; }
 
        [ForeignKey("OrderId")]
-        public required Order Order { get; set; }
+        public virtual Order Order { get; set; }
     }
 }

@@ -32,9 +32,9 @@ namespace GaHipHop_Repository.Entity
         public string Status { get; set; }
 
         [ForeignKey("UserId")]
-        public required UserInfo UserInfo { get; set; }
+        public virtual UserInfo UserInfo { get; set; }
 
         [ForeignKey("AdminId")]
-        public required Admin Admin { get; set; }
+        public virtual Admin Admin { get; set; }
     }
 }
