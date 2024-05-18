@@ -25,8 +25,8 @@ namespace GaHipHop_Service.Service
 
         public async Task<IEnumerable<Contact>> GetAllContacts()
         {
-            return null;
-            //return await _unitOfWork.ContactRepository.Get();
+            
+            return _unitOfWork.ContactRepository.Get();
         }
 
         public async Task<Contact> GetContactById(long id)

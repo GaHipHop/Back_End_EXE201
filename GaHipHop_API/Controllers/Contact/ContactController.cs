@@ -25,10 +25,6 @@ namespace GaHipHop_API.Controllers.Contact
             try
             {
                 var contacts = await _contactService.GetAllContacts();
-                if (contacts == null)
-                {
-                    return CustomResult("This ID isn't exist", HttpStatusCode.NotFound);
-                }
                 return CustomResult("Load Successfull", contacts, HttpStatusCode.OK);
             }
             catch (Exception ex)
@@ -37,7 +33,7 @@ namespace GaHipHop_API.Controllers.Contact
             }
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("GetContactBy/{id}")]
         public async Task<IActionResult> GetContactById(long id)
         {
             try
@@ -56,7 +52,7 @@ namespace GaHipHop_API.Controllers.Contact
         }
 
 
-        [HttpPost]
+        [HttpPost("CreateContact")]
         public async Task<IActionResult> CreateContact([FromBody] CreateContactRequest createContactRequest)
         {
             try
@@ -70,7 +66,7 @@ namespace GaHipHop_API.Controllers.Contact
             }
         }
 
-        [HttpPatch("{id}")]
+        [HttpPatch("UpdateContact/{id}")]
         public async Task<IActionResult> UpdateContact(long id, [FromBody] UpdateContactRequest updateContactRequest)
         {
             try
@@ -84,7 +80,7 @@ namespace GaHipHop_API.Controllers.Contact
             }
         }
 
-        [HttpDelete("{id}")]
+        [HttpDelete("DeleteContact/{id}")]
         public async Task<IActionResult> DeleteContact(long id)
         {
             try
