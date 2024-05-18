@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GaHipHop_Model.DTO.Respone
+namespace GaHipHop_Model.DTO.Response
 {
     public class DiscountResponse
     {

@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using CoreApiResponse;
 using GaHipHop_Model.DTO.Request;
-using GaHipHop_Model.DTO.Respone;
+using GaHipHop_Model.DTO.Response;
 using GaHipHop_Service.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
