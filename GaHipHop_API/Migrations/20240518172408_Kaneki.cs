@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace GaHipHop_API.Migrations
 {
     /// <inheritdoc />
-    public partial class Dante : Migration
+    public partial class Kaneki : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -303,8 +303,8 @@ namespace GaHipHop_API.Migrations
                 columns: new[] { "Id", "ExpiredDate", "Percent", "Status" },
                 values: new object[,]
                 {
-                    { 1L, new DateTime(2024, 6, 18, 23, 54, 28, 568, DateTimeKind.Local).AddTicks(7423), 10f, true },
-                    { 2L, new DateTime(2024, 7, 18, 23, 54, 28, 568, DateTimeKind.Local).AddTicks(7444), 20f, true }
+                    { 1L, new DateTime(2024, 6, 19, 0, 24, 8, 185, DateTimeKind.Local).AddTicks(8576), 10f, true },
+                    { 2L, new DateTime(2024, 7, 19, 0, 24, 8, 185, DateTimeKind.Local).AddTicks(8599), 20f, true }
                 });
 
             migrationBuilder.InsertData(
@@ -330,12 +330,12 @@ namespace GaHipHop_API.Migrations
             migrationBuilder.InsertData(
                 table: "Order",
                 columns: new[] { "Id", "AdminId", "CreateDate", "OrderCode", "OrderRequirement", "PaymentMethod", "Status", "TotalPrice", "UserId" },
-                values: new object[] { 1L, 1L, new DateTime(2024, 5, 18, 23, 54, 28, 568, DateTimeKind.Local).AddTicks(7502), "ORD001", "Requirement 1", "Credit Card", "Confirmed", 100.0, 1L });
+                values: new object[] { 1L, 1L, new DateTime(2024, 5, 19, 0, 24, 8, 185, DateTimeKind.Local).AddTicks(8664), "ORD001", "Requirement 1", "Credit Card", "Confirmed", 100.0, 1L });
 
             migrationBuilder.InsertData(
                 table: "Product",
                 columns: new[] { "Id", "AdminId", "CategoryId", "CreateDate", "DiscountId", "ModifiedDate", "ProductDescription", "ProductName", "ProductPrice", "ProductQuantity", "Status" },
-                values: new object[] { 1L, 1L, 1L, new DateTime(2024, 5, 18, 23, 54, 28, 568, DateTimeKind.Local).AddTicks(7483), 1L, new DateTime(2024, 5, 18, 23, 54, 28, 568, DateTimeKind.Local).AddTicks(7484), "Description for Product 1", "Product 1", 100.0, 10, true });
+                values: new object[] { 1L, 1L, 1L, new DateTime(2024, 5, 19, 0, 24, 8, 185, DateTimeKind.Local).AddTicks(8644), 1L, new DateTime(2024, 5, 19, 0, 24, 8, 185, DateTimeKind.Local).AddTicks(8644), "Description for Product 1", "Product 1", 100.0, 10, true });
 
             migrationBuilder.InsertData(
                 table: "Img",

@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GaHipHop_API.Migrations
 {
     [DbContext(typeof(MyDbContext))]
-    [Migration("20240518165428_Dante")]
-    partial class Dante
+    [Migration("20240518172408_Kaneki")]
+    partial class Kaneki
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -202,14 +202,14 @@ namespace GaHipHop_API.Migrations
                         new
                         {
                             Id = 1L,
-                            ExpiredDate = new DateTime(2024, 6, 18, 23, 54, 28, 568, DateTimeKind.Local).AddTicks(7423),
+                            ExpiredDate = new DateTime(2024, 6, 19, 0, 24, 8, 185, DateTimeKind.Local).AddTicks(8576),
                             Percent = 10f,
                             Status = true
                         },
                         new
                         {
                             Id = 2L,
-                            ExpiredDate = new DateTime(2024, 7, 18, 23, 54, 28, 568, DateTimeKind.Local).AddTicks(7444),
+                            ExpiredDate = new DateTime(2024, 7, 19, 0, 24, 8, 185, DateTimeKind.Local).AddTicks(8599),
                             Percent = 20f,
                             Status = true
                         });
@@ -299,7 +299,7 @@ namespace GaHipHop_API.Migrations
                         {
                             Id = 1L,
                             AdminId = 1L,
-                            CreateDate = new DateTime(2024, 5, 18, 23, 54, 28, 568, DateTimeKind.Local).AddTicks(7502),
+                            CreateDate = new DateTime(2024, 5, 19, 0, 24, 8, 185, DateTimeKind.Local).AddTicks(8664),
                             OrderCode = "ORD001",
                             OrderRequirement = "Requirement 1",
                             PaymentMethod = "Credit Card",
@@ -404,9 +404,9 @@ namespace GaHipHop_API.Migrations
                             Id = 1L,
                             AdminId = 1L,
                             CategoryId = 1L,
-                            CreateDate = new DateTime(2024, 5, 18, 23, 54, 28, 568, DateTimeKind.Local).AddTicks(7483),
+                            CreateDate = new DateTime(2024, 5, 19, 0, 24, 8, 185, DateTimeKind.Local).AddTicks(8644),
                             DiscountId = 1L,
-                            ModifiedDate = new DateTime(2024, 5, 18, 23, 54, 28, 568, DateTimeKind.Local).AddTicks(7484),
+                            ModifiedDate = new DateTime(2024, 5, 19, 0, 24, 8, 185, DateTimeKind.Local).AddTicks(8644),
                             ProductDescription = "Description for Product 1",
                             ProductName = "Product 1",
                             ProductPrice = 100.0,
