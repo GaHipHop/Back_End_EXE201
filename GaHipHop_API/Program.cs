@@ -3,7 +3,7 @@ using GaHipHop_Model.Mapper;
 using GaHipHop_Repository.Entity;
 using Microsoft.EntityFrameworkCore;
 using GaHipHop_Repository.Repository;
-using GaHipHop_Service.Service.Interfaces;
+using GaHipHop_Service.Interfaces;
 using GaHipHop_Service.Service;
 using GaHipHop_Service.Interfaces;
 
