@@ -1,4 +1,6 @@
-﻿using GaHipHop_Repository.Entity;
+﻿using GaHipHop_Model.DTO.Request;
+using GaHipHop_Model.DTO.Respone;
+using GaHipHop_Repository.Entity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +11,7 @@ namespace GaHipHop_Service.Interfaces
 {
     public interface IContactService
     {
+        Task<ContactReponse> CreateContact(CreateContactRequest createContactRequest);
         Task<IEnumerable<Contact>> getAllContacts();
     }
 }

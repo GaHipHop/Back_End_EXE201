@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using GaHipHop_Model.DTO.Request;
+using GaHipHop_Model.DTO.Respone;
 using GaHipHop_Repository;
 using GaHipHop_Repository.Entity;
 using GaHipHop_Repository.Repository;
@@ -25,6 +27,15 @@ namespace GaHipHop_Service.Service
         {
             return null;
             //return await _unitOfWork.ContactRepository.Get();
+        }
+        public async Task<ContactReponse> CreateContact(CreateContactRequest createContactRequest)
+        {
+            var createcontact =  _mapper.Map<Contact>(createContactRequest);
+
+             _unitOfWork.ContactRepository.Insert(createcontact);
+
+            ContactReponse createContactReponse = _mapper.Map<ContactReponse>(createcontact);
+            return createContactReponse;
         }
     }
 }
