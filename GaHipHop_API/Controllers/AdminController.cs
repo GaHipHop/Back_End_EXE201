@@ -19,6 +19,19 @@ namespace GaHipHop_API.Controllers
             _adminService = adminService;
         }
 
+        [HttpPost("login")]
+        public async Task<IActionResult> Login([FromBody] LoginRequest loginRequest)
+        {
+            var result = await _adminService.AuthorizeUser(loginRequest);
+            if (result.Token != null)
+            {
+                return CustomResult("Login successful.",new { Token = result.Token, LoginResponse = result.loginResponse });
+            }
+            else
+            {
+                return CustomResult("Invalid email or password.", HttpStatusCode.Unauthorized);
+            }
+        }
 
         [HttpGet]
         public IActionResult GetAllAdmin()

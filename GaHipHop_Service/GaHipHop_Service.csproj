@@ -7,6 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\GaHipHop_Model\GaHipHop_Model.csproj" />
     <ProjectReference Include="..\GaHipHop_Repository\GaHipHop_Repository.csproj" />
   </ItemGroup>
