@@ -27,6 +27,10 @@ var config = new MapperConfiguration(cfg =>
 });
 builder.Services.AddSingleton<IMapper>(config.CreateMapper());
 
+
+
+
+
 // Add services to the container.
 var serverVersion = new MySqlServerVersion(new Version(8, 0, 23)); // Replace with your actual MySQL server version
 builder.Services.AddDbContext<MyDbContext>(options =>
@@ -43,6 +47,18 @@ builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
+// Service add o day
+//builder.Services.AddScoped<IUserService, UserService>();
+
+builder.Services.AddScoped<IContactService, ContactService>();
+
+//builder.Services.AddScoped<IUserService, UserService>();
+
+builder.Services.AddScoped<IContactService, ContactService>();
+
+//builder.Services.AddScoped<IUserService, UserService>();
+
+builder.Services.AddScoped<IContactService, ContactService>();
 
 //Build CORS
 /*builder.Services.AddCors(p => p.AddPolicy("MyCors", build =>
