@@ -19,6 +19,7 @@ builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepositor
 builder.Services.AddScoped<IAdminService, AdminService>();
 builder.Services.AddScoped<IContactService, ContactService>();
 builder.Services.AddScoped<IProductService, ProductService>();
+builder.Services.AddScoped<IDiscountService, DiscountService>();
 
 //Mapper
 var config = new MapperConfiguration(cfg =>
