@@ -36,13 +36,13 @@ namespace GaHipHop_Repository.Entity
         public bool Status { get; set; }
 
         [ForeignKey("AdminId")]
-        public required Admin Admin { get; set; }
+        public virtual Admin Admin { get; set; }
 
         [ForeignKey("DiscountId")]
-        public required Discount Discount { get; set; }
+        public virtual Discount Discount { get; set; }
 
         [ForeignKey("CategoryId")]
-        public required Category Category { get; set; }
+        public virtual Category Category { get; set; }
 
     }
 }

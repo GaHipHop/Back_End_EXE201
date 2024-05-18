@@ -4,6 +4,8 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
+#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
+
 namespace GaHipHop_API.Migrations
 {
     /// <inheritdoc />
@@ -232,17 +234,17 @@ namespace GaHipHop_API.Migrations
                     Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     ProductId = table.Column<long>(type: "bigint", nullable: false),
-                    ColorName = table.Column<long>(type: "bigint", nullable: false),
-                    Image = table.Column<string>(type: "longtext", nullable: false)
+                    ColorName = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    Product_Id = table.Column<long>(type: "bigint", nullable: false)
+                    Image = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4")
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Img", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Img_Product_Product_Id",
-                        column: x => x.Product_Id,
+                        name: "FK_Img_Product_ProductId",
+                        column: x => x.ProductId,
                         principalTable: "Product",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -278,15 +280,82 @@ namespace GaHipHop_API.Migrations
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
+            migrationBuilder.InsertData(
+                table: "Category",
+                columns: new[] { "Id", "CategoryName", "Status" },
+                values: new object[,]
+                {
+                    { 1L, "Category 1", true },
+                    { 2L, "Category 2", true }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Contact",
+                columns: new[] { "Id", "Email", "Facebook", "Instagram", "Phone", "Shoppee", "Tiktok" },
+                values: new object[,]
+                {
+                    { 1L, "contact1@example.com", "facebook1", "instagram1", "123456789", "shoppee1", "tiktok1" },
+                    { 2L, "contact2@example.com", "facebook2", "instagram2", "987654321", "shoppee2", "tiktok2" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Discount",
+                columns: new[] { "Id", "ExpiredDate", "Percent", "Status" },
+                values: new object[,]
+                {
+                    { 1L, new DateTime(2024, 6, 18, 23, 54, 28, 568, DateTimeKind.Local).AddTicks(7423), 10f, true },
+                    { 2L, new DateTime(2024, 7, 18, 23, 54, 28, 568, DateTimeKind.Local).AddTicks(7444), 20f, true }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Role",
+                columns: new[] { "Id", "RoleName" },
+                values: new object[,]
+                {
+                    { 1L, "Admin" },
+                    { 2L, "Manager" },
+                    { 3L, "Staff" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "UserInfo",
+                columns: new[] { "Id", "Address", "Email", "Phone", "Province", "UserName", "Wards" },
+                values: new object[] { 1L, "Address 1", "user1@example.com", "123456789", "Province 1", "user1", "Wards 1" });
+
+            migrationBuilder.InsertData(
+                table: "Admin",
+                columns: new[] { "Id", "Address", "Email", "FullName", "Password", "Phone", "RoleId", "Status", "Username" },
+                values: new object[] { 1L, "Admin Address", "admin@example.com", "Admin User", "1", "123456789", 1L, true, "admin" });
+
+            migrationBuilder.InsertData(
+                table: "Order",
+                columns: new[] { "Id", "AdminId", "CreateDate", "OrderCode", "OrderRequirement", "PaymentMethod", "Status", "TotalPrice", "UserId" },
+                values: new object[] { 1L, 1L, new DateTime(2024, 5, 18, 23, 54, 28, 568, DateTimeKind.Local).AddTicks(7502), "ORD001", "Requirement 1", "Credit Card", "Confirmed", 100.0, 1L });
+
+            migrationBuilder.InsertData(
+                table: "Product",
+                columns: new[] { "Id", "AdminId", "CategoryId", "CreateDate", "DiscountId", "ModifiedDate", "ProductDescription", "ProductName", "ProductPrice", "ProductQuantity", "Status" },
+                values: new object[] { 1L, 1L, 1L, new DateTime(2024, 5, 18, 23, 54, 28, 568, DateTimeKind.Local).AddTicks(7483), 1L, new DateTime(2024, 5, 18, 23, 54, 28, 568, DateTimeKind.Local).AddTicks(7484), "Description for Product 1", "Product 1", 100.0, 10, true });
+
+            migrationBuilder.InsertData(
+                table: "Img",
+                columns: new[] { "Id", "ColorName", "Image", "ProductId" },
+                values: new object[] { 1L, "Red", "image1.jpg", 1L });
+
+            migrationBuilder.InsertData(
+                table: "OrderDetails",
+                columns: new[] { "Id", "OrderId", "OrderPrice", "OrderQuantity", "ProductId" },
+                values: new object[] { 1L, 1L, 100.0, 1, 1L });
+
             migrationBuilder.CreateIndex(
                 name: "IX_Admin_RoleId",
                 table: "Admin",
                 column: "RoleId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Img_Product_Id",
+                name: "IX_Img_ProductId",
                 table: "Img",
-                column: "Product_Id");
+                column: "ProductId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Order_AdminId",
