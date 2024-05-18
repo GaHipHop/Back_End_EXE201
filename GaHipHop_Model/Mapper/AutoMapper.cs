@@ -17,12 +17,16 @@ namespace GaHipHop_Model.Mapper
         {
             //Request
             CreateMap<AdminRequest, Admin>().ReverseMap();
-            CreateMap<CreateContactRequest, CreateContactRequest>().ReverseMap();
+            CreateMap<CreateContactRequest, Contact>().ReverseMap();
+            CreateMap<UpdateContactRequest, Contact>().ReverseMap();
+            CreateMap<CreateDiscountRequest, Discount>().ReverseMap();
+            CreateMap<UpdateContactRequest, Discount>().ReverseMap();
 
             //Reponse
             CreateMap<Admin, AdminResponse>()
             .ForMember(dest => dest.Role, opt => opt.MapFrom(src => src.Role));
-            CreateMap<ContactReponse, ContactReponse>().ReverseMap();
+            CreateMap<Contact, ContactReponse>().ReverseMap();
+            CreateMap<Discount, DiscountResponse>().ReverseMap();
         }
     }
 }
