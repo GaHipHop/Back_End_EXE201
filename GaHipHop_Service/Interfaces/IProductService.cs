@@ -1,5 +1,6 @@
 ﻿using GaHipHop_Model.DTO.Request;
 using GaHipHop_Model.DTO.Response;
+using GaHipHop_Repository.Entity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,9 +11,9 @@ namespace GaHipHop_Service.Interfaces
 {
     public interface IProductService
     {
-        IEnumerable<ProductResponse> GetAllProduct();
-        Task<ProductResponse> CreateProduct(ProductRequest productRequest);
-        Task<ProductResponse> UpdateProduct(long id, ProductRequest productRequest);
+        Task<IEnumerable<Product>> GetAllProduct();
+        Task<ProductResponse> CreateProduct(CreateProductRequest createProductRequest);
+        Task<ProductResponse> UpdateProduct(long id, UpdateProductRequest updateProductRequest);
         Task<bool> DeleteProduct(long id);
         Task<ProductResponse> GetProductById(long id);
     }

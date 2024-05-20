@@ -21,10 +21,10 @@ namespace GaHipHop_Model.DTO.Response
 
         public bool Status { get; set; }
 
-        public Admin Admin { get; set; }
+        public virtual Admin Admin { get; set; }
 
-        public Discount Discount { get; set; }
+        public virtual Discount Discount { get; set; }
 
-        public Category Category { get; set; }
+        public virtual Category Category { get; set; }
     }
 }

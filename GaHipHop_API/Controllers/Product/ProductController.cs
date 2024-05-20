@@ -1,5 +1,6 @@
 ﻿using CoreApiResponse;
 using GaHipHop_Model.DTO.Request;
+using GaHipHop_Model.DTO.Response;
 using GaHipHop_Service.Interfaces;
 using GaHipHop_Service.Service;
 using Microsoft.AspNetCore.Http;
@@ -33,7 +34,7 @@ namespace GaHipHop_API.Controllers.Product
             {
                 var product = await _productService.GetProductById(id);
 
-                return CustomResult("Create Product successful", product);
+                return CustomResult("Product is found", product);
             }
             catch (Exception ex)
             {
@@ -42,16 +43,16 @@ namespace GaHipHop_API.Controllers.Product
         }
 
         [HttpPost("CreateProduct")]
-        public async Task<IActionResult> CreateProduct([FromBody] ProductRequest productRequest)
+        public async Task<IActionResult> CreateProduct([FromBody] CreateProductRequest createProductRequest)
         {
             if (!ModelState.IsValid)
             {
                 return CustomResult(ModelState, HttpStatusCode.BadRequest);
             }
 
-            var result = await _productService.CreateProduct(productRequest);
+            var result = await _productService.CreateProduct(createProductRequest);
 
-            if (!result.Status)
+            if (result.Status)
             {
                 return CustomResult("Create fail.", new { productName = result.ProductName }, HttpStatusCode.Conflict);
             }
@@ -61,22 +62,16 @@ namespace GaHipHop_API.Controllers.Product
         }
 
         [HttpPatch("UpdateProduct/{id}")]
-        public async Task<IActionResult> UpdateProduct(long id, [FromBody] ProductRequest productRequest)
+        public async Task<IActionResult> UpdateProduct(long id, [FromBody] UpdateProductRequest updateProductRequest)
         {
-            if (!ModelState.IsValid)
-            {
-                //return BadRequest(ModelState);
-                return CustomResult(ModelState, HttpStatusCode.BadRequest);
-            }
-
             try
             {
-                var result = await _productService.UpdateProduct(id, productRequest);
-                return CustomResult("Update Successful", result);
+                ProductResponse product = await _productService.UpdateProduct(id, updateProductRequest);
+                return CustomResult("updated Successful", product, HttpStatusCode.OK);
             }
             catch (Exception ex)
             {
-                return CustomResult("Update Product Fail", HttpStatusCode.BadRequest);
+                return CustomResult(ex.Message, HttpStatusCode.InternalServerError);
             }
         }
 
@@ -85,23 +80,15 @@ namespace GaHipHop_API.Controllers.Product
         {
             try
             {
-                var result = await _productService.DeleteProduct(id);
-                if (result)
-                {
-                    return CustomResult("Delete Successful.");
-                }
-                else
-                {
-                    return CustomResult("Product not found.", HttpStatusCode.NotFound);
-                }
+                var deleteProduct = await _productService.DeleteProduct(id);
+                return CustomResult("Delete Prodcut Successfull (Status)", deleteProduct, HttpStatusCode.OK);
             }
             catch (Exception ex)
             {
-                return CustomResult("Delete Fail.", HttpStatusCode.BadRequest);
+                return CustomResult(ex.Message, HttpStatusCode.InternalServerError);
             }
+
+
         }
-
-
     }
-
 }
