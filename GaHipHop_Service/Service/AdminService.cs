@@ -66,7 +66,7 @@ namespace GaHipHop_Service.Service
 
                 if (admin == null)
                 {
-                    throw new Exception("Admin not found");
+                    throw new Exception("Admin not found"); 
                 }
 
                 var adminResponse = _mapper.Map<AdminResponse>(admin);

@@ -63,6 +63,7 @@ namespace GaHipHop_Repository.Repository
         public virtual void Insert(TEntity entity)
         {
             dbSet.Add(entity);
+            context.SaveChanges();
         }
 
         public virtual void Delete(object id)

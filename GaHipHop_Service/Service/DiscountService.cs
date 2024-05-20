@@ -37,14 +37,14 @@ namespace GaHipHop_Service.Service
 
         public async Task<DiscountResponse> CreateDiscount(CreateDiscountRequest createDiscountRequest)
         {
-            var dícounts = _mapper.Map<Discount>(createDiscountRequest);
+            var discounts = _mapper.Map<Discount>(createDiscountRequest);
 
             // set trạng thái luôn true
-            dícounts.Status = true;
-            _unitOfWork.DiscountRepository.Insert(dícounts);
+            discounts.Status = true;
+            _unitOfWork.DiscountRepository.Insert(discounts);
 
             //map lại với cái response 
-            DiscountResponse discountResponse = _mapper.Map<DiscountResponse>(dícounts);
+            DiscountResponse discountResponse = _mapper.Map<DiscountResponse>(discounts);
             return discountResponse;
         }
 

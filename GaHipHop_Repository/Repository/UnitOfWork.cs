@@ -6,6 +6,7 @@ namespace GaHipHop_Repository.Repository
     {
         private MyDbContext _context = new MyDbContext();
         private IGenericRepository<Admin> _adminRepository;
+        private IGenericRepository<Category> _categoryRepository;
         private IGenericRepository<Product> _productRepository;
         private IGenericRepository<Contact> _contactRepository;
         private IGenericRepository<Discount> _discountRepository;
@@ -129,7 +130,18 @@ namespace GaHipHop_Repository.Repository
             }
         }
 
-        public IGenericRepository<Category> CategoryRepository => throw new NotImplementedException();
+        public IGenericRepository<Category> CategoryRepository
+        {
+            get
+            {
+
+                if (_categoryRepository == null)
+                {
+                    _categoryRepository = new GenericRepository<Category>(_context);
+                }
+                return _categoryRepository;
+            }
+        }
 
         public void Save()
         {
