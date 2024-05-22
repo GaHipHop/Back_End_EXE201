@@ -52,7 +52,7 @@ namespace GaHipHop_API.Controllers.Product
 
             var result = await _productService.CreateProduct(createProductRequest);
 
-            if (result.Status)
+            if (!result.Status)
             {
                 return CustomResult("Create fail.", new { productName = result.ProductName }, HttpStatusCode.Conflict);
             }
