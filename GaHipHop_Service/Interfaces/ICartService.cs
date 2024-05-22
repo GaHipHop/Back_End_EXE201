@@ -10,9 +10,10 @@ namespace GaHipHop_Service.Interfaces
 {
     public interface ICartService
     {
-        CartItem AddItem(long productId, int quantity, long imageId);
-        void RemoveItem(long productId);
-        void UpdateItemQuantity(long productId, int quantity, long imageId);
+        //CartItem AddItem(long productId, int quantity, long imageId);
+        CartItem AddItem(long id, int quantity);
+        void RemoveItem(long id);
+        void UpdateItemQuantity(long id, int quantity);
         void ClearCart();
         CartResponse GetCartItems();
     }
