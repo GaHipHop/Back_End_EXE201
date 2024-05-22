@@ -37,7 +37,7 @@ namespace GaHipHop_API.Controllers.cart
         {
             try
             {
-                var cartItemDTO = _cartService.AddItem(request.ProductId, request.Quantity, request.imageId);
+                var cartItemDTO = _cartService.AddItem(request.Id, request.Quantity);
                 return CustomResult("Item added to cart.", cartItemDTO);
             }
             catch (CustomException.DataNotFoundException ex)
@@ -72,7 +72,7 @@ namespace GaHipHop_API.Controllers.cart
         {
             try
             {
-                _cartService.UpdateItemQuantity(request.ProductId, request.Quantity, request.imgId);
+                _cartService.UpdateItemQuantity(request.Id, request.Quantity);
                 return CustomResult("Item quantity updated successfully.");
             }
             catch (CustomException.DataNotFoundException ex)

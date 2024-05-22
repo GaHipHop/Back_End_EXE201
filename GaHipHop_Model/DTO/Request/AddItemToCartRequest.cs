@@ -8,9 +8,8 @@ namespace GaHipHop_Model.DTO.Request
 {
     public class AddItemToCartRequest
     {
-        public long ProductId { get; set; }
+        public long Id { get; set; }
         public int Quantity { get; set; }
-        public long imageId { get; set; }
     }
 
 }
