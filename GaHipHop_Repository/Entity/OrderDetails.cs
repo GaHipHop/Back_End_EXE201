@@ -10,7 +10,7 @@ namespace GaHipHop_Repository.Entity
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public long Id { get; set; }
 
-        public long ProductId { get; set; }
+        public long KindId { get; set; }
 
         public long OrderId { get; set; }
 
@@ -20,8 +20,8 @@ namespace GaHipHop_Repository.Entity
         [Required]
         public double OrderPrice { get; set; }
 
-        [ForeignKey("ProductId")]
-        public virtual Product Product { get; set; }
+        [ForeignKey("KindId")]
+        public virtual Kind Kind { get; set; }
 
        [ForeignKey("OrderId")]
         public virtual Order Order { get; set; }

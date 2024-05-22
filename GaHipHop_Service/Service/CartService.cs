@@ -121,12 +121,12 @@ namespace GaHipHop_Service.Service
             }*/
             var cartItems = GetCartItemsFromSession();
             var totalQuantityInCart = cartItems.Where(item => item.ProductId == productId).Sum(item => item.Quantity);
-            if (totalQuantityInCart + quantity > product.ProductQuantity)
+            if (totalQuantityInCart + quantity > product.StockQuantity)
             {
                 throw new CustomException.InvalidDataException("Requested quantity exceeds the available stock.");
             }
 
-            bool imageExists = _unitOfWork.ImgRepository.Exists(img => img.Id == imageId & img.ProductId == productId);
+            bool imageExists = _unitOfWork.KindRepository.Exists(img => img.Id == imageId & img.ProductId == productId);
             if (!imageExists)
             {
                 throw new CustomException.DataNotFoundException("Product image not found.");
@@ -148,7 +148,7 @@ namespace GaHipHop_Service.Service
             var existingItem = cartItems.FirstOrDefault(item => item.ProductId == productId && item.ProductImage == imageId);
             if (existingItem != null)
             {
-                if (existingItem.Quantity + quantity > product.ProductQuantity)
+                if (existingItem.Quantity + quantity > product.StockQuantity)
                 {
                     throw new CustomException.InvalidDataException("Requested quantity exceeds the available stock.");
                 }
@@ -225,13 +225,13 @@ namespace GaHipHop_Service.Service
 
                 // Check if the total quantity of the item in the cart exceeds the available stock
                 var totalQuantityInCart = cartItems.Where(i => i.ProductId == productId).Sum(i => i.Quantity) - item.Quantity;
-                if (quantity > product.ProductQuantity - totalQuantityInCart)
+                if (quantity > product.StockQuantity - totalQuantityInCart)
                 {
                     throw new CustomException.InvalidDataException("Requested quantity exceeds the available stock.");
                 }
 
                 // Check if the requested image exists for the product
-                bool imageExists = _unitOfWork.ImgRepository.Exists(img => img.Id == imageId && img.ProductId == productId);
+                bool imageExists = _unitOfWork.KindRepository.Exists(img => img.Id == imageId && img.ProductId == productId);
                 if (!imageExists)
                 {
                     throw new CustomException.DataNotFoundException("Product image not found.");

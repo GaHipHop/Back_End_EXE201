@@ -10,7 +10,7 @@ namespace GaHipHop_Repository.Repository
         private IGenericRepository<Product> _productRepository;
         private IGenericRepository<Contact> _contactRepository;
         private IGenericRepository<Discount> _discountRepository;
-        private IGenericRepository<Img> _imgRepository;
+        private IGenericRepository<Kind> _kindRepository;
         private IGenericRepository<Order> _orderRepository;
         private IGenericRepository<OrderDetails> _orderDetailsRepository;
         private IGenericRepository<Role> _roleRepository;
@@ -69,16 +69,16 @@ namespace GaHipHop_Repository.Repository
                 return _discountRepository;
             }
         }
-        public IGenericRepository<Img> ImgRepository
+        public IGenericRepository<Kind> KindRepository
         {
             get
             {
 
-                if (_imgRepository == null)
+                if (_kindRepository == null)
                 {
-                    _imgRepository = new GenericRepository<Img>(_context);
+                    _kindRepository = new GenericRepository<Kind>(_context);
                 }
-                return _imgRepository;
+                return _kindRepository;
             }
         }
         public IGenericRepository<OrderDetails> OrderDetailsRepository

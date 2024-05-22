@@ -3,8 +3,8 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace GaHipHop_Repository.Entity
 {
-    [Table("Img")]
-    public class Img
+    [Table("Kind")]
+    public class Kind
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -17,6 +17,12 @@ namespace GaHipHop_Repository.Entity
 
         [Required]
         public string Image { get; set; }
+        
+        [Required]        
+        public int Quantity { get; set; }
+
+        [Required]
+        public bool Status { get; set; }
 
         [ForeignKey("ProductId")]
         public virtual Product Product { get; set; }

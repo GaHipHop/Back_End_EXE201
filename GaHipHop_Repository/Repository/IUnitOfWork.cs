@@ -13,7 +13,7 @@ namespace GaHipHop_Repository.Repository
         public IGenericRepository<Category> CategoryRepository { get; }
         public IGenericRepository<Contact> ContactRepository { get; }
         public IGenericRepository<Discount> DiscountRepository { get; }
-        public IGenericRepository<Img> ImgRepository { get; }
+        public IGenericRepository<Kind> KindRepository { get; }
         public IGenericRepository<Order> OrderRepository { get; }
         public IGenericRepository<OrderDetails> OrderDetailsRepository { get; }
         public IGenericRepository<Product> ProductRepository { get; }

@@ -26,7 +26,7 @@ namespace GaHipHop_Repository.Entity
         public double ProductPrice { get; set; }
 
         [Required]
-        public int ProductQuantity { get; set; }
+        public int StockQuantity { get; set; }
 
         public DateTime CreateDate { get; set; }
 
@@ -44,6 +44,6 @@ namespace GaHipHop_Repository.Entity
         [ForeignKey("CategoryId")]
         public virtual Category Category { get; set; }
 
-        public virtual ICollection<Img> Images { get; set; }
+        public virtual ICollection<Kind> Images { get; set; }
     }
 }

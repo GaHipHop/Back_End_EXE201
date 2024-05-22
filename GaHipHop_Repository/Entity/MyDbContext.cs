@@ -19,7 +19,7 @@ namespace GaHipHop_Repository.Entity
         public DbSet<Category> Categories { get; set; }
         public DbSet<Contact> Contacts { get; set; }
         public DbSet<Discount> Discounts { get; set; }
-        public DbSet<Img> Imgs { get; set; }
+        public DbSet<Kind> Kinds { get; set; }
         public DbSet<Order> Orders { get; set; }
         public DbSet<OrderDetails> OrderDetails { get; set; }
         public DbSet<Product> Products { get; set; }
@@ -78,13 +78,14 @@ namespace GaHipHop_Repository.Entity
             );
 
             // Seed data for Imgs
-            modelBuilder.Entity<Img>().HasData(
-               new Img { Id = 1, ProductId = 1, ColorName = "Red", Image = "image1.jpg" }
+            modelBuilder.Entity<Kind>().HasData(
+               new Kind { Id = 1, ProductId = 1, ColorName = "Red", Image = "image1.jpg", Quantity = 5, Status = true },
+               new Kind { Id = 2, ProductId = 1, ColorName = "Blue", Image = "image2.jpg", Quantity = 5, Status = true }
             );
 
             // Seed data for Products
             modelBuilder.Entity<Product>().HasData(
-                new Product { Id = 1, AdminId = 1, DiscountId = 1, CategoryId = 1, ProductName = "Product 1", ProductDescription = "Description for Product 1", ProductPrice = 100.00, ProductQuantity = 10, CreateDate = DateTime.Now, ModifiedDate = DateTime.Now, Status = true }
+                new Product { Id = 1, AdminId = 1, DiscountId = 1, CategoryId = 1, ProductName = "Product 1", ProductDescription = "Description for Product 1", ProductPrice = 100.00, StockQuantity = 10, CreateDate = DateTime.Now, ModifiedDate = DateTime.Now, Status = true }
             );
 
             // Seed data for Orders
@@ -94,7 +95,7 @@ namespace GaHipHop_Repository.Entity
 
             // Seed data for OrderDetails
             modelBuilder.Entity<OrderDetails>().HasData(
-                new OrderDetails { Id = 1, ProductId = 1, OrderId = 1, OrderQuantity = 1, OrderPrice = 100.00 }
+                new OrderDetails { Id = 1, KindId = 1, OrderId = 1, OrderQuantity = 1, OrderPrice = 100.00 }
             );
 
             // Seed data for UserInfos
