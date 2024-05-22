@@ -198,7 +198,7 @@ namespace GaHipHop_API.Migrations
                     ProductDescription = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     ProductPrice = table.Column<double>(type: "double", nullable: false),
-                    ProductQuantity = table.Column<int>(type: "int", nullable: false),
+                    StockQuantity = table.Column<int>(type: "int", nullable: false),
                     CreateDate = table.Column<DateTime>(type: "datetime(6)", nullable: false),
                     ModifiedDate = table.Column<DateTime>(type: "datetime(6)", nullable: false),
                     Status = table.Column<bool>(type: "tinyint(1)", nullable: false)
@@ -228,7 +228,7 @@ namespace GaHipHop_API.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "Img",
+                name: "Kind",
                 columns: table => new
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false)
@@ -237,13 +237,15 @@ namespace GaHipHop_API.Migrations
                     ColorName = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Image = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4")
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Quantity = table.Column<int>(type: "int", nullable: false),
+                    Status = table.Column<bool>(type: "tinyint(1)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Img", x => x.Id);
+                    table.PrimaryKey("PK_Kind", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Img_Product_ProductId",
+                        name: "FK_Kind_Product_ProductId",
                         column: x => x.ProductId,
                         principalTable: "Product",
                         principalColumn: "Id",
@@ -257,7 +259,7 @@ namespace GaHipHop_API.Migrations
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    ProductId = table.Column<long>(type: "bigint", nullable: false),
+                    KindId = table.Column<long>(type: "bigint", nullable: false),
                     OrderId = table.Column<long>(type: "bigint", nullable: false),
                     OrderQuantity = table.Column<int>(type: "int", nullable: false),
                     OrderPrice = table.Column<double>(type: "double", nullable: false)
@@ -266,15 +268,15 @@ namespace GaHipHop_API.Migrations
                 {
                     table.PrimaryKey("PK_OrderDetails", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_OrderDetails_Order_OrderId",
-                        column: x => x.OrderId,
-                        principalTable: "Order",
+                        name: "FK_OrderDetails_Kind_KindId",
+                        column: x => x.KindId,
+                        principalTable: "Kind",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_OrderDetails_Product_ProductId",
-                        column: x => x.ProductId,
-                        principalTable: "Product",
+                        name: "FK_OrderDetails_Order_OrderId",
+                        column: x => x.OrderId,
+                        principalTable: "Order",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 })
@@ -303,8 +305,8 @@ namespace GaHipHop_API.Migrations
                 columns: new[] { "Id", "ExpiredDate", "Percent", "Status" },
                 values: new object[,]
                 {
-                    { 1L, new DateTime(2024, 6, 19, 0, 24, 8, 185, DateTimeKind.Local).AddTicks(8576), 10f, true },
-                    { 2L, new DateTime(2024, 7, 19, 0, 24, 8, 185, DateTimeKind.Local).AddTicks(8599), 20f, true }
+                    { 1L, new DateTime(2024, 6, 22, 22, 2, 53, 205, DateTimeKind.Local).AddTicks(1467), 10f, true },
+                    { 2L, new DateTime(2024, 7, 22, 22, 2, 53, 205, DateTimeKind.Local).AddTicks(1489), 20f, true }
                 });
 
             migrationBuilder.InsertData(
@@ -330,22 +332,26 @@ namespace GaHipHop_API.Migrations
             migrationBuilder.InsertData(
                 table: "Order",
                 columns: new[] { "Id", "AdminId", "CreateDate", "OrderCode", "OrderRequirement", "PaymentMethod", "Status", "TotalPrice", "UserId" },
-                values: new object[] { 1L, 1L, new DateTime(2024, 5, 19, 0, 24, 8, 185, DateTimeKind.Local).AddTicks(8664), "ORD001", "Requirement 1", "Credit Card", "Confirmed", 100.0, 1L });
+                values: new object[] { 1L, 1L, new DateTime(2024, 5, 22, 22, 2, 53, 205, DateTimeKind.Local).AddTicks(1545), "ORD001", "Requirement 1", "Credit Card", "Confirmed", 100.0, 1L });
 
             migrationBuilder.InsertData(
                 table: "Product",
-                columns: new[] { "Id", "AdminId", "CategoryId", "CreateDate", "DiscountId", "ModifiedDate", "ProductDescription", "ProductName", "ProductPrice", "ProductQuantity", "Status" },
-                values: new object[] { 1L, 1L, 1L, new DateTime(2024, 5, 19, 0, 24, 8, 185, DateTimeKind.Local).AddTicks(8644), 1L, new DateTime(2024, 5, 19, 0, 24, 8, 185, DateTimeKind.Local).AddTicks(8644), "Description for Product 1", "Product 1", 100.0, 10, true });
+                columns: new[] { "Id", "AdminId", "CategoryId", "CreateDate", "DiscountId", "ModifiedDate", "ProductDescription", "ProductName", "ProductPrice", "Status", "StockQuantity" },
+                values: new object[] { 1L, 1L, 1L, new DateTime(2024, 5, 22, 22, 2, 53, 205, DateTimeKind.Local).AddTicks(1527), 1L, new DateTime(2024, 5, 22, 22, 2, 53, 205, DateTimeKind.Local).AddTicks(1528), "Description for Product 1", "Product 1", 100.0, true, 10 });
 
             migrationBuilder.InsertData(
-                table: "Img",
-                columns: new[] { "Id", "ColorName", "Image", "ProductId" },
-                values: new object[] { 1L, "Red", "image1.jpg", 1L });
+                table: "Kind",
+                columns: new[] { "Id", "ColorName", "Image", "ProductId", "Quantity", "Status" },
+                values: new object[,]
+                {
+                    { 1L, "Red", "image1.jpg", 1L, 5, true },
+                    { 2L, "Blue", "image2.jpg", 1L, 5, true }
+                });
 
             migrationBuilder.InsertData(
                 table: "OrderDetails",
-                columns: new[] { "Id", "OrderId", "OrderPrice", "OrderQuantity", "ProductId" },
-                values: new object[] { 1L, 1L, 100.0, 1, 1L });
+                columns: new[] { "Id", "KindId", "OrderId", "OrderPrice", "OrderQuantity" },
+                values: new object[] { 1L, 1L, 1L, 100.0, 1 });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Admin_RoleId",
@@ -353,8 +359,8 @@ namespace GaHipHop_API.Migrations
                 column: "RoleId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Img_ProductId",
-                table: "Img",
+                name: "IX_Kind_ProductId",
+                table: "Kind",
                 column: "ProductId");
 
             migrationBuilder.CreateIndex(
@@ -368,14 +374,14 @@ namespace GaHipHop_API.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_OrderDetails_KindId",
+                table: "OrderDetails",
+                column: "KindId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_OrderDetails_OrderId",
                 table: "OrderDetails",
                 column: "OrderId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_OrderDetails_ProductId",
-                table: "OrderDetails",
-                column: "ProductId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Product_AdminId",
@@ -400,10 +406,10 @@ namespace GaHipHop_API.Migrations
                 name: "Contact");
 
             migrationBuilder.DropTable(
-                name: "Img");
+                name: "OrderDetails");
 
             migrationBuilder.DropTable(
-                name: "OrderDetails");
+                name: "Kind");
 
             migrationBuilder.DropTable(
                 name: "Order");

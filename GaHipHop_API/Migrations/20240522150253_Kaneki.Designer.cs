@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GaHipHop_API.Migrations
 {
     [DbContext(typeof(MyDbContext))]
-    [Migration("20240518172408_Kaneki")]
+    [Migration("20240522150253_Kaneki")]
     partial class Kaneki
     {
         /// <inheritdoc />
@@ -202,20 +202,20 @@ namespace GaHipHop_API.Migrations
                         new
                         {
                             Id = 1L,
-                            ExpiredDate = new DateTime(2024, 6, 19, 0, 24, 8, 185, DateTimeKind.Local).AddTicks(8576),
+                            ExpiredDate = new DateTime(2024, 6, 22, 22, 2, 53, 205, DateTimeKind.Local).AddTicks(1467),
                             Percent = 10f,
                             Status = true
                         },
                         new
                         {
                             Id = 2L,
-                            ExpiredDate = new DateTime(2024, 7, 19, 0, 24, 8, 185, DateTimeKind.Local).AddTicks(8599),
+                            ExpiredDate = new DateTime(2024, 7, 22, 22, 2, 53, 205, DateTimeKind.Local).AddTicks(1489),
                             Percent = 20f,
                             Status = true
                         });
                 });
 
-            modelBuilder.Entity("GaHipHop_Repository.Entity.Img", b =>
+            modelBuilder.Entity("GaHipHop_Repository.Entity.Kind", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -234,11 +234,17 @@ namespace GaHipHop_API.Migrations
                     b.Property<long>("ProductId")
                         .HasColumnType("bigint");
 
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("Status")
+                        .HasColumnType("tinyint(1)");
+
                     b.HasKey("Id");
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("Img");
+                    b.ToTable("Kind");
 
                     b.HasData(
                         new
@@ -246,7 +252,18 @@ namespace GaHipHop_API.Migrations
                             Id = 1L,
                             ColorName = "Red",
                             Image = "image1.jpg",
-                            ProductId = 1L
+                            ProductId = 1L,
+                            Quantity = 5,
+                            Status = true
+                        },
+                        new
+                        {
+                            Id = 2L,
+                            ColorName = "Blue",
+                            Image = "image2.jpg",
+                            ProductId = 1L,
+                            Quantity = 5,
+                            Status = true
                         });
                 });
 
@@ -299,7 +316,7 @@ namespace GaHipHop_API.Migrations
                         {
                             Id = 1L,
                             AdminId = 1L,
-                            CreateDate = new DateTime(2024, 5, 19, 0, 24, 8, 185, DateTimeKind.Local).AddTicks(8664),
+                            CreateDate = new DateTime(2024, 5, 22, 22, 2, 53, 205, DateTimeKind.Local).AddTicks(1545),
                             OrderCode = "ORD001",
                             OrderRequirement = "Requirement 1",
                             PaymentMethod = "Credit Card",
@@ -317,6 +334,9 @@ namespace GaHipHop_API.Migrations
 
                     MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<long>("Id"));
 
+                    b.Property<long>("KindId")
+                        .HasColumnType("bigint");
+
                     b.Property<long>("OrderId")
                         .HasColumnType("bigint");
 
@@ -326,14 +346,11 @@ namespace GaHipHop_API.Migrations
                     b.Property<int>("OrderQuantity")
                         .HasColumnType("int");
 
-                    b.Property<long>("ProductId")
-                        .HasColumnType("bigint");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("OrderId");
+                    b.HasIndex("KindId");
 
-                    b.HasIndex("ProductId");
+                    b.HasIndex("OrderId");
 
                     b.ToTable("OrderDetails");
 
@@ -341,10 +358,10 @@ namespace GaHipHop_API.Migrations
                         new
                         {
                             Id = 1L,
+                            KindId = 1L,
                             OrderId = 1L,
                             OrderPrice = 100.0,
-                            OrderQuantity = 1,
-                            ProductId = 1L
+                            OrderQuantity = 1
                         });
                 });
 
@@ -382,11 +399,11 @@ namespace GaHipHop_API.Migrations
                     b.Property<double>("ProductPrice")
                         .HasColumnType("double");
 
-                    b.Property<int>("ProductQuantity")
-                        .HasColumnType("int");
-
                     b.Property<bool>("Status")
                         .HasColumnType("tinyint(1)");
+
+                    b.Property<int>("StockQuantity")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -404,14 +421,14 @@ namespace GaHipHop_API.Migrations
                             Id = 1L,
                             AdminId = 1L,
                             CategoryId = 1L,
-                            CreateDate = new DateTime(2024, 5, 19, 0, 24, 8, 185, DateTimeKind.Local).AddTicks(8644),
+                            CreateDate = new DateTime(2024, 5, 22, 22, 2, 53, 205, DateTimeKind.Local).AddTicks(1527),
                             DiscountId = 1L,
-                            ModifiedDate = new DateTime(2024, 5, 19, 0, 24, 8, 185, DateTimeKind.Local).AddTicks(8644),
+                            ModifiedDate = new DateTime(2024, 5, 22, 22, 2, 53, 205, DateTimeKind.Local).AddTicks(1528),
                             ProductDescription = "Description for Product 1",
                             ProductName = "Product 1",
                             ProductPrice = 100.0,
-                            ProductQuantity = 10,
-                            Status = true
+                            Status = true,
+                            StockQuantity = 10
                         });
                 });
 
@@ -509,10 +526,10 @@ namespace GaHipHop_API.Migrations
                     b.Navigation("Role");
                 });
 
-            modelBuilder.Entity("GaHipHop_Repository.Entity.Img", b =>
+            modelBuilder.Entity("GaHipHop_Repository.Entity.Kind", b =>
                 {
                     b.HasOne("GaHipHop_Repository.Entity.Product", "Product")
-                        .WithMany()
+                        .WithMany("Images")
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -541,21 +558,21 @@ namespace GaHipHop_API.Migrations
 
             modelBuilder.Entity("GaHipHop_Repository.Entity.OrderDetails", b =>
                 {
+                    b.HasOne("GaHipHop_Repository.Entity.Kind", "Kind")
+                        .WithMany()
+                        .HasForeignKey("KindId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("GaHipHop_Repository.Entity.Order", "Order")
                         .WithMany()
                         .HasForeignKey("OrderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("GaHipHop_Repository.Entity.Product", "Product")
-                        .WithMany()
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Navigation("Kind");
 
                     b.Navigation("Order");
-
-                    b.Navigation("Product");
                 });
 
             modelBuilder.Entity("GaHipHop_Repository.Entity.Product", b =>
@@ -583,6 +600,11 @@ namespace GaHipHop_API.Migrations
                     b.Navigation("Category");
 
                     b.Navigation("Discount");
+                });
+
+            modelBuilder.Entity("GaHipHop_Repository.Entity.Product", b =>
+                {
+                    b.Navigation("Images");
                 });
 #pragma warning restore 612, 618
         }
