@@ -6,7 +6,7 @@ using GaHipHop_Service.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 
-namespace GaHipHop_API.Controllers
+namespace GaHipHop_API.Controllers.Admin
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -25,7 +25,7 @@ namespace GaHipHop_API.Controllers
             var result = await _adminService.AuthorizeUser(loginRequest);
             if (result.Token != null)
             {
-                return CustomResult("Login successful.",new { Token = result.Token, LoginResponse = result.loginResponse });
+                return CustomResult("Login successful.", new { result.Token, LoginResponse = result.loginResponse });
             }
             else
             {
@@ -37,7 +37,7 @@ namespace GaHipHop_API.Controllers
         public IActionResult GetAllAdmin()
         {
             var admin = _adminService.GetAllAdmin();
-            return CustomResult("Data load Successful",admin);
+            return CustomResult("Data load Successful", admin);
         }
 
         [HttpGet("{id}")]
@@ -47,7 +47,7 @@ namespace GaHipHop_API.Controllers
             {
                 var admin = await _adminService.GetAdminById(id);
 
-                return CustomResult("Create admin successful",admin);
+                return CustomResult("Create admin successful", admin);
             }
             catch (Exception ex)
             {
@@ -82,13 +82,13 @@ namespace GaHipHop_API.Controllers
             if (!ModelState.IsValid)
             {
                 //return BadRequest(ModelState);
-                return CustomResult(ModelState,HttpStatusCode.BadRequest);
+                return CustomResult(ModelState, HttpStatusCode.BadRequest);
             }
 
             try
             {
                 var result = await _adminService.UpdateAdmin(id, adminRequest);
-                return CustomResult("Update Successful",result);
+                return CustomResult("Update Successful", result);
             }
             catch (Exception ex)
             {
