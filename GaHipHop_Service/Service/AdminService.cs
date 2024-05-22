@@ -164,13 +164,13 @@ namespace GaHipHop_Service.Service
             new Claim(JwtRegisteredClaimNames.Sub, info.Username),
             new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
             new Claim(JwtRegisteredClaimNames.Iat, new DateTimeOffset(DateTime.UtcNow).ToUnixTimeSeconds().ToString(), ClaimValueTypes.Integer64),
-            new Claim(ClaimTypes.Name, info.Username),
+            new Claim("name", info.Username),
         };
 
             if (info.RoleId != 0)
             {
                 var role = _unitOfWork.RoleRepository.Get(filter: r => r.Id == info.RoleId).FirstOrDefault();
-                claims.Add(new Claim(ClaimTypes.Role, role.RoleName));
+                claims.Add(new Claim("role", role.RoleName));
             }
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration.GetSection("Jwt:Key").Value));
