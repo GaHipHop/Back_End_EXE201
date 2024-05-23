@@ -104,7 +104,7 @@ namespace GaHipHop_Repository.Entity
             );
         }
 
-        private string HashPassword(string password)
+        /*private string HashPassword(string password)
         {
             using (var sha512 = new System.Security.Cryptography.SHA512Managed())
             {
@@ -112,7 +112,7 @@ namespace GaHipHop_Repository.Entity
                 var hash = sha512.ComputeHash(bytes);
                 return Convert.ToBase64String(hash);
             }
-        }
+        }*/
 
 
     }
