@@ -33,8 +33,8 @@ namespace GaHipHop_Service.Service
         public async Task<(string Token, LoginResponse loginResponse)> AuthorizeUser(LoginRequest loginRequest)
         {
             var member = _unitOfWork.AdminRepository
-                .Get(filter: a => a.Username == loginRequest.UserName && a.Password == loginRequest.Password && a.Status == true).FirstOrDefault();
-            if (member != null)
+                .Get(filter: a => a.Username == loginRequest.UserName && a.Status == true).FirstOrDefault();
+            if (member != null && VerifyPassword(loginRequest.Password, member.Password))
             {
                 string token = GenerateToken(member);
                 var adminResponse = _mapper.Map<LoginResponse>(member);
@@ -96,6 +96,7 @@ namespace GaHipHop_Service.Service
 
                 var admin = _mapper.Map<Admin>(adminRequest);
 
+                admin.Password = HashPassword(adminRequest.Password);
                 admin.Status = true;
                 admin.RoleId = 1;
 
@@ -185,6 +186,14 @@ namespace GaHipHop_Service.Service
             return jwt;
         }
 
+        private bool VerifyPassword(string providedPassword, string hashedPassword)
+        {
+            return BCrypt.Net.BCrypt.Verify(providedPassword, hashedPassword);
+        }
 
+        public string HashPassword(string password)
+        {
+            return BCrypt.Net.BCrypt.HashPassword(password);
+        }
     }
 }
