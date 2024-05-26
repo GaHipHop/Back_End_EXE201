@@ -11,6 +11,12 @@ namespace GaHipHop_Model.DTO.Response
     {
         public long Id { get; set; }
 
+        public long AdminId { get; set; }
+
+        public long DiscountId { get; set; }
+
+        public long CategoryId { get; set; }
+
         public string ProductName { get; set; }
 
         public string ProductDescription { get; set; }
@@ -19,14 +25,12 @@ namespace GaHipHop_Model.DTO.Response
 
         public double CurrentPrice { get; set; }
 
-        public int ProductQuantity { get; set; }
+        public int StockQuantity { get; set; }
+
+        public DateTime CreateDate { get; set; }
+
+        public DateTime ModifiedDate { get; set; }
 
         public bool Status { get; set; }
-
-        public virtual Admin Admin { get; set; }
-
-        public virtual Discount Discount { get; set; }
-
-        public virtual Category Category { get; set; }
     }
 }

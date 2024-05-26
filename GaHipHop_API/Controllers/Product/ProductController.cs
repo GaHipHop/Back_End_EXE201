@@ -5,6 +5,7 @@ using GaHipHop_Service.Interfaces;
 using GaHipHop_Service.Service;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
 using System.Net;
 using Tools;
 
@@ -22,9 +23,9 @@ namespace GaHipHop_API.Controllers.Product
         }
 
         [HttpGet("GetAllProduct")]
-        public IActionResult GetAllProduct()
+        public IActionResult GetAllProduct([FromQuery] QueryObject queryObject)
         {
-            var product = _productService.GetAllProduct();
+            var product = _productService.GetAllProduct(queryObject);
             return CustomResult("Get all data Successfully", product);
         }
 

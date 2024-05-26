@@ -14,7 +14,7 @@ namespace GaHipHop_Model.DTO.Request
         public required string ProductName { get; set; }
         public required string ProductDescription { get; set; }
         public required double ProductPrice { get; set; }
-        public required int ProductQuantity { get; set; }
+        public required int StockQuantity { get; set; }
         public required bool Status { get; set; }
     }
 }

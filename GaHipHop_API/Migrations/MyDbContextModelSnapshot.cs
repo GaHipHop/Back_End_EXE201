@@ -199,14 +199,14 @@ namespace GaHipHop_API.Migrations
                         new
                         {
                             Id = 1L,
-                            ExpiredDate = new DateTime(2024, 6, 22, 22, 2, 53, 205, DateTimeKind.Local).AddTicks(1467),
+                            ExpiredDate = new DateTime(2024, 6, 27, 2, 5, 21, 593, DateTimeKind.Local).AddTicks(4838),
                             Percent = 10f,
                             Status = true
                         },
                         new
                         {
                             Id = 2L,
-                            ExpiredDate = new DateTime(2024, 7, 22, 22, 2, 53, 205, DateTimeKind.Local).AddTicks(1489),
+                            ExpiredDate = new DateTime(2024, 7, 27, 2, 5, 21, 593, DateTimeKind.Local).AddTicks(4863),
                             Percent = 20f,
                             Status = true
                         });
@@ -313,7 +313,7 @@ namespace GaHipHop_API.Migrations
                         {
                             Id = 1L,
                             AdminId = 1L,
-                            CreateDate = new DateTime(2024, 5, 22, 22, 2, 53, 205, DateTimeKind.Local).AddTicks(1545),
+                            CreateDate = new DateTime(2024, 5, 27, 2, 5, 21, 593, DateTimeKind.Local).AddTicks(5011),
                             OrderCode = "ORD001",
                             OrderRequirement = "Requirement 1",
                             PaymentMethod = "Credit Card",
@@ -418,14 +418,28 @@ namespace GaHipHop_API.Migrations
                             Id = 1L,
                             AdminId = 1L,
                             CategoryId = 1L,
-                            CreateDate = new DateTime(2024, 5, 22, 22, 2, 53, 205, DateTimeKind.Local).AddTicks(1527),
+                            CreateDate = new DateTime(2024, 5, 27, 2, 5, 21, 593, DateTimeKind.Local).AddTicks(4927),
                             DiscountId = 1L,
-                            ModifiedDate = new DateTime(2024, 5, 22, 22, 2, 53, 205, DateTimeKind.Local).AddTicks(1528),
-                            ProductDescription = "Description for Product 1",
-                            ProductName = "Product 1",
-                            ProductPrice = 100.0,
+                            ModifiedDate = new DateTime(2024, 5, 27, 2, 5, 21, 593, DateTimeKind.Local).AddTicks(4929),
+                            ProductDescription = "Nilou",
+                            ProductName = "Figure",
+                            ProductPrice = 50000000.0,
                             Status = true,
                             StockQuantity = 10
+                        },
+                        new
+                        {
+                            Id = 2L,
+                            AdminId = 1L,
+                            CategoryId = 1L,
+                            CreateDate = new DateTime(2024, 5, 27, 2, 5, 21, 593, DateTimeKind.Local).AddTicks(4980),
+                            DiscountId = 2L,
+                            ModifiedDate = new DateTime(2024, 5, 27, 2, 5, 21, 593, DateTimeKind.Local).AddTicks(4981),
+                            ProductDescription = "Shenhe",
+                            ProductName = "Figure",
+                            ProductPrice = 1000000.0,
+                            Status = true,
+                            StockQuantity = 100
                         });
                 });
 
@@ -526,7 +540,7 @@ namespace GaHipHop_API.Migrations
             modelBuilder.Entity("GaHipHop_Repository.Entity.Kind", b =>
                 {
                     b.HasOne("GaHipHop_Repository.Entity.Product", "Product")
-                        .WithMany("Images")
+                        .WithMany()
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -597,11 +611,6 @@ namespace GaHipHop_API.Migrations
                     b.Navigation("Category");
 
                     b.Navigation("Discount");
-                });
-
-            modelBuilder.Entity("GaHipHop_Repository.Entity.Product", b =>
-                {
-                    b.Navigation("Images");
                 });
 #pragma warning restore 612, 618
         }
