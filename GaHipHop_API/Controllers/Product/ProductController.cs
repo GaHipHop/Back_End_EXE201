@@ -6,6 +6,7 @@ using GaHipHop_Service.Service;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
+using Tools;
 
 namespace GaHipHop_API.Controllers.Product
 {
@@ -36,9 +37,9 @@ namespace GaHipHop_API.Controllers.Product
 
                 return CustomResult("Product is found", product);
             }
-            catch (Exception ex)
+            catch (CustomException.DataNotFoundException ex)
             {
-                return CustomResult("Product not found.", HttpStatusCode.NotFound);
+                return CustomResult(ex.Message, HttpStatusCode.NotFound);
             }
         }
 

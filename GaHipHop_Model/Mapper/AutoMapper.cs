@@ -23,6 +23,7 @@ namespace GaHipHop_Model.Mapper
             CreateMap<UpdateContactRequest, Discount>().ReverseMap();
             CreateMap<CreateProductRequest, Product>().ReverseMap();
             CreateMap<UpdateProductRequest, Product>().ReverseMap();
+            CreateMap<KindRequest, Kind>().ReverseMap();
 
             //Reponse
             CreateMap<Admin, AdminResponse>()
@@ -34,7 +35,7 @@ namespace GaHipHop_Model.Mapper
             .ForMember(dest => dest.Admin, opt => opt.MapFrom(src => src.Admin))
             .ForMember(dest => dest.Discount, opt => opt.MapFrom(src => src.Discount))
             .ForMember(dest => dest.Category, opt => opt.MapFrom(src => src.Category));
-           
+            CreateMap<Kind, KindResponse>();
 
         }
     }

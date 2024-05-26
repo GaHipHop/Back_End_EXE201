@@ -11,6 +11,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Tools;
 
 namespace GaHipHop_Service.Service
 {
@@ -45,7 +46,7 @@ namespace GaHipHop_Service.Service
 
                 if (product == null)
                 {
-                    throw new Exception("Product not found");
+                    throw new CustomException.DataNotFoundException("Product not found");
                 }
 
                 var productResponse = _mapper.Map<ProductResponse>(product);

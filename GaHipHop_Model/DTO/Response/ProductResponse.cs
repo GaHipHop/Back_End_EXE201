@@ -17,7 +17,8 @@ namespace GaHipHop_Model.DTO.Response
 
         public double ProductPrice { get; set; }
 
-        //public double CurrentPrice { get; set; }
+        public double CurrentPrice { get; set; }
+
         public int ProductQuantity { get; set; }
 
         public bool Status { get; set; }
