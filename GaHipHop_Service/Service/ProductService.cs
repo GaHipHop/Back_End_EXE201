@@ -28,6 +28,7 @@ namespace GaHipHop_Service.Service
             _mapper = mapper;
         }
 
+        //Status = TRUE
         public async Task<List<ProductResponse>> GetAllProduct(QueryObject queryObject)
         {
             var products = _unitOfWork.ProductRepository.Get(
@@ -67,17 +68,8 @@ namespace GaHipHop_Service.Service
                 {
                     throw new CustomException.DataNotFoundException("Product not found");
                 }
-                if (product.DiscountId != null && product.Discount != null)
-                {
-                    var discount = product.Discount;
-
-                    if (discount.ExpiredDate >= DateTime.Now && discount.Status)
-                    {
-                        var discountedPrice = product.ProductPrice * (1 - discount.Percent / 100);
-                        product.ProductPrice = Math.Round(discountedPrice, 3);
-                    }
-                }
-                var productResponse = _mapper.Map<ProductResponse>(product);
+                var productResponse = CalculateDiscountedPrice(product);
+                _mapper.Map(product, productResponse);
                 return productResponse;
             }
             catch (Exception ex)
@@ -86,71 +78,73 @@ namespace GaHipHop_Service.Service
             }
         }
 
-        public async Task<ProductResponse> CreateProduct(CreateProductRequest createProductRequest)
+        public async Task<ProductResponse> CreateProduct(ProductRequest productRequest)
         {
-            var existingProduct = _unitOfWork.ProductRepository.Get().FirstOrDefault(p => p.ProductName.ToLower() == createProductRequest.ProductName.ToLower());
+            var existingProduct = _unitOfWork.ProductRepository.Get().FirstOrDefault(p => p.ProductName.ToLower() == productRequest.ProductName.ToLower());
 
             if (existingProduct != null)
             {
-                throw new ArgumentException($"Product with name '{createProductRequest.ProductName}' already exists.");
+                throw new CustomException.DataExistException($"Product with name '{productRequest.ProductName}' already exists.");
             }
-            var admin = _unitOfWork.AdminRepository.GetByID(createProductRequest.AdminId);
+            var admin = _unitOfWork.AdminRepository.GetByID(productRequest.AdminId);
             if (admin == null)
             {
-                throw new ArgumentException("Admin not found.");
+                throw new CustomException.DataNotFoundException("Admin not found.");
             }
 
-            var discount = _unitOfWork.DiscountRepository.GetByID(createProductRequest.DiscountId);
+            var discount = _unitOfWork.DiscountRepository.GetByID(productRequest.DiscountId);
             if (discount == null)
             {
-                throw new ArgumentException("Discount not found.");
+                throw new CustomException.DataNotFoundException("Discount not found.");
             }
 
-            var category = _unitOfWork.CategoryRepository.GetByID(createProductRequest.CategoryId);
+            var category = _unitOfWork.CategoryRepository.GetByID(productRequest.CategoryId);
             if (category == null)
             {
-                throw new ArgumentException("Category not found.");
+                throw new CustomException.DataNotFoundException("Category not found.");
             }
 
-            var newProduct = _mapper.Map<Product>(createProductRequest);
+            var newProduct = _mapper.Map<Product>(productRequest);
             newProduct.CreateDate = DateTime.UtcNow;
+            newProduct.Status = true;
 
             newProduct.Admin = admin;
             newProduct.Discount = discount;
             newProduct.Category = category;
 
+            var productResponse = CalculateDiscountedPrice(newProduct);
+
             _unitOfWork.ProductRepository.Insert(newProduct);
             _unitOfWork.Save();
 
-            var productResponse = _mapper.Map<ProductResponse>(newProduct);
-
+            _mapper.Map(newProduct, productResponse);
             return productResponse;
         }
 
-        public async Task<ProductResponse> UpdateProduct(long id, UpdateProductRequest updateProductRequest)
+        public async Task<ProductResponse> UpdateProduct(long id, ProductRequest productRequest)
         {
             // 1. Fetch the Existing Product
             var existingProduct = _unitOfWork.ProductRepository.GetByID(id); // Use async variant
 
             if (existingProduct == null)
             {
-                throw new ArgumentException($"Product with ID {id} not found."); // Use a more specific exception type
+                throw new CustomException.DataNotFoundException($"Product with ID {id} not found."); // Use a more specific exception type
             }
 
             // 2. Check for Duplicate Product Name
-            if (existingProduct.ProductName.ToLower() != updateProductRequest.ProductName.ToLower())
+            if (existingProduct.ProductName.ToLower() != productRequest.ProductName.ToLower())
             {
                 var duplicateExists = _unitOfWork.ProductRepository.Get((p => p.Id != id
-                                                                                      && p.ProductName.ToLower() == updateProductRequest.ProductName.ToLower()));
+                                                                                      && p.ProductName.ToLower() == productRequest.ProductName.ToLower()));
 
                 if (duplicateExists == null)
                 {
-                    throw new ArgumentException($"Product with name '{updateProductRequest.ProductName}' already exists.");
+                    throw new CustomException.DataExistException($"Product with name '{productRequest.ProductName}' already exists.");
                 }
             }
 
             // 3. Update Product Properties
-            _mapper.Map(updateProductRequest, existingProduct);
+            _mapper.Map(productRequest, existingProduct);
             existingProduct.ModifiedDate = DateTime.Now;
 
             // Discount calculation logic
@@ -197,7 +191,7 @@ namespace GaHipHop_Service.Service
                 var product = _unitOfWork.ProductRepository.GetByID(id);
                 if (product == null)
                 {
-                    throw new Exception("Product not found.");
+                    throw new CustomException.DataNotFoundException("Product not found.");
                 }
 
                 product.Status = false;

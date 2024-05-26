@@ -28,7 +28,7 @@ namespace GaHipHop_API.Controllers.Kind
 
             try
             {
-                var kindResponse = await _kindService.UploadImageAsync(file);
+                var kindResponse = await _kindService.UploadImage(file);
                 if (kindResponse == null)
                 {
                     return StatusCode(500, "Error uploading image to Firebase.");

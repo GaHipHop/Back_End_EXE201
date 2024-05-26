@@ -45,35 +45,44 @@ namespace GaHipHop_API.Controllers.Product
         }
 
         [HttpPost("CreateProduct")]
-        public async Task<IActionResult> CreateProduct([FromBody] CreateProductRequest createProductRequest)
+        public async Task<IActionResult> CreateProduct([FromBody] ProductRequest productRequest)
         {
-            if (!ModelState.IsValid)
+            try
             {
-                return CustomResult(ModelState, HttpStatusCode.BadRequest);
+                if (!ModelState.IsValid)
+                {
+                    return CustomResult(ModelState, HttpStatusCode.BadRequest);
+                }
+
+                ProductResponse product = await _productService.CreateProduct(productRequest);
+                return CustomResult("Create Successful", product, HttpStatusCode.OK);
             }
-
-            var result = await _productService.CreateProduct(createProductRequest);
-
-            if (!result.Status)
+            catch (CustomException.DataNotFoundException ex)
             {
-                return CustomResult("Create fail.", new { productName = result.ProductName }, HttpStatusCode.Conflict);
+                return CustomResult(ex.Message, HttpStatusCode.Conflict);
             }
-
-            return CustomResult("Create Successful", result);
+            catch (Exception ex)
+            {
+                return CustomResult(ex.Message);
+            }
 
         }
 
         [HttpPatch("UpdateProduct/{id}")]
-        public async Task<IActionResult> UpdateProduct(long id, [FromBody] UpdateProductRequest updateProductRequest)
+        public async Task<IActionResult> UpdateProduct(long id, [FromBody] ProductRequest productRequest)
         {
             try
             {
-                ProductResponse product = await _productService.UpdateProduct(id, updateProductRequest);
+                ProductResponse product = await _productService.UpdateProduct(id, productRequest);
                 return CustomResult("updated Successful", product, HttpStatusCode.OK);
+            }
+            catch (CustomException.DataNotFoundException ex)
+            {
+                return CustomResult(ex.Message, HttpStatusCode.InternalServerError);
             }
             catch (Exception ex)
             {
-                return CustomResult(ex.Message, HttpStatusCode.InternalServerError);
+                return CustomResult(ex.Message);
             }
         }
 
@@ -85,11 +94,14 @@ namespace GaHipHop_API.Controllers.Product
                 var deleteProduct = await _productService.DeleteProduct(id);
                 return CustomResult("Delete Prodcut Successfull (Status)", deleteProduct, HttpStatusCode.OK);
             }
-            catch (Exception ex)
+            catch (CustomException.DataNotFoundException ex)
             {
                 return CustomResult(ex.Message, HttpStatusCode.InternalServerError);
             }
-
+            catch (Exception ex)
+            {
+                return CustomResult(ex.Message);
+            }
 
         }
     }
