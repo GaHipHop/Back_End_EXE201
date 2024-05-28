@@ -33,53 +33,30 @@ namespace GaHipHop_Service.Service
 
         public async Task<KindResponse> CreateKind(KindRequest kindRequest)
         {
-            try
+            var existingKind = _unitOfWork.KindRepository.Get().FirstOrDefault(p => p.ColorName.ToLower() == kindRequest.ColorName.ToLower());
+
+            if (existingKind != null)
             {
-                var existingKind = _unitOfWork.KindRepository.Get().FirstOrDefault(p => p.ColorName.ToLower() == kindRequest.ColorName.ToLower());
-
-                if (existingKind != null)
-                {
-                    throw new CustomException.DataExistException($"Kind with ColorName '{kindRequest.ColorName}' already exists.");
-                }
-
-                var product = _unitOfWork.ProductRepository.GetByID(kindRequest.ProductId);
-                if (product == null)
-                {
-                    throw new CustomException.DataNotFoundException("Product not found.");
-                }
-
-                product.StockQuantity += kindRequest.Quantity;
-
-                var kindResponse = _mapper.Map<KindResponse>(existingKind);
-                var newKind = _mapper.Map<Kind>(kindRequest);
-                newKind.Status = true;
-
-                _unitOfWork.KindRepository.Insert(newKind);
-                _unitOfWork.Save(); // Lưu thay đổi không đồng bộ
-
-                _mapper.Map(newKind, kindResponse);
-                return kindResponse;
+                throw new CustomException.DataExistException($"Kind with ColorName '{kindRequest.ColorName}' already exists.");
             }
-            catch (DbUpdateException dbEx)
+
+            var product = _unitOfWork.ProductRepository.GetByID(kindRequest.ProductId);
+            if (product == null)
             {
-                // Xử lý lỗi cập nhật cơ sở dữ liệu
-                throw new Exception("There was a problem updating the database. " + dbEx.Message, dbEx);
+                throw new CustomException.DataNotFoundException("Product not found.");
             }
-            catch (DbEntityValidationException valEx)
-            {
-                // Xử lý lỗi xác thực thực thể
-                var errorMessages = valEx.EntityValidationErrors
-                    .SelectMany(x => x.ValidationErrors)
-                    .Select(x => x.ErrorMessage);
-                var fullErrorMessage = string.Join("; ", errorMessages);
-                var exceptionMessage = string.Concat(valEx.Message, " The validation errors are: ", fullErrorMessage);
-                throw new Exception(exceptionMessage, valEx);
-            }
-            catch (Exception ex)
-            {
-                // Xử lý các lỗi chung khác
-                throw new Exception("An error occurred while creating the kind: " + ex.Message, ex);
-            }
+
+            product.StockQuantity += kindRequest.Quantity;
+
+            var kindResponse = _mapper.Map<KindResponse>(existingKind);
+            var newKind = _mapper.Map<Kind>(kindRequest);
+            newKind.Status = true;
+
+            _unitOfWork.KindRepository.Insert(newKind);
+            _unitOfWork.Save(); // Lưu thay đổi không đồng bộ
+
+            _mapper.Map(newKind, kindResponse);
+            return kindResponse;
         }
 
         public async Task<KindResponse> UpdateKind(long id, KindRequest kindRequest)

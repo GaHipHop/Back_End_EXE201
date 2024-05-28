@@ -40,10 +40,10 @@ namespace GaHipHop_API.Controllers.Kind
             {
                 return CustomResult(ex.Message, HttpStatusCode.NotFound);
             }
-            /*catch (Exception ex)
+            catch (Exception ex)
             {
                 return CustomResult(ex.Message, HttpStatusCode.InternalServerError);
-            }*/
+            }
 
         }
 
