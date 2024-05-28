@@ -1,9 +1,14 @@
-﻿using CoreApiResponse;
+﻿using AutoMapper;
+using CoreApiResponse;
 using GaHipHop_Model.DTO.Request;
+using GaHipHop_Model.DTO.Response;
+using GaHipHop_Repository.Repository;
 using GaHipHop_Service.Interfaces;
+using GaHipHop_Service.Service;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
+using Tools;
 
 namespace GaHipHop_API.Controllers.Kind
 {
@@ -18,29 +23,74 @@ namespace GaHipHop_API.Controllers.Kind
             _kindService = kindService;
         }
 
-        [HttpPost("upload")]
-        public async Task<IActionResult> UploadImage(IFormFile file)
+        [HttpPost("CreateKind")]
+        public async Task<IActionResult> CreateKind([FromForm] KindRequest kindRequest)
         {
-            if (file == null || file.Length == 0)
-            {
-                return BadRequest("Invalid file.");
-            }
-
             try
             {
-                var kindResponse = await _kindService.UploadImage(file);
-                if (kindResponse == null)
+                if (!ModelState.IsValid)
                 {
-                    return StatusCode(500, "Error uploading image to Firebase.");
+                    return CustomResult(ModelState, HttpStatusCode.BadRequest);
                 }
 
-                return Ok(new { DownloadUrl = kindResponse }); // Return download URL
+                KindResponse kind = await _kindService.CreateKind(kindRequest);
+                return CustomResult("Create Successful", kind, HttpStatusCode.OK);
+            }
+            catch (CustomException.DataNotFoundException ex)
+            {
+                return CustomResult(ex.Message, HttpStatusCode.NotFound);
+            }
+            /*catch (Exception ex)
+            {
+                return CustomResult(ex.Message, HttpStatusCode.InternalServerError);
+            }*/
+
+        }
+
+        [HttpPatch("UpdateKind/{id}")]
+        public async Task<IActionResult> UpdateKind(long id, [FromForm] KindRequest kindRequest)
+        {
+            try
+            {
+                KindResponse kind = await _kindService.UpdateKind(id, kindRequest);
+                return CustomResult("Update Sucessfully", kind, HttpStatusCode.OK);
+            }
+            catch (CustomException.DataNotFoundException ex)
+            {
+                return CustomResult(ex.Message, HttpStatusCode.NotFound);
+            }
+            catch (CustomException.DataExistException ex)
+            {
+                return CustomResult(ex.Message, HttpStatusCode.Conflict);
+            }
+            catch (CustomException.InvalidDataException ex)
+            {
+                return CustomResult(ex.Message, HttpStatusCode.BadRequest);
             }
             catch (Exception ex)
             {
-                // Log the Firebase exception (e.g., using a logging framework)
-                return StatusCode(500, $"Firebase error: {ex.Message}");
+                return CustomResult(ex.Message, HttpStatusCode.InternalServerError);
             }
         }
+
+        [HttpDelete("DeleteKind/{id}")]
+        public async Task<IActionResult> DeleteKind(long id)
+        {
+            try
+            {
+                var kind = await _kindService.DeleteKind(id);
+                return CustomResult("Delete Kind Successfull (Status)", kind, HttpStatusCode.OK);
+            }
+            catch (CustomException.DataNotFoundException ex)
+            {
+                return CustomResult(ex.Message, HttpStatusCode.NotFound);
+            }
+            catch (Exception ex)
+            {
+                return CustomResult(ex.Message, HttpStatusCode.InternalServerError);
+            }
+
+        }
+
     }
 }

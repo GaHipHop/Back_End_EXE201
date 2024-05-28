@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -14,5 +15,7 @@ namespace GaHipHop_Model.DTO.Request
         public required string ColorName { get; set; }
 
         public required int Quantity { get; set; }
+
+        public IFormFile? File { get; set; }
     }
 }

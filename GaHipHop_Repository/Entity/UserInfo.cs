@@ -10,22 +10,16 @@ namespace GaHipHop_Repository.Entity
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public long Id { get; set; }
 
-        [Required]
         public string UserName { get; set; }
 
-        [Required]
         public string Email { get; set;}
 
-        [Required]
         public string Phone { get; set; }
 
-        [Required]
         public string Province { get; set; }
 
-        [Required]
         public string Wards { get; set; }
 
-        [Required]
         public string Address { get; set; }
 
     }

@@ -121,6 +121,7 @@ namespace GaHipHop_Service.Service
             return productResponse;
         }
 
+
         public async Task<ProductResponse> UpdateProduct(long id, ProductRequest productRequest)
         {
             // 1. Fetch the Existing Product
@@ -157,7 +158,7 @@ namespace GaHipHop_Service.Service
             return productResponse;
         }
 
-        // Centralized Discount Calculation
+
         private ProductResponse CalculateDiscountedPrice(Product existingProduct)
         {
             var productResponse = _mapper.Map<ProductResponse>(existingProduct);
@@ -183,6 +184,7 @@ namespace GaHipHop_Service.Service
 
             return productResponse;
         }
+
 
         public async Task<bool> DeleteProduct(long id)
         {

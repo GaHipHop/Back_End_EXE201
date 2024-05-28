@@ -42,6 +42,10 @@ namespace GaHipHop_API.Controllers.Product
             {
                 return CustomResult(ex.Message, HttpStatusCode.NotFound);
             }
+            catch (Exception ex)
+            {
+                return CustomResult(ex.Message, HttpStatusCode.InternalServerError);
+            }
         }
 
         [HttpPost("CreateProduct")]
@@ -59,11 +63,11 @@ namespace GaHipHop_API.Controllers.Product
             }
             catch (CustomException.DataNotFoundException ex)
             {
-                return CustomResult(ex.Message, HttpStatusCode.Conflict);
+                return CustomResult(ex.Message, HttpStatusCode.NotFound);
             }
             catch (Exception ex)
             {
-                return CustomResult(ex.Message);
+                return CustomResult(ex.Message, HttpStatusCode.InternalServerError);
             }
 
         }
@@ -78,11 +82,15 @@ namespace GaHipHop_API.Controllers.Product
             }
             catch (CustomException.DataNotFoundException ex)
             {
-                return CustomResult(ex.Message, HttpStatusCode.InternalServerError);
+                return CustomResult(ex.Message, HttpStatusCode.NotFound);
+            }
+            catch (CustomException.DataExistException ex)
+            {
+                return CustomResult(ex.Message, HttpStatusCode.Conflict);
             }
             catch (Exception ex)
             {
-                return CustomResult(ex.Message);
+                return CustomResult(ex.Message, HttpStatusCode.InternalServerError);
             }
         }
 
@@ -96,11 +104,11 @@ namespace GaHipHop_API.Controllers.Product
             }
             catch (CustomException.DataNotFoundException ex)
             {
-                return CustomResult(ex.Message, HttpStatusCode.InternalServerError);
+                return CustomResult(ex.Message, HttpStatusCode.NotFound);
             }
             catch (Exception ex)
             {
-                return CustomResult(ex.Message);
+                return CustomResult(ex.Message, HttpStatusCode.InternalServerError);
             }
 
         }

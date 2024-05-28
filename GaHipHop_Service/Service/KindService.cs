@@ -3,12 +3,16 @@ using Firebase.Auth;
 using Firebase.Storage;
 using GaHipHop_Model.DTO.Request;
 using GaHipHop_Model.DTO.Response;
+using GaHipHop_Repository.Entity;
 using GaHipHop_Repository.Repository;
 using GaHipHop_Service.Interfaces;
 using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using System.Data.Entity.Validation;
 using System.Net.Sockets;
 using System.Text;
+using Tools;
 
 namespace GaHipHop_Service.Service
 {
@@ -17,79 +21,138 @@ namespace GaHipHop_Service.Service
         private readonly IConfiguration _configuration;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
-        /*private readonly string _apiKey = "AIzaSyAklaGpff9jFMDeQquEvV95oC0yQ5Kv55U";
-        private readonly string _storage = "gahiphop-4de10.appspot.com";
-        private readonly string _authEmail = "phamdat720749pd@gmail.com";
-        private readonly string _authPassword = "123456";*/
+        private readonly Tools.Firebase _firebase;
 
-        public KindService(IConfiguration configuration, IUnitOfWork unitOfWork, IMapper mapper)
+        public KindService(IConfiguration configuration, IUnitOfWork unitOfWork, IMapper mapper, Tools.Firebase firebase)
         {
             _configuration = configuration;
             _unitOfWork = unitOfWork;
             _mapper = mapper;
+            _firebase = firebase;
         }
 
-        public async Task<string> UploadImageAsync(IFormFile file)
+        public async Task<KindResponse> CreateKind(KindRequest kindRequest)
         {
-            var _apiKey = _configuration["Firebase:ApiKey"];
-            var _storage = _configuration["Firebase:Storage"];
-            var _authEmail = _configuration["Firebase:AuthEmail"];
-            var _authPassword = _configuration["Firebase:AuthPassword"];
-            var auth = new FirebaseAuthProvider(new FirebaseConfig(_apiKey));
-            var a = await auth.SignInWithEmailAndPasswordAsync(_authEmail, _authPassword);
-
-            var fileName = $"{Guid.NewGuid()}_{file.FileName}";
-            var storage = new FirebaseStorage(_storage, new FirebaseStorageOptions
+            try
             {
-                AuthTokenAsyncFactory = () => Task.FromResult(a.FirebaseToken),
-                ThrowOnCancel = true
-            });
+                var existingKind = _unitOfWork.KindRepository.Get().FirstOrDefault(p => p.ColorName.ToLower() == kindRequest.ColorName.ToLower());
 
-            using (var stream = file.OpenReadStream())
+                if (existingKind != null)
+                {
+                    throw new CustomException.DataExistException($"Kind with ColorName '{kindRequest.ColorName}' already exists.");
+                }
+
+                var product = _unitOfWork.ProductRepository.GetByID(kindRequest.ProductId);
+                if (product == null)
+                {
+                    throw new CustomException.DataNotFoundException("Product not found.");
+                }
+
+                product.StockQuantity += kindRequest.Quantity;
+
+                var kindResponse = _mapper.Map<KindResponse>(existingKind);
+                var newKind = _mapper.Map<Kind>(kindRequest);
+                newKind.Status = true;
+
+                _unitOfWork.KindRepository.Insert(newKind);
+                _unitOfWork.Save(); // Lưu thay đổi không đồng bộ
+
+                _mapper.Map(newKind, kindResponse);
+                return kindResponse;
+            }
+            catch (DbUpdateException dbEx)
             {
-                var storageReference = storage.Child("images").Child(fileName);
-                await storageReference.PutAsync(stream);
-
-                // Get the public download URL of the uploaded image
-                return await storageReference.GetDownloadUrlAsync();
+                // Xử lý lỗi cập nhật cơ sở dữ liệu
+                throw new Exception("There was a problem updating the database. " + dbEx.Message, dbEx);
+            }
+            catch (DbEntityValidationException valEx)
+            {
+                // Xử lý lỗi xác thực thực thể
+                var errorMessages = valEx.EntityValidationErrors
+                    .SelectMany(x => x.ValidationErrors)
+                    .Select(x => x.ErrorMessage);
+                var fullErrorMessage = string.Join("; ", errorMessages);
+                var exceptionMessage = string.Concat(valEx.Message, " The validation errors are: ", fullErrorMessage);
+                throw new Exception(exceptionMessage, valEx);
+            }
+            catch (Exception ex)
+            {
+                // Xử lý các lỗi chung khác
+                throw new Exception("An error occurred while creating the kind: " + ex.Message, ex);
             }
         }
-        /*if (file == null || file.Length == 0)
-        {
-            return null;
-        }
 
+        public async Task<KindResponse> UpdateKind(long id, KindRequest kindRequest)
         {
-            // Authentication
-            var auth = new FirebaseAuthProvider(new FirebaseConfig(_apiKey));
-            var authLink = await auth.SignInWithEmailAndPasswordAsync(_authEmail, _authPassword);
+            var existingKind = _unitOfWork.KindRepository.GetByID(id);
 
-            // Upload to Firebase Storage
-            var task = new FirebaseStorage(
-                _bucket,
-                new FirebaseStorageOptions
+            if (existingKind == null)
+            {
+                throw new CustomException.DataNotFoundException($"Kind with ID {id} not found.");
+            }
+
+            if (!existingKind.Status)
+            {
+                throw new CustomException.InvalidDataException($"Kind with ID {id} was DeActive.");
+            }
+
+            if (existingKind.ColorName.ToLower() != kindRequest.ColorName.ToLower())
+            {
+                var duplicateExists = _unitOfWork.KindRepository.Get(p =>
+                    p.Id != id &&
+                    p.ProductId == existingKind.ProductId &&
+                    p.ColorName.ToLower() == kindRequest.ColorName.ToLower());
+
+                if (duplicateExists != null)
                 {
-                    AuthTokenAsyncFactory = () => Task.FromResult(authLink.FirebaseToken),
-                    ThrowOnCancel = true,
-                })
-                .Child("images")
-                .Child(Guid.NewGuid().ToString() + Path.GetExtension(file.FileName))
-                .PutAsync(stream);
+                    throw new CustomException.DataExistException($"Color with name '{kindRequest.ColorName}' already exists for this product.");
+                }
+            }
 
-            // Track progress of the upload
-            task.Progress.ProgressChanged += (s, e) => Console.WriteLine($"Progress: {e.Percentage} %");
+            var product = _unitOfWork.ProductRepository.GetByID(existingKind.ProductId);
 
-            // Await the task to wait until upload completes and get the download URL
-            var downloadUrl = await task;
+            product.StockQuantity -= existingKind.Quantity - kindRequest.Quantity;
 
-            // Assuming default values for properties, update as necessary
-            var newKind = _mapper.Map<Kind>(kindRequest);
+            if (kindRequest.File != null && kindRequest.File.Length < 10 * 1024 * 1024)
+            {
+                string imageDownloadUrl = await _firebase.UploadImage(kindRequest.File);
+                existingKind.Image = imageDownloadUrl;
+            }
+            else
+            {
+                throw new CustomException.InvalidDataException("File size exceeds the maximum allowed limit.");
+            }
+            _unitOfWork.ProductRepository.Update(product);
+            _mapper.Map(kindRequest, existingKind);
+            existingKind.Status = true;
 
-            _unitOfWork.KindRepository.Insert(newKind);
             _unitOfWork.Save();
 
-            var kindResponse = _mapper.Map<KindResponse>(newKind);
+            var kindResponse = _mapper.Map<KindResponse>(existingKind);
             return kindResponse;
-        }*/
+        }
+
+        public async Task<bool> DeleteKind(long id)
+        {
+            try
+            {
+                var kind = _unitOfWork.KindRepository.GetByID(id);
+                if (kind == null)
+                {
+                    throw new CustomException.DataNotFoundException("Kind not found.");
+                }
+
+                kind.Status = false;
+                _unitOfWork.KindRepository.Update(kind);
+                _unitOfWork.Save();
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
     }
 }

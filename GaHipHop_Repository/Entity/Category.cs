@@ -10,10 +10,8 @@ namespace GaHipHop_Repository.Entity
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public long Id { get; set; }
 
-        [Required]
         public string CategoryName { get; set; }
 
-        [Required]
         public bool Status { get; set; }
     }
 }

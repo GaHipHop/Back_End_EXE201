@@ -11,6 +11,8 @@ namespace GaHipHop_Service.Interfaces
 {
     public interface IKindService
     {
-        Task<string> UploadImageAsync(IFormFile file);
+        Task<KindResponse> CreateKind(KindRequest kindRequest);
+        Task<KindResponse> UpdateKind(long id, KindRequest kindRequest);
+        Task<bool> DeleteKind(long id);
     }
 }
