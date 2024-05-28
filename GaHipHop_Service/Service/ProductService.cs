@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Firebase.Auth;
 using GaHipHop_Model.DTO.Request;
 using GaHipHop_Model.DTO.Response;
 using GaHipHop_Repository.Entity;
@@ -8,9 +9,11 @@ using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Tools;
 
 namespace GaHipHop_Service.Service
 {
@@ -25,30 +28,48 @@ namespace GaHipHop_Service.Service
             _mapper = mapper;
         }
 
-        public async Task<IEnumerable<Product>> GetAllProduct()
+        //Status = TRUE
+        public async Task<List<ProductResponse>> GetAllProduct(QueryObject queryObject)
         {
-            // Fetch products with related entities
             var products = _unitOfWork.ProductRepository.Get(
-                includeProperties: "Admin,Discount,Category"  // Eager load related entities
-            );
+                filter: p => queryObject.SearchText == null || p.ProductName.Contains(queryObject.SearchText)); // ToListAsync for better query execution
 
-            return await Task.FromResult(products);
+            var productResponses = new List<ProductResponse>();
+            foreach (var product in products)
+            {
+                var productResponse = _mapper.Map<ProductResponse>(product); // Map basic properties
+
+                // Discount calculation logic
+                var discount = _unitOfWork.DiscountRepository.GetByID(product.DiscountId); // Fetch discount
+
+                if (discount != null && discount.ExpiredDate >= DateTime.Now && discount.Status)
+                {
+                    var discountedPrice = product.ProductPrice * (1 - discount.Percent / 100);
+                    productResponse.CurrentPrice = Math.Round(discountedPrice, 3);
+                }
+                else
+                {
+                    productResponse.CurrentPrice = product.ProductPrice;
+                }
+
+                productResponses.Add(productResponse);
+            }
+
+            return productResponses;
         }
 
         public async Task<ProductResponse> GetProductById(long id)
         {
             try
             {
-                var product = _unitOfWork.ProductRepository.Get(
-                    filter: p => p.Id == id, includeProperties: "Admin,Discount,Category"
-                    ).FirstOrDefault();
+                var product = _unitOfWork.ProductRepository.Get(filter: p => p.Id == id).FirstOrDefault();
 
                 if (product == null)
                 {
-                    throw new Exception("Product not found");
+                    throw new CustomException.DataNotFoundException("Product not found");
                 }
-
-                var productResponse = _mapper.Map<ProductResponse>(product);
+                var productResponse = CalculateDiscountedPrice(product);
+                _mapper.Map(product, productResponse);
                 return productResponse;
             }
             catch (Exception ex)
@@ -57,69 +78,113 @@ namespace GaHipHop_Service.Service
             }
         }
 
-        public async Task<ProductResponse> CreateProduct(CreateProductRequest createProductRequest)
+        public async Task<ProductResponse> CreateProduct(ProductRequest productRequest)
         {
-            var existingProduct = _unitOfWork.ProductRepository.Get().FirstOrDefault(p => p.ProductName.ToLower() == createProductRequest.ProductName.ToLower());
+            var existingProduct = _unitOfWork.ProductRepository.Get().FirstOrDefault(p => p.ProductName.ToLower() == productRequest.ProductName.ToLower());
 
             if (existingProduct != null)
             {
-                throw new ArgumentException($"Product with name '{createProductRequest.ProductName}' already exists.");
+                throw new CustomException.DataExistException($"Product with name '{productRequest.ProductName}' already exists.");
             }
-            var admin = _unitOfWork.AdminRepository.GetByID(createProductRequest.AdminId);
+            var admin = _unitOfWork.AdminRepository.GetByID(productRequest.AdminId);
             if (admin == null)
             {
-                throw new ArgumentException("Admin not found.");
+                throw new CustomException.DataNotFoundException("Admin not found.");
             }
 
-            var discount = _unitOfWork.DiscountRepository.GetByID(createProductRequest.DiscountId);
+            var discount = _unitOfWork.DiscountRepository.GetByID(productRequest.DiscountId);
             if (discount == null)
             {
-                throw new ArgumentException("Discount not found.");
+                throw new CustomException.DataNotFoundException("Discount not found.");
             }
 
-            var category = _unitOfWork.CategoryRepository.GetByID(createProductRequest.CategoryId);
+            var category = _unitOfWork.CategoryRepository.GetByID(productRequest.CategoryId);
             if (category == null)
             {
-                throw new ArgumentException("Category not found.");
+                throw new CustomException.DataNotFoundException("Category not found.");
             }
 
-            var newProduct = _mapper.Map<Product>(createProductRequest);
+            var newProduct = _mapper.Map<Product>(productRequest);
             newProduct.CreateDate = DateTime.UtcNow;
+            newProduct.Status = true;
 
             newProduct.Admin = admin;
             newProduct.Discount = discount;
             newProduct.Category = category;
 
+            var productResponse = CalculateDiscountedPrice(newProduct);
+
             _unitOfWork.ProductRepository.Insert(newProduct);
             _unitOfWork.Save();
 
-            var productResponse = _mapper.Map<ProductResponse>(newProduct);
-
+            _mapper.Map(newProduct, productResponse);
             return productResponse;
         }
 
-        public async Task<ProductResponse> UpdateProduct(long id, UpdateProductRequest updateProductRequest)
+
+        public async Task<ProductResponse> UpdateProduct(long id, ProductRequest productRequest)
         {
-            var existingProduct = _unitOfWork.ProductRepository.Get(filter: p => p.Id == id, includeProperties: "Admin,Discount,Category").FirstOrDefault();
+            // 1. Fetch the Existing Product
+            var existingProduct = _unitOfWork.ProductRepository.GetByID(id); // Use async variant
+
             if (existingProduct == null)
             {
-                throw new ArgumentException($"Product with ID {id} not found.");
+                throw new CustomException.DataNotFoundException($"Product with ID {id} not found."); // Use a more specific exception type
             }
-            existingProduct = _unitOfWork.ProductRepository.Get().FirstOrDefault(p => p.ProductName.ToLower() == updateProductRequest.ProductName.ToLower());
 
-            if (existingProduct != null)
+            // 2. Check for Duplicate Product Name
+            if (existingProduct.ProductName.ToLower() != productRequest.ProductName.ToLower())
             {
-                throw new ArgumentException($"Product with name '{updateProductRequest.ProductName}' already exists.");
+                var duplicateExists = _unitOfWork.ProductRepository.Get((p => p.Id != id
+                                                                                      && p.ProductName.ToLower() == productRequest.ProductName.ToLower()));
+
+                if (duplicateExists == null)
+                {
+                    throw new CustomException.DataExistException($"Product with name '{productRequest.ProductName}' already exists.");
+                }
             }
-            _mapper.Map(updateProductRequest, existingProduct);
 
-            existingProduct.ModifiedDate = DateTime.UtcNow;
+            // 3. Update Product Properties
+            _mapper.Map(productRequest, existingProduct);
+            existingProduct.ModifiedDate = DateTime.Now;
 
-            _unitOfWork.Save();
+            // Discount calculation logic
+            var productResponse = CalculateDiscountedPrice(existingProduct); // Centralize discount logic
 
-            var productResponse = _mapper.Map<ProductResponse>(existingProduct);
+            // 4. Save Changes and Map the Response
+            _unitOfWork.Save(); // Use the async version of Save
+
+            _mapper.Map(existingProduct, productResponse); // Update response with final product state
             return productResponse;
         }
+
+
+        private ProductResponse CalculateDiscountedPrice(Product existingProduct)
+        {
+            var productResponse = _mapper.Map<ProductResponse>(existingProduct);
+
+            if (existingProduct.DiscountId != null)
+            {
+                var discount = _unitOfWork.DiscountRepository.GetByID(existingProduct.DiscountId); // Fetch discount
+
+                if (discount != null && discount.ExpiredDate >= DateTime.Now && discount.Status)
+                {
+                    var discountedPrice = existingProduct.ProductPrice * (1 - discount.Percent / 100);
+                    productResponse.CurrentPrice = Math.Round(discountedPrice, 3);
+                }
+                else
+                {
+                    productResponse.CurrentPrice = existingProduct.ProductPrice;
+                }
+            }
+            else
+            {
+                productResponse.CurrentPrice = existingProduct.ProductPrice; // No discount
+            }
+
+            return productResponse;
+        }
+
 
         public async Task<bool> DeleteProduct(long id)
         {
@@ -128,7 +193,7 @@ namespace GaHipHop_Service.Service
                 var product = _unitOfWork.ProductRepository.GetByID(id);
                 if (product == null)
                 {
-                    throw new Exception("Product not found.");
+                    throw new CustomException.DataNotFoundException("Product not found.");
                 }
 
                 product.Status = false;

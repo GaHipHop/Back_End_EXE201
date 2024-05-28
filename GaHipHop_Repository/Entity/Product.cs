@@ -16,23 +16,18 @@ namespace GaHipHop_Repository.Entity
         
         public long CategoryId { get; set; }
 
-        [Required]
         public string ProductName { get; set; }
 
-        [Required]
         public string ProductDescription { get; set; }
 
-        [Required]
         public double ProductPrice { get; set; }
 
-        [Required]
         public int StockQuantity { get; set; }
 
         public DateTime CreateDate { get; set; }
 
         public DateTime ModifiedDate { get; set ; }
 
-        [Required]
         public bool Status { get; set; }
 
         [ForeignKey("AdminId")]
@@ -44,6 +39,6 @@ namespace GaHipHop_Repository.Entity
         [ForeignKey("CategoryId")]
         public virtual Category Category { get; set; }
 
-        public virtual ICollection<Kind> Images { get; set; }
+        //public virtual ICollection<Kind> Images { get; set; }
     }
 }

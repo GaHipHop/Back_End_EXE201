@@ -6,9 +6,8 @@ using System.Threading.Tasks;
 
 namespace GaHipHop_Model.DTO.Request
 {
-    public class UpdateItemQuantityRequest
+    public class CategoryRequest
     {
-        public long Id { get; set; }
-        public int Quantity { get; set; }
+        public required string CategoryName { get; set; }
     }
 }

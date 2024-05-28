@@ -85,7 +85,8 @@ namespace GaHipHop_Repository.Entity
 
             // Seed data for Products
             modelBuilder.Entity<Product>().HasData(
-                new Product { Id = 1, AdminId = 1, DiscountId = 1, CategoryId = 1, ProductName = "Product 1", ProductDescription = "Description for Product 1", ProductPrice = 100.00, StockQuantity = 10, CreateDate = DateTime.Now, ModifiedDate = DateTime.Now, Status = true }
+                new Product { Id = 1, AdminId = 1, DiscountId = 1, CategoryId = 1, ProductName = "Figure", ProductDescription = "Nilou", ProductPrice = 50000000.00, StockQuantity = 10, CreateDate = DateTime.Now, ModifiedDate = DateTime.Now, Status = true },
+                new Product { Id = 2, AdminId = 1, DiscountId = 2, CategoryId = 1, ProductName = "Figure", ProductDescription = "Shenhe", ProductPrice = 1000000.00, StockQuantity = 100, CreateDate = DateTime.Now, ModifiedDate = DateTime.Now, Status = true }
             );
 
             // Seed data for Orders
@@ -104,7 +105,7 @@ namespace GaHipHop_Repository.Entity
             );
         }
 
-        private string HashPassword(string password)
+        /*private string HashPassword(string password)
         {
             using (var sha512 = new System.Security.Cryptography.SHA512Managed())
             {
@@ -112,7 +113,7 @@ namespace GaHipHop_Repository.Entity
                 var hash = sha512.ComputeHash(bytes);
                 return Convert.ToBase64String(hash);
             }
-        }
+        }*/
 
 
     }

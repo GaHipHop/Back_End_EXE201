@@ -107,7 +107,48 @@ namespace GaHipHop_Service.Service
             return _mapper.Map<CartItem>(existingItem ?? cartItems.Last());
         }*/
 
-        public CartItem AddItem(long productId, int quantity, long imageId)
+        public CartItem AddItem(long id, int quantity)
+        {
+            var productKind = _unitOfWork.KindRepository.GetByID(id);
+            if (productKind == null)
+            {
+                throw new CustomException.DataNotFoundException("Product not found.");
+            }
+
+            if (quantity > productKind.Quantity)
+            {
+                throw new CustomException.InvalidDataException("Requested quantity is greater than the available stock.");
+            }
+            var product = _unitOfWork.ProductRepository.GetByID(productKind.ProductId);
+            if (product.DiscountId != null)
+            {
+                var discount = _unitOfWork.DiscountRepository.GetByID(product.DiscountId);
+
+                if (discount != null && discount.ExpiredDate >= DateTime.Now && discount.Status)
+                {
+                    var discountedPrice = product.ProductPrice * (1 - discount.Percent / 100);
+                    product.ProductPrice = discountedPrice;
+                }
+            }
+
+            var cartItems = GetCartItemsFromSession();
+            var existingItem = cartItems.FirstOrDefault(item => item.Id == id);
+            if (existingItem != null)
+            {
+                if (existingItem.Quantity + quantity > productKind.Quantity)
+                {
+                    throw new CustomException.InvalidDataException("Requested quantity exceeds the available stock.");
+                }
+                existingItem.Quantity += quantity;
+            }
+            else
+            {
+                cartItems.Add(new CartItem { Id = id, Quantity = quantity, ProductPrice = product.ProductPrice, ProductName = product.ProductName, ProductImage = productKind.Image, Color = productKind.ColorName });
+            }
+            SaveCartItemsToSession(cartItems);
+            return _mapper.Map<CartItem>(existingItem ?? cartItems.Last());
+        }
+        /*public CartItem AddItem(long productId, int quantity, long imageId)
         {
             var product = _unitOfWork.ProductRepository.GetByID(productId);
             if (product == null)
@@ -115,10 +156,10 @@ namespace GaHipHop_Service.Service
                 throw new CustomException.DataNotFoundException("Product not found.");
             }
 
-            /*if (quantity > product.ProductQuantity)
+            *//*if (quantity > product.ProductQuantity)
             {
                 throw new CustomException.InvalidDataException("Requested quantity is greater than the available stock.");
-            }*/
+            }*//*
             var cartItems = GetCartItemsFromSession();
             var totalQuantityInCart = cartItems.Where(item => item.ProductId == productId).Sum(item => item.Quantity);
             if (totalQuantityInCart + quantity > product.StockQuantity)
@@ -160,13 +201,13 @@ namespace GaHipHop_Service.Service
             }
             SaveCartItemsToSession(cartItems);
             return _mapper.Map<CartItem>(existingItem ?? cartItems.Last());
-        }
+        }*/
 
 
-        public void RemoveItem(long productId)
+        public void RemoveItem(long id)
         {
             var cartItems = GetCartItemsFromSession();
-            var item = cartItems.FirstOrDefault(i => i.ProductId == productId);
+            var item = cartItems.FirstOrDefault(i => i.Id == id);
             if (item != null)
             {
                 cartItems.Remove(item);
@@ -185,19 +226,26 @@ namespace GaHipHop_Service.Service
             }
         }*/
 
-        /*public void UpdateItemQuantity(long productId, int quantity)
+        public void UpdateItemQuantity(long id, int quantity)
         {
             var cartItems = GetCartItemsFromSession();
-            var item = cartItems.FirstOrDefault(i => i.ProductId == productId);
+            var item = cartItems.FirstOrDefault(i => i.Id == id);
+
             if (item != null)
             {
-                var product = _unitOfWork.ProductRepository.GetByID(productId);
+                var productKind = _unitOfWork.KindRepository.GetByID(id);
+                if (productKind == null)
+                {
+                    throw new CustomException.DataNotFoundException("Product kind not found.");
+                }
+
+                var product = _unitOfWork.ProductRepository.GetByID(productKind.ProductId);
                 if (product == null)
                 {
                     throw new CustomException.DataNotFoundException("Product not found.");
                 }
 
-                if (quantity > product.ProductQuantity)
+                if (quantity > productKind.Quantity)
                 {
                     throw new CustomException.InvalidDataException("Requested quantity exceeds the available stock.");
                 }
@@ -209,9 +257,10 @@ namespace GaHipHop_Service.Service
             {
                 throw new CustomException.DataNotFoundException("Item not found in cart.");
             }
-        }*/
+        }
 
-        public void UpdateItemQuantity(long productId, int quantity, long imageId)
+
+        /*public void UpdateItemQuantity(long productId, int quantity, long imageId)
         {
             var cartItems = GetCartItemsFromSession();
             var item = cartItems.FirstOrDefault(i => i.ProductId == productId && i.ProductImage == imageId);
@@ -245,7 +294,7 @@ namespace GaHipHop_Service.Service
                 throw new CustomException.DataNotFoundException("Item not found in cart.");
             }
         }
-
+*/
 
 
         public void ClearCart()

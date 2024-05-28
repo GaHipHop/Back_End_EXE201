@@ -24,4 +24,10 @@ public class CustomException
         public DataNotFoundException(string message) : base(message) { }
         public DataNotFoundException(string message, Exception innerException) : base(message, innerException) { }
     }
+    public class DataExistException : Exception
+    {
+        public DataExistException() : base() { }
+        public DataExistException(string message) : base(message) { }
+        public DataExistException(string message, Exception innerException) : base(message, innerException) { }
+    }
 }

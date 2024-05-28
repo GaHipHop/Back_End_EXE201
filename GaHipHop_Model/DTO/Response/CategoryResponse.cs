@@ -6,9 +6,12 @@ using System.Threading.Tasks;
 
 namespace GaHipHop_Model.DTO.Response
 {
-    public class ImgResponse
+    public class CategoryResponse
     {
         public long Id { get; set; }
-        public string Color { get; set; }
+
+        public string CategoryName { get; set; }
+
+        public bool Status { get; set; }
     }
 }
