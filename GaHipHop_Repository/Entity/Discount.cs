@@ -10,13 +10,10 @@ namespace GaHipHop_Repository.Entity
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public long Id { get; set; }
 
-        [Required]
         public float Percent { get; set; }
 
-        [Required]
         public DateTime ExpiredDate { get; set; }
 
-        [Required]
         public bool Status { get; set; }
     }
 }

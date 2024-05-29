@@ -12,16 +12,12 @@ namespace GaHipHop_Repository.Entity
 
         public long ProductId { get; set; }
 
-        [Required]
         public string ColorName { get; set; }
 
-        [Required]
         public string Image { get; set; }
         
-        [Required]        
         public int Quantity { get; set; }
 
-        [Required]
         public bool Status { get; set; }
 
         [ForeignKey("ProductId")]

@@ -14,21 +14,16 @@ namespace GaHipHop_Repository.Entity
 
         public long AdminId { get; set; }
 
-        [Required]
         public string OrderRequirement { get; set; }
 
-        [Required]
         public string OrderCode { get; set; }
 
-        [Required]
         public string PaymentMethod { get; set; }
 
         public DateTime CreateDate { get; set; }
 
-        [Required]
         public double TotalPrice { get; set; }
 
-        [Required]
         public string Status { get; set; }
 
         [ForeignKey("UserId")]

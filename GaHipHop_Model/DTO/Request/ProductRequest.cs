@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace GaHipHop_Model.DTO.Request
 {
-    public class UpdateProductRequest
+    public class ProductRequest
     {
         public long AdminId { get; set; }
         public long DiscountId { get; set; }
@@ -14,7 +14,6 @@ namespace GaHipHop_Model.DTO.Request
         public required string ProductName { get; set; }
         public required string ProductDescription { get; set; }
         public required double ProductPrice { get; set; }
-        public required int ProductQuantity { get; set; }
-        public required bool Status { get; set; }
+        public required int StockQuantity { get; set; }
     }
 }

@@ -10,7 +10,6 @@ namespace GaHipHop_Repository.Entity
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public long Id { get; set; }
 
-        [Required]
         public string RoleName { get; set; }
     }
 }

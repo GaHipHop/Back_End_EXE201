@@ -14,10 +14,8 @@ namespace GaHipHop_Repository.Entity
 
         public long OrderId { get; set; }
 
-        [Required]
         public int OrderQuantity { get; set; }
 
-        [Required]
         public double OrderPrice { get; set; }
 
         [ForeignKey("KindId")]
