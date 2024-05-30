@@ -25,8 +25,55 @@ namespace GaHipHop_API.Controllers.Product
         [HttpGet("GetAllProduct")]
         public IActionResult GetAllProduct([FromQuery] QueryObject queryObject)
         {
-            var product = _productService.GetAllProduct(queryObject);
-            return CustomResult("Get all data Successfully", product);
+            try
+            {
+                var product = _productService.GetAllProduct(queryObject);
+                return CustomResult("Get all data Successfully", product);
+            }
+            catch (CustomException.DataNotFoundException ex)
+            {
+                return CustomResult(ex.Message, HttpStatusCode.NotFound);
+            }
+            catch (Exception ex)
+            {
+                return CustomResult(ex.Message, HttpStatusCode.InternalServerError);
+            }
+        }
+
+        [HttpGet("GetAllProductFalse")]
+        public IActionResult GetAllProductFalse([FromQuery] QueryObject queryObject)
+        {
+            try
+            {
+                var product = _productService.GetAllProductFalse(queryObject);
+                return CustomResult("Get all data Successfully", product);
+            }
+            catch (CustomException.DataNotFoundException ex)
+            {
+                return CustomResult(ex.Message, HttpStatusCode.NotFound);
+            }
+            catch (Exception ex)
+            {
+                return CustomResult(ex.Message, HttpStatusCode.InternalServerError);
+            }
+        }
+
+        [HttpGet("GetAllProductByCategoryId/{id}")]
+        public async Task<IActionResult> GetAllProductByCategoryId(long id)
+        {
+            try
+            {
+                var products = _productService.GetAllProductByCategoryId(id);
+                return CustomResult("Category have those products:", products);
+            }
+            catch (CustomException.DataNotFoundException ex)
+            {
+                return CustomResult(ex.Message, HttpStatusCode.NotFound);
+            }
+            catch (Exception ex)
+            {
+                return CustomResult(ex.Message, HttpStatusCode.InternalServerError);
+            }
         }
 
         [HttpGet("GetProductById/{id}")]

@@ -26,15 +26,37 @@ namespace GaHipHop_API.Controllers.Kind
         [HttpGet("GetAllKind")]
         public IActionResult GetAllKind([FromQuery] QueryObject queryObject)
         {
-            var kind = _kindService.GetAllKind(queryObject);
-            return CustomResult("Get all Data Successfully", kind);
+            try
+            {
+                var kind = _kindService.GetAllKind(queryObject);
+                return CustomResult("Get all Data Successfully", kind);
+            }
+            catch (CustomException.DataNotFoundException ex)
+            {
+                return CustomResult(ex.Message, HttpStatusCode.NotFound);
+            }
+            catch (Exception ex)
+            {
+                return CustomResult(ex.Message, HttpStatusCode.InternalServerError);
+            }
         }
 
         [HttpGet("GetAllKindFalse")]
         public IActionResult GetAllKindFalse([FromQuery] QueryObject queryObject)
         {
-            var kind = _kindService.GetAllKindFalse(queryObject);
-            return CustomResult("Get all Data Successfully", kind);
+            try
+            {
+                var kind = _kindService.GetAllKindFalse(queryObject);
+                return CustomResult("Get all Data Successfully", kind);
+            }
+            catch (CustomException.DataNotFoundException ex)
+            {
+                return CustomResult(ex.Message, HttpStatusCode.NotFound);
+            }
+            catch (Exception ex)
+            {
+                return CustomResult(ex.Message, HttpStatusCode.InternalServerError);
+            }
         }
 
         [HttpGet("GetAllKindByProductId/{id}")]

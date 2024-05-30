@@ -14,7 +14,6 @@ namespace GaHipHop_Service.Interfaces
         Task<List<CategoryResponse>> GetAllCategory(QueryObject queryObject);
         Task<List<CategoryResponse>> GetAllCategoryFalse(QueryObject queryObject);
         Task<CategoryResponse> GetCategoryById(long id);
-        Task<IEnumerable<Kind>> GetAllCategoryByProductId(long id);
         Task<CategoryResponse> CreateCategory(CategoryRequest categoryRequest);
         Task<CategoryResponse> UpdateCategory(long id, CategoryRequest categoryRequest);
         Task<bool> DeleteCategory(long id);

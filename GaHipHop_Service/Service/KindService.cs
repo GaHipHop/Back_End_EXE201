@@ -28,6 +28,10 @@ namespace GaHipHop_Service.Service
                 filter: p => queryObject.SearchText == null || p.ColorName.Contains(queryObject.SearchText))
                 .Where(k => k.Quantity != 0 && k.Status == true)
                 .ToList();
+            if (!kinds.Any())
+            {
+                throw new CustomException.DataNotFoundException("No Kind in Database");
+            }
 
             var kindResponses = _mapper.Map<List<KindResponse>>(kinds);
 
@@ -40,6 +44,12 @@ namespace GaHipHop_Service.Service
                 filter: p => queryObject.SearchText == null || p.ColorName.Contains(queryObject.SearchText))
                 .Where(k => k.Quantity != 0 && k.Status == false)
                 .ToList();
+
+            if (!kinds.Any())
+            {
+                throw new CustomException.DataNotFoundException("No Kind False in Database");
+            }
+
             var kindResponses = _mapper.Map<List<KindResponse>>(kinds);
 
             return kindResponses;
@@ -151,10 +161,6 @@ namespace GaHipHop_Service.Service
                 product.StockQuantity += change;
                 existingKind.Quantity = updateKindRequest.Quantity.Value;
             }
-            /*else
-            { 
-                existingKind.Quantity =
-            }*/
 
             // Handle file upload (same as before)
             if (updateKindRequest.File != null)
@@ -173,7 +179,6 @@ namespace GaHipHop_Service.Service
             }
             _unitOfWork.ProductRepository.Update(product);
             _mapper.Map(updateKindRequest, existingKind);
-            existingKind.Status = true;
 
             _unitOfWork.Save(); // Save all changes (existingKind and product) together
 
