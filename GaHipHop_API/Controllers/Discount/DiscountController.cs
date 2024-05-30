@@ -5,6 +5,7 @@ using GaHipHop_Service.Interfaces;
 using GaHipHop_Service.Service;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
+using Tools;
 
 namespace GaHipHop_API.Controllers.Discont
 {
@@ -27,6 +28,14 @@ namespace GaHipHop_API.Controllers.Discont
                 var discount = await _discountService.GetAllDiscount();
                 return CustomResult("Load Successfull", discount, HttpStatusCode.OK);
             }
+            catch (CustomException.DataNotFoundException ex)
+            {
+                return CustomResult(ex.Message, HttpStatusCode.NotFound);
+            }
+            catch (CustomException.InvalidDataException ex)
+            {
+                return CustomResult(ex.Message, HttpStatusCode.BadRequest);
+            }
             catch (Exception ex)
             {
                 return CustomResult(ex.Message, HttpStatusCode.InternalServerError);
@@ -38,12 +47,20 @@ namespace GaHipHop_API.Controllers.Discont
         {
             try
             {
-                var discount = await _discountService.GetContactById(id);
+                var discount = await _discountService.GetDiscountById(id);
                 if (discount == null)
                 {
                     return CustomResult("Id is not exist", discount, HttpStatusCode.NotFound);
                 }
                 return CustomResult("ID found: ", discount, HttpStatusCode.OK);
+            }
+            catch (CustomException.DataNotFoundException ex)
+            {
+                return CustomResult(ex.Message, HttpStatusCode.NotFound);
+            }
+            catch (CustomException.InvalidDataException ex)
+            {
+                return CustomResult(ex.Message, HttpStatusCode.BadRequest);
             }
             catch (Exception ex)
             {
@@ -72,6 +89,14 @@ namespace GaHipHop_API.Controllers.Discont
             {
                 DiscountResponse subcription = await _discountService.UpdateDiscount(id, updateDiscountRequest);
                 return CustomResult("updated Successful", subcription, HttpStatusCode.OK);
+            }
+            catch (CustomException.DataNotFoundException ex)
+            {
+                return CustomResult(ex.Message, HttpStatusCode.NotFound);
+            }
+            catch (CustomException.InvalidDataException ex)
+            {
+                return CustomResult(ex.Message, HttpStatusCode.BadRequest);
             }
             catch (Exception ex)
             {

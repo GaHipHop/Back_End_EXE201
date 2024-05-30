@@ -32,15 +32,19 @@ namespace GaHipHop_Service.Service
         public async Task<List<ProductResponse>> GetAllProduct(QueryObject queryObject)
         {
             var products = _unitOfWork.ProductRepository.Get(
-                filter: p => queryObject.SearchText == null || p.ProductName.Contains(queryObject.SearchText)); // ToListAsync for better query execution
+                filter: p => queryObject.SearchText == null || p.ProductName.Contains(queryObject.SearchText))
+                .Where(k => k.Status == true);
+
+            if (!products.Any())
+            {
+                throw new CustomException.DataNotFoundException("No Product in Database");
+            }
 
             var productResponses = new List<ProductResponse>();
             foreach (var product in products)
             {
-                var productResponse = _mapper.Map<ProductResponse>(product); // Map basic properties
-
-                // Discount calculation logic
-                var discount = _unitOfWork.DiscountRepository.GetByID(product.DiscountId); // Fetch discount
+                var productResponse = _mapper.Map<ProductResponse>(product);
+                var discount = _unitOfWork.DiscountRepository.GetByID(product.DiscountId);
 
                 if (discount != null && discount.ExpiredDate >= DateTime.Now && discount.Status)
                 {
@@ -55,6 +59,61 @@ namespace GaHipHop_Service.Service
                 productResponses.Add(productResponse);
             }
 
+            return productResponses;
+        }
+
+        public async Task<List<ProductResponse>> GetAllProductFalse(QueryObject queryObject)
+        {
+            var products = _unitOfWork.ProductRepository.Get(
+                filter: p => queryObject.SearchText == null || p.ProductName.Contains(queryObject.SearchText))
+                .Where(k => k.Status == false);
+
+            if (!products.Any())
+            {
+                throw new CustomException.DataNotFoundException("No Product False in Database");
+            }
+
+            var productResponses = new List<ProductResponse>();
+            foreach (var product in products)
+            {
+                var productResponse = _mapper.Map<ProductResponse>(product);
+
+                // Discount calculation logic
+                var discount = _unitOfWork.DiscountRepository.GetByID(product.DiscountId); 
+
+                if (discount != null && discount.ExpiredDate >= DateTime.Now && discount.Status)
+                {
+                    var discountedPrice = product.ProductPrice * (1 - discount.Percent / 100);
+                    productResponse.CurrentPrice = Math.Round(discountedPrice, 3);
+                }
+                else
+                {
+                    productResponse.CurrentPrice = product.ProductPrice;
+                }
+
+                productResponses.Add(productResponse);
+            }
+
+            return productResponses;
+        }
+
+        public async Task<List<ProductResponse>> GetAllProductByCategoryId(long id)
+        {
+            var category = _unitOfWork.CategoryRepository.GetByID(id);
+
+            if (category == null)
+            {
+                throw new CustomException.DataNotFoundException($"Category not found with ID: {id}");
+            }
+
+            var products = _unitOfWork.ProductRepository.Get(
+                filter: k => k.CategoryId == id && k.Status == true).ToList();
+            if (!products.Any())
+            {
+                throw new CustomException.DataNotFoundException($"Category with ID: {id} does not have any Kind");
+            }
+
+            var productResponses = _mapper.Map<List<ProductResponse>>(products);
             return productResponses;
         }
 
@@ -207,5 +266,6 @@ namespace GaHipHop_Service.Service
                 throw ex;
             }
         }
+
     }
 }

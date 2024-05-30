@@ -44,6 +44,10 @@ namespace GaHipHop_Repository.Entity
         {
             base.OnModelCreating(modelBuilder);
 
+            modelBuilder.Entity<Kind>()
+                .Property(k => k.Image)
+                .IsRequired(false);
+
             // Seed data for Roles
             modelBuilder.Entity<Role>().HasData(
                 new Role { Id = 1, RoleName = "Admin" },

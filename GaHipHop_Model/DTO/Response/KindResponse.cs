@@ -15,7 +15,7 @@ namespace GaHipHop_Model.DTO.Response
 
         public required string ColorName { get; set; }
 
-        public required int Quantity { get; set; }
+        public int Quantity { get; set; }
 
         public required bool Status { get; set; }
 

@@ -5,30 +5,29 @@ using GaHipHop_Service.Interfaces;
 using GaHipHop_Service.Service;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
 using System.Net;
 using Tools;
 
-namespace GaHipHop_API.Controllers.Product
+namespace GaHipHop_API.Controllers.Category
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ProductController : BaseController
+    public class CategoryController : BaseController
     {
-        private readonly IProductService _productService;
+        private readonly ICategoryService _categoryService;
 
-        public ProductController(IProductService productService)
+        public CategoryController(ICategoryService categoryService)
         {
-            _productService = productService;
+            _categoryService = categoryService;
         }
 
-        [HttpGet("GetAllProduct")]
-        public IActionResult GetAllProduct([FromQuery] QueryObject queryObject)
+        [HttpGet("GetAllCategory")]
+        public IActionResult GetAllCategory([FromQuery] QueryObject queryObject)
         {
             try
             {
-                var product = _productService.GetAllProduct(queryObject);
-                return CustomResult("Get all data Successfully", product);
+                var categories = _categoryService.GetAllCategory(queryObject);
+                return CustomResult("Get all Data Successfully", categories);
             }
             catch (CustomException.DataNotFoundException ex)
             {
@@ -40,13 +39,13 @@ namespace GaHipHop_API.Controllers.Product
             }
         }
 
-        [HttpGet("GetAllProductFalse")]
-        public IActionResult GetAllProductFalse([FromQuery] QueryObject queryObject)
+        [HttpGet("GetAllCategoryFalse")]
+        public IActionResult GetAllCategoryFalse([FromQuery] QueryObject queryObject)
         {
             try
             {
-                var product = _productService.GetAllProductFalse(queryObject);
-                return CustomResult("Get all data Successfully", product);
+                var categories = _categoryService.GetAllCategoryFalse(queryObject);
+                return CustomResult("Get all Data Successfully", categories);
             }
             catch (CustomException.DataNotFoundException ex)
             {
@@ -58,13 +57,14 @@ namespace GaHipHop_API.Controllers.Product
             }
         }
 
-        [HttpGet("GetAllProductByCategoryId/{id}")]
-        public async Task<IActionResult> GetAllProductByCategoryId(long id)
+        [HttpGet("GetCategoryById/{id}")]
+        public async Task<IActionResult> GetCategoryById(long id)
         {
             try
             {
-                var products = _productService.GetAllProductByCategoryId(id);
-                return CustomResult("Category have those products:", products);
+                var category = await _categoryService.GetCategoryById(id);
+
+                return CustomResult("Kind is found", category);
             }
             catch (CustomException.DataNotFoundException ex)
             {
@@ -76,27 +76,8 @@ namespace GaHipHop_API.Controllers.Product
             }
         }
 
-        [HttpGet("GetProductById/{id}")]
-        public async Task<IActionResult> GetProductById(long id)
-        {
-            try
-            {
-                var product = await _productService.GetProductById(id);
-
-                return CustomResult("Product is found", product);
-            }
-            catch (CustomException.DataNotFoundException ex)
-            {
-                return CustomResult(ex.Message, HttpStatusCode.NotFound);
-            }
-            catch (Exception ex)
-            {
-                return CustomResult(ex.Message, HttpStatusCode.InternalServerError);
-            }
-        }
-
-        [HttpPost("CreateProduct")]
-        public async Task<IActionResult> CreateProduct([FromBody] ProductRequest productRequest)
+        [HttpPost("CreateCategory")]
+        public async Task<IActionResult> CreateCategory([FromForm] CategoryRequest categoryRequest)
         {
             try
             {
@@ -105,8 +86,8 @@ namespace GaHipHop_API.Controllers.Product
                     return CustomResult(ModelState, HttpStatusCode.BadRequest);
                 }
 
-                ProductResponse product = await _productService.CreateProduct(productRequest);
-                return CustomResult("Create Successful", product, HttpStatusCode.OK);
+                CategoryResponse category = await _categoryService.CreateCategory(categoryRequest);
+                return CustomResult("Create Successful", category, HttpStatusCode.OK);
             }
             catch (CustomException.DataNotFoundException ex)
             {
@@ -119,13 +100,13 @@ namespace GaHipHop_API.Controllers.Product
 
         }
 
-        [HttpPatch("UpdateProduct/{id}")]
-        public async Task<IActionResult> UpdateProduct(long id, [FromBody] ProductRequest productRequest)
+        [HttpPatch("UpdateCategory/{id}")]
+        public async Task<IActionResult> UpdateCategory(long id, [FromForm] CategoryRequest categoryRequest)
         {
             try
             {
-                ProductResponse product = await _productService.UpdateProduct(id, productRequest);
-                return CustomResult("updated Successful", product, HttpStatusCode.OK);
+                CategoryResponse category = await _categoryService.UpdateCategory(id, categoryRequest);
+                return CustomResult("Update Sucessfully", category, HttpStatusCode.OK);
             }
             catch (CustomException.DataNotFoundException ex)
             {
@@ -135,19 +116,23 @@ namespace GaHipHop_API.Controllers.Product
             {
                 return CustomResult(ex.Message, HttpStatusCode.Conflict);
             }
+            catch (CustomException.InvalidDataException ex)
+            {
+                return CustomResult(ex.Message, HttpStatusCode.BadRequest);
+            }
             catch (Exception ex)
             {
                 return CustomResult(ex.Message, HttpStatusCode.InternalServerError);
             }
         }
 
-        [HttpDelete("DeleteProduct/{id}")]
-        public async Task<IActionResult> DeleteProduct(long id)
+        [HttpDelete("DeleteCategory/{id}")]
+        public async Task<IActionResult> DeleteCategory(long id)
         {
             try
             {
-                var deleteProduct = await _productService.DeleteProduct(id);
-                return CustomResult("Delete Prodcut Successfull (Status)", deleteProduct, HttpStatusCode.OK);
+                var category = await _categoryService.DeleteCategory(id);
+                return CustomResult("Delete Category Successfull (Status)", category, HttpStatusCode.OK);
             }
             catch (CustomException.DataNotFoundException ex)
             {

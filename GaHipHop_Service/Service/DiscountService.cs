@@ -29,7 +29,7 @@ namespace GaHipHop_Service.Service
             return discount;
         }
 
-        public async Task<Discount> GetContactById(long id)
+        public async Task<Discount> GetDiscountById(long id)
         {
             var discount = _unitOfWork.DiscountRepository.GetByID(id);
             return discount;

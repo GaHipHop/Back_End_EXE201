@@ -24,6 +24,8 @@ namespace GaHipHop_Model.Mapper
             CreateMap<ProductRequest, Product>().ReverseMap();
             CreateMap<ProductRequest, Product>().ReverseMap();
             CreateMap<KindRequest, Kind>().ReverseMap();
+            CreateMap<UpdateKindRequest, Kind>().ReverseMap();
+            CreateMap<CategoryRequest, Category>().ReverseMap();
 
             //Reponse
             CreateMap<Admin, AdminResponse>()
@@ -33,6 +35,7 @@ namespace GaHipHop_Model.Mapper
             CreateMap<Admin, LoginResponse>();
             CreateMap<Product, ProductResponse>();
             CreateMap<Kind, KindResponse>();
+            CreateMap<Category, CategoryResponse>();
 
         }
     }
