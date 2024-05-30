@@ -6,6 +6,7 @@ using GaHipHop_Service.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
+using Tools;
 
 namespace GaHipHop_API.Controllers.Contact
 {
@@ -27,6 +28,14 @@ namespace GaHipHop_API.Controllers.Contact
                 var contacts = await _contactService.GetAllContacts();
                 return CustomResult("Load Successfull", contacts, HttpStatusCode.OK);
             }
+            catch (CustomException.DataNotFoundException ex)
+            {
+                return CustomResult(ex.Message, HttpStatusCode.NotFound);
+            }
+            catch (CustomException.InvalidDataException ex)
+            {
+                return CustomResult(ex.Message, HttpStatusCode.BadRequest);
+            }
             catch (Exception ex)
             {
                 return CustomResult(ex.Message, HttpStatusCode.InternalServerError);
@@ -44,6 +53,14 @@ namespace GaHipHop_API.Controllers.Contact
                     return CustomResult("Id is not exist", contact, HttpStatusCode.NotFound);
                 }
                 return CustomResult("ID found: ", contact, HttpStatusCode.OK);
+            }
+            catch (CustomException.DataNotFoundException ex)
+            {
+                return CustomResult(ex.Message, HttpStatusCode.NotFound);
+            }
+            catch (CustomException.InvalidDataException ex)
+            {
+                return CustomResult(ex.Message, HttpStatusCode.BadRequest);
             }
             catch (Exception ex)
             {
@@ -73,6 +90,14 @@ namespace GaHipHop_API.Controllers.Contact
             {
                 ContactReponse subcription = await _contactService.UpdateContact(id, updateContactRequest);
                 return CustomResult("Create Successfull", subcription, HttpStatusCode.OK);
+            }
+            catch (CustomException.DataNotFoundException ex)
+            {
+                return CustomResult(ex.Message, HttpStatusCode.NotFound);
+            }
+            catch (CustomException.InvalidDataException ex)
+            {
+                return CustomResult(ex.Message, HttpStatusCode.BadRequest);
             }
             catch (Exception ex)
             {
