@@ -23,6 +23,57 @@ namespace GaHipHop_API.Controllers.Kind
             _kindService = kindService;
         }
 
+        [HttpGet("GetAllKind")]
+        public IActionResult GetAllKind([FromQuery] QueryObject queryObject)
+        {
+            var kind = _kindService.GetAllKind(queryObject);
+            return CustomResult("Get all Data Successfully", kind);
+        }
+
+        [HttpGet("GetAllKindFalse")]
+        public IActionResult GetAllKindFalse([FromQuery] QueryObject queryObject)
+        {
+            var kind = _kindService.GetAllKindFalse(queryObject);
+            return CustomResult("Get all Data Successfully", kind);
+        }
+
+        [HttpGet("GetAllKindByProductId/{id}")]
+        public async Task<IActionResult> GetAllKindByProductId(long id)
+        {
+            try
+            {
+                var kinds = _kindService.GetAllKindByProductId(id);
+                return CustomResult("Product those kind:", kinds);
+            }
+            catch (CustomException.DataNotFoundException ex)
+            {
+                return CustomResult(ex.Message, HttpStatusCode.NotFound);
+            }
+            catch (Exception ex)
+            {
+                return CustomResult(ex.Message, HttpStatusCode.InternalServerError);
+            }
+        }
+
+        [HttpGet("GetKindById/{id}")]
+        public async Task<IActionResult> GetKindById(long id)
+        {
+            try
+            {
+                var kind = await _kindService.GetKindById(id);
+
+                return CustomResult("Kind is found", kind);
+            }
+            catch (CustomException.DataNotFoundException ex)
+            {
+                return CustomResult(ex.Message, HttpStatusCode.NotFound);
+            }
+            catch (Exception ex)
+            {
+                return CustomResult(ex.Message, HttpStatusCode.InternalServerError);
+            }
+        }
+
         [HttpPost("CreateKind")]
         public async Task<IActionResult> CreateKind([FromForm] KindRequest kindRequest)
         {
@@ -48,11 +99,11 @@ namespace GaHipHop_API.Controllers.Kind
         }
 
         [HttpPatch("UpdateKind/{id}")]
-        public async Task<IActionResult> UpdateKind(long id, [FromForm] KindRequest kindRequest)
+        public async Task<IActionResult> UpdateKind(long id, [FromForm] UpdateKindRequest updateKindRequest)
         {
             try
             {
-                KindResponse kind = await _kindService.UpdateKind(id, kindRequest);
+                KindResponse kind = await _kindService.UpdateKind(id, updateKindRequest);
                 return CustomResult("Update Sucessfully", kind, HttpStatusCode.OK);
             }
             catch (CustomException.DataNotFoundException ex)

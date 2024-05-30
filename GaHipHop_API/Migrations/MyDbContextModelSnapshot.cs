@@ -199,14 +199,14 @@ namespace GaHipHop_API.Migrations
                         new
                         {
                             Id = 1L,
-                            ExpiredDate = new DateTime(2024, 6, 28, 6, 38, 44, 468, DateTimeKind.Local).AddTicks(4544),
+                            ExpiredDate = new DateTime(2024, 6, 29, 21, 59, 52, 647, DateTimeKind.Local).AddTicks(6829),
                             Percent = 10f,
                             Status = true
                         },
                         new
                         {
                             Id = 2L,
-                            ExpiredDate = new DateTime(2024, 7, 28, 6, 38, 44, 468, DateTimeKind.Local).AddTicks(4566),
+                            ExpiredDate = new DateTime(2024, 7, 29, 21, 59, 52, 647, DateTimeKind.Local).AddTicks(6855),
                             Percent = 20f,
                             Status = true
                         });
@@ -225,7 +225,6 @@ namespace GaHipHop_API.Migrations
                         .HasColumnType("longtext");
 
                     b.Property<string>("Image")
-                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.Property<long>("ProductId")
@@ -313,7 +312,7 @@ namespace GaHipHop_API.Migrations
                         {
                             Id = 1L,
                             AdminId = 1L,
-                            CreateDate = new DateTime(2024, 5, 28, 6, 38, 44, 468, DateTimeKind.Local).AddTicks(4634),
+                            CreateDate = new DateTime(2024, 5, 29, 21, 59, 52, 647, DateTimeKind.Local).AddTicks(6927),
                             OrderCode = "ORD001",
                             OrderRequirement = "Requirement 1",
                             PaymentMethod = "Credit Card",
@@ -418,9 +417,9 @@ namespace GaHipHop_API.Migrations
                             Id = 1L,
                             AdminId = 1L,
                             CategoryId = 1L,
-                            CreateDate = new DateTime(2024, 5, 28, 6, 38, 44, 468, DateTimeKind.Local).AddTicks(4610),
+                            CreateDate = new DateTime(2024, 5, 29, 21, 59, 52, 647, DateTimeKind.Local).AddTicks(6901),
                             DiscountId = 1L,
-                            ModifiedDate = new DateTime(2024, 5, 28, 6, 38, 44, 468, DateTimeKind.Local).AddTicks(4612),
+                            ModifiedDate = new DateTime(2024, 5, 29, 21, 59, 52, 647, DateTimeKind.Local).AddTicks(6903),
                             ProductDescription = "Nilou",
                             ProductName = "Figure",
                             ProductPrice = 50000000.0,
@@ -432,9 +431,9 @@ namespace GaHipHop_API.Migrations
                             Id = 2L,
                             AdminId = 1L,
                             CategoryId = 1L,
-                            CreateDate = new DateTime(2024, 5, 28, 6, 38, 44, 468, DateTimeKind.Local).AddTicks(4615),
+                            CreateDate = new DateTime(2024, 5, 29, 21, 59, 52, 647, DateTimeKind.Local).AddTicks(6906),
                             DiscountId = 2L,
-                            ModifiedDate = new DateTime(2024, 5, 28, 6, 38, 44, 468, DateTimeKind.Local).AddTicks(4615),
+                            ModifiedDate = new DateTime(2024, 5, 29, 21, 59, 52, 647, DateTimeKind.Local).AddTicks(6907),
                             ProductDescription = "Shenhe",
                             ProductName = "Figure",
                             ProductPrice = 1000000.0,

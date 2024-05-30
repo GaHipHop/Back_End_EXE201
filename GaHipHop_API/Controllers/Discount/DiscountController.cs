@@ -38,7 +38,7 @@ namespace GaHipHop_API.Controllers.Discont
         {
             try
             {
-                var discount = await _discountService.GetContactById(id);
+                var discount = await _discountService.GetDiscountById(id);
                 if (discount == null)
                 {
                     return CustomResult("Id is not exist", discount, HttpStatusCode.NotFound);

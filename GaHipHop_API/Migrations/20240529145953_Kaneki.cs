@@ -198,7 +198,7 @@ namespace GaHipHop_API.Migrations
                     ProductDescription = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     ProductPrice = table.Column<double>(type: "double", nullable: false),
-                    StockQuantity = table.Column<int>(type: "int", nullable: true),
+                    StockQuantity = table.Column<int>(type: "int", nullable: false),
                     CreateDate = table.Column<DateTime>(type: "datetime(6)", nullable: false),
                     ModifiedDate = table.Column<DateTime>(type: "datetime(6)", nullable: false),
                     Status = table.Column<bool>(type: "tinyint(1)", nullable: false)
@@ -305,8 +305,8 @@ namespace GaHipHop_API.Migrations
                 columns: new[] { "Id", "ExpiredDate", "Percent", "Status" },
                 values: new object[,]
                 {
-                    { 1L, new DateTime(2024, 6, 28, 6, 38, 44, 468, DateTimeKind.Local).AddTicks(4544), 10f, true },
-                    { 2L, new DateTime(2024, 7, 28, 6, 38, 44, 468, DateTimeKind.Local).AddTicks(4566), 20f, true }
+                    { 1L, new DateTime(2024, 6, 29, 21, 59, 52, 647, DateTimeKind.Local).AddTicks(6829), 10f, true },
+                    { 2L, new DateTime(2024, 7, 29, 21, 59, 52, 647, DateTimeKind.Local).AddTicks(6855), 20f, true }
                 });
 
             migrationBuilder.InsertData(
@@ -332,15 +332,15 @@ namespace GaHipHop_API.Migrations
             migrationBuilder.InsertData(
                 table: "Order",
                 columns: new[] { "Id", "AdminId", "CreateDate", "OrderCode", "OrderRequirement", "PaymentMethod", "Status", "TotalPrice", "UserId" },
-                values: new object[] { 1L, 1L, new DateTime(2024, 5, 28, 6, 38, 44, 468, DateTimeKind.Local).AddTicks(4634), "ORD001", "Requirement 1", "Credit Card", "Confirmed", 100.0, 1L });
+                values: new object[] { 1L, 1L, new DateTime(2024, 5, 29, 21, 59, 52, 647, DateTimeKind.Local).AddTicks(6927), "ORD001", "Requirement 1", "Credit Card", "Confirmed", 100.0, 1L });
 
             migrationBuilder.InsertData(
                 table: "Product",
                 columns: new[] { "Id", "AdminId", "CategoryId", "CreateDate", "DiscountId", "ModifiedDate", "ProductDescription", "ProductName", "ProductPrice", "Status", "StockQuantity" },
                 values: new object[,]
                 {
-                    { 1L, 1L, 1L, new DateTime(2024, 5, 28, 6, 38, 44, 468, DateTimeKind.Local).AddTicks(4610), 1L, new DateTime(2024, 5, 28, 6, 38, 44, 468, DateTimeKind.Local).AddTicks(4612), "Nilou", "Figure", 50000000.0, true, 10 },
-                    { 2L, 1L, 1L, new DateTime(2024, 5, 28, 6, 38, 44, 468, DateTimeKind.Local).AddTicks(4615), 2L, new DateTime(2024, 5, 28, 6, 38, 44, 468, DateTimeKind.Local).AddTicks(4615), "Shenhe", "Figure", 1000000.0, true, 100 }
+                    { 1L, 1L, 1L, new DateTime(2024, 5, 29, 21, 59, 52, 647, DateTimeKind.Local).AddTicks(6901), 1L, new DateTime(2024, 5, 29, 21, 59, 52, 647, DateTimeKind.Local).AddTicks(6903), "Nilou", "Figure", 50000000.0, true, 10 },
+                    { 2L, 1L, 1L, new DateTime(2024, 5, 29, 21, 59, 52, 647, DateTimeKind.Local).AddTicks(6906), 2L, new DateTime(2024, 5, 29, 21, 59, 52, 647, DateTimeKind.Local).AddTicks(6907), "Shenhe", "Figure", 1000000.0, true, 100 }
                 });
 
             migrationBuilder.InsertData(
