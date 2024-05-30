@@ -155,14 +155,9 @@ namespace GaHipHop_Service.Service
 
             var product = _unitOfWork.ProductRepository.GetByID(existingKind.ProductId);
 
-            if (updateKindRequest.Quantity.HasValue && updateKindRequest.Quantity.Value != 0)
-            {
-                int change = updateKindRequest.Quantity.Value - existingKind.Quantity;
-                product.StockQuantity += change;
-                existingKind.Quantity = updateKindRequest.Quantity.Value;
-            }
+            int change = updateKindRequest.Quantity - existingKind.Quantity;
+            product.StockQuantity += change;
 
-            // Handle file upload (same as before)
             if (updateKindRequest.File != null)
             {
                 if (updateKindRequest.File.Length >= 10 * 1024 * 1024)
