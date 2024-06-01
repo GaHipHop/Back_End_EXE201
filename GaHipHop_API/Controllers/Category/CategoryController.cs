@@ -138,6 +138,10 @@ namespace GaHipHop_API.Controllers.Category
             {
                 return CustomResult(ex.Message, HttpStatusCode.NotFound);
             }
+            catch (CustomException.DataExistException ex)
+            {
+                return CustomResult(ex.Message, HttpStatusCode.Conflict);
+            }
             catch (Exception ex)
             {
                 return CustomResult(ex.Message, HttpStatusCode.InternalServerError);

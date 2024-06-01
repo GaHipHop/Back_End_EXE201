@@ -244,7 +244,6 @@ namespace GaHipHop_Service.Service
             return productResponse;
         }
 
-
         public async Task<bool> DeleteProduct(long id)
         {
             try
@@ -253,6 +252,13 @@ namespace GaHipHop_Service.Service
                 if (product == null)
                 {
                     throw new CustomException.DataNotFoundException("Product not found.");
+                }
+
+                var kinds = _unitOfWork.KindRepository.Get().Where(p => p.ProductId == id);
+                foreach (var kind in kinds)
+                {
+                    kind.Status = false;
+                    _unitOfWork.KindRepository.Update(kind);
                 }
 
                 product.Status = false;
