@@ -30,4 +30,13 @@ public class CustomException
         public DataExistException(string message) : base(message) { }
         public DataExistException(string message, Exception innerException) : base(message, innerException) { }
     }
+
+    public class ForbbidenException : Exception
+    {
+        public ForbbidenException() : base() { }
+        public ForbbidenException(string message) : base(message) { }
+        public ForbbidenException(string statuscode, string message) : base(message) { }
+        public ForbbidenException(string message, Exception innerException) : base(message, innerException) { }
+    }
+
 }

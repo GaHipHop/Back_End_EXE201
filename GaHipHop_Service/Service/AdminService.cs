@@ -4,6 +4,7 @@ using GaHipHop_Model.DTO.Response;
 using GaHipHop_Repository.Entity;
 using GaHipHop_Repository.Repository;
 using GaHipHop_Service.Interfaces;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System;
@@ -14,6 +15,7 @@ using System.Net;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using Tools;
 
 namespace GaHipHop_Service.Service
 {
@@ -22,30 +24,17 @@ namespace GaHipHop_Service.Service
         private readonly IConfiguration _configuration;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public AdminService(IConfiguration configuration, IUnitOfWork unitOfWork, IMapper mapper)
+        public AdminService(IConfiguration configuration, IUnitOfWork unitOfWork, IMapper mapper, IHttpContextAccessor httpContextAccessor)
         {
             _configuration = configuration;
             _unitOfWork = unitOfWork;
             _mapper = mapper;
+            _httpContextAccessor = httpContextAccessor;
         }
 
-        public async Task<(string Token, LoginResponse loginResponse)> AuthorizeUser(LoginRequest loginRequest)
-        {
-            var member = _unitOfWork.AdminRepository
-                .Get(filter: a => a.Username == loginRequest.UserName && a.Status == true).FirstOrDefault();
-            if (member != null && VerifyPassword(loginRequest.Password, member.Password))
-            {
-                string token = GenerateToken(member);
-                var adminResponse = _mapper.Map<LoginResponse>(member);
-                return (token, adminResponse);
-            }
-            return (null, null);
-        }
-
-
-
-        public IEnumerable<AdminResponse> GetAllAdmin()
+        public IEnumerable<AdminResponse> GetAllAdminByStatusTrue()
         {
             var listAdmin = _unitOfWork.AdminRepository.Get(
                 filter: s => s.Status == true && s.RoleId == 1,
@@ -55,26 +44,80 @@ namespace GaHipHop_Service.Service
             return adminResponses;
         }
 
+        public IEnumerable<AdminResponse> GetAllAdminByStatusFalse()
+        {
+            try
+            {
+                var accountId = Authentication.GetUserIdFromHttpContext(_httpContextAccessor.HttpContext);
+                if (string.IsNullOrEmpty(accountId))
+                {
+                    throw new CustomException.ForbbidenException("User ID claim invalid.");
+                }
+
+                if (!long.TryParse(accountId, out long Id))
+                {
+                    throw new CustomException.ForbbidenException("User ID claim invalid.");
+                }
+
+                var checkmanager = _unitOfWork.AdminRepository.Get( a => a.Id == Id ).FirstOrDefault();
+
+                if (checkmanager == null || checkmanager.RoleId != 2)
+                {
+                    throw new CustomException.ForbbidenException("you don't have permission to use it.");
+                }
+
+                var listAdmin = _unitOfWork.AdminRepository.Get(
+                    filter: s => s.Status == true && s.RoleId == 0,
+                    includeProperties: "Role"
+                ).ToList();
+                var adminResponses = _mapper.Map<IEnumerable<AdminResponse>>(listAdmin);
+                return adminResponses;
+            }
+            catch (CustomException.InternalServerErrorException ex)
+            {
+                throw new CustomException.InternalServerErrorException("An error occurred during data processing.", ex);
+            }
+        }
+
+
 
         public async Task<AdminResponse> GetAdminById(long id)
         {
             try
             {
+                var accountId = Authentication.GetUserIdFromHttpContext(_httpContextAccessor.HttpContext);
+                if (string.IsNullOrEmpty(accountId))
+                {
+                    throw new CustomException.ForbbidenException("User ID claim invalid.");
+                }
+
+                if (!long.TryParse(accountId, out long Id))
+                {
+                    throw new CustomException.ForbbidenException("User ID claim invalid.");
+                }
+
+                var checkmanager = _unitOfWork.AdminRepository.Get(a => a.Id == Id).FirstOrDefault();
+
+                if (checkmanager == null || checkmanager.RoleId != 2)
+                {
+                    throw new CustomException.ForbbidenException("you don't have permission to use it.");
+                }
+
                 var admin = _unitOfWork.AdminRepository.Get(
                     filter: a => a.Id == id && a.Status == true && a.RoleId == 1, includeProperties: "Role"
                 ).FirstOrDefault();
 
                 if (admin == null)
                 {
-                    throw new Exception("Admin not found"); 
+                    throw new CustomException.DataNotFoundException("Admin not found."); 
                 }
 
                 var adminResponse = _mapper.Map<AdminResponse>(admin);
                 return adminResponse;
             }
-            catch (Exception ex)
+            catch (CustomException.InternalServerErrorException ex)
             {
-                throw ex;
+                throw new CustomException.InternalServerErrorException("An error occurred during data processing.", ex);
             }
         }
 
@@ -84,6 +127,8 @@ namespace GaHipHop_Service.Service
         {
             try
             {
+                Authentication authentication = new(_configuration, _unitOfWork);
+
                 bool usernameExists = _unitOfWork.AdminRepository.Exists(a => a.Username == adminRequest.UserName);
                 if (usernameExists)
                 {
@@ -96,7 +141,7 @@ namespace GaHipHop_Service.Service
 
                 var admin = _mapper.Map<Admin>(adminRequest);
 
-                admin.Password = HashPassword(adminRequest.Password);
+                admin.Password = authentication.HashPassword(adminRequest.Password);
                 admin.Status = true;
                 admin.RoleId = 1;
 
@@ -116,14 +161,18 @@ namespace GaHipHop_Service.Service
         {
             try
             {
+                Authentication authentication = new(_configuration, _unitOfWork);
+
                 var existingAdmin = _unitOfWork.AdminRepository.GetByID(id);
 
                 if (existingAdmin == null)
                 {
-                    throw new Exception("Admin not found.");
+                    throw new CustomException.DataNotFoundException("Admin not found.");
                 }
 
-                _mapper.Map(adminRequest, existingAdmin);
+                var admin = _mapper.Map(adminRequest, existingAdmin);
+
+                admin.Password = authentication.HashPassword(adminRequest.Password);
 
                 _unitOfWork.AdminRepository.Update(existingAdmin);
                 _unitOfWork.Save();
@@ -141,10 +190,28 @@ namespace GaHipHop_Service.Service
         {
             try
             {
+                var accountId = Authentication.GetUserIdFromHttpContext(_httpContextAccessor.HttpContext);
+                if (string.IsNullOrEmpty(accountId))
+                {
+                    throw new CustomException.ForbbidenException("User ID claim invalid.");
+                }
+
+                if (!long.TryParse(accountId, out long Id))
+                {
+                    throw new CustomException.ForbbidenException("User ID claim invalid.");
+                }
+
+                var checkmanager = _unitOfWork.AdminRepository.Get(a => a.Id == Id).FirstOrDefault();
+
+                if (checkmanager == null || checkmanager.RoleId != 2)
+                {
+                    throw new CustomException.ForbbidenException("you don't have permission to use it.");
+                }
+
                 var admin = _unitOfWork.AdminRepository.GetByID(id);
                 if (admin == null)
                 {
-                    throw new Exception("Admin not found.");
+                    throw new CustomException.DataNotFoundException("Admin not found.");
                 }
 
                 admin.Status = false;
@@ -153,47 +220,10 @@ namespace GaHipHop_Service.Service
 
                 return true;
             }
-            catch (Exception ex)
+            catch (CustomException.InternalServerErrorException ex)
             {
-                throw ex;
+                throw new CustomException.InternalServerErrorException("An error occurred during data processing.", ex);
             }
-        }
-        private string GenerateToken(Admin info)
-        {
-            List<Claim> claims = new List<Claim>()
-        {
-            new Claim(JwtRegisteredClaimNames.Sub, info.Username),
-            new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-            new Claim(JwtRegisteredClaimNames.Iat, new DateTimeOffset(DateTime.UtcNow).ToUnixTimeSeconds().ToString(), ClaimValueTypes.Integer64),
-            new Claim("name", info.Username),
-        };
-
-            if (info.RoleId != 0)
-            {
-                var role = _unitOfWork.RoleRepository.Get(filter: r => r.Id == info.RoleId).FirstOrDefault();
-                claims.Add(new Claim("role", role.RoleName));
-            }
-
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration.GetSection("Jwt:Key").Value));
-            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
-
-            var token = new JwtSecurityToken(
-                claims: claims,
-                expires: DateTime.Now.AddDays(1),
-                signingCredentials: creds);
-
-            var jwt = new JwtSecurityTokenHandler().WriteToken(token);
-            return jwt;
-        }
-
-        private bool VerifyPassword(string providedPassword, string hashedPassword)
-        {
-            return BCrypt.Net.BCrypt.Verify(providedPassword, hashedPassword);
-        }
-
-        public string HashPassword(string password)
-        {
-            return BCrypt.Net.BCrypt.HashPassword(password);
         }
     }
 }
