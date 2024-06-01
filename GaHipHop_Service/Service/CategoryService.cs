@@ -54,6 +54,13 @@ namespace GaHipHop_Service.Service
                 {
                     throw new CustomException.DataNotFoundException("Category not found.");
                 }
+                
+                var products = _unitOfWork.ProductRepository.Get()
+                                .Where(p => p.CategoryId == category.Id && p.Status == true);
+                if (products.Any())
+                {
+                    throw new CustomException.DataExistException("Product still exist in Category");
+                }
 
                 category.Status = false;
                 _unitOfWork.CategoryRepository.Update(category);
