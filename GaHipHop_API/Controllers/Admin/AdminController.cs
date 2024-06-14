@@ -3,8 +3,10 @@ using GaHipHop_Model.DTO.Request;
 using GaHipHop_Model.DTO.Response;
 using GaHipHop_Repository.Entity;
 using GaHipHop_Service.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
+using Tools;
 
 namespace GaHipHop_API.Controllers.Admin
 {
@@ -19,28 +21,35 @@ namespace GaHipHop_API.Controllers.Admin
             _adminService = adminService;
         }
 
-        [HttpPost("login")]
-        public async Task<IActionResult> Login([FromBody] LoginRequest loginRequest)
+        [HttpGet("getAllAdminByStatusTrue")]
+        public IActionResult GetAllAdminByStatusTrue()
         {
-            var result = await _adminService.AuthorizeUser(loginRequest);
-            if (result.Token != null)
-            {
-                return CustomResult("Login successful.", new { result.Token, LoginResponse = result.loginResponse });
-            }
-            else
-            {
-                return CustomResult("Invalid email or password.", HttpStatusCode.Unauthorized);
-            }
-        }
-
-        [HttpGet]
-        public IActionResult GetAllAdmin()
-        {
-            var admin = _adminService.GetAllAdmin();
+            var admin = _adminService.GetAllAdminByStatusTrue();
             return CustomResult("Data load Successful", admin);
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("getAllAdminByStatusFalse")]
+        [Authorize]
+        public IActionResult GetAllAdminByStatusFalse()
+        {
+            try
+            {
+                var admin = _adminService.GetAllAdminByStatusFalse();
+                return CustomResult("Data load Successful", admin);
+            }
+            catch (CustomException.ForbbidenException ex)
+            {
+                return CustomResult(ex.Message, HttpStatusCode.Forbidden);
+            }
+            catch (CustomException.InternalServerErrorException ex)
+            {
+                return CustomResult(ex.Message, HttpStatusCode.InternalServerError);
+            }
+
+        }
+
+        [HttpGet("getAdminById/{id}")]
+        [Authorize]
         public async Task<IActionResult> GetAdminById(long id)
         {
             try
@@ -49,14 +58,22 @@ namespace GaHipHop_API.Controllers.Admin
 
                 return CustomResult("Create admin successful", admin);
             }
-            catch (Exception ex)
+            catch (CustomException.DataNotFoundException ex)
             {
-                return CustomResult("Not found admin.", HttpStatusCode.NotFound);
+                return CustomResult(ex.Message, HttpStatusCode.NotFound);
+            }
+            catch (CustomException.ForbbidenException ex)
+            {
+                return CustomResult(ex.Message, HttpStatusCode.Forbidden);
+            }
+            catch (CustomException.InternalServerErrorException ex)
+            {
+                return CustomResult(ex.Message, HttpStatusCode.InternalServerError);
             }
         }
 
 
-        [HttpPost]
+        [HttpPost("createAdmin")]
         public async Task<IActionResult> CreateAdmin([FromBody] AdminRequest adminRequest)
         {
             if (!ModelState.IsValid)
@@ -76,7 +93,7 @@ namespace GaHipHop_API.Controllers.Admin
 
         }
 
-        [HttpPut("{id}")]
+        [HttpPatch("updateAdmin/{id}")]
         public async Task<IActionResult> UpdateAdmin(long id, [FromBody] AdminRequest adminRequest)
         {
             if (!ModelState.IsValid)
@@ -96,24 +113,26 @@ namespace GaHipHop_API.Controllers.Admin
             }
         }
 
-        [HttpDelete("{id}")]
+        [HttpDelete("deletetAdmin/{id}")]
+        [Authorize]
         public async Task<IActionResult> DeleteAdmin(long id)
         {
             try
             {
-                var result = await _adminService.DeleteAdmin(id);
-                if (result)
-                {
-                    return CustomResult("Delete Successful.");
-                }
-                else
-                {
-                    return CustomResult("Not found admin.", HttpStatusCode.NotFound);
-                }
+               var result = await _adminService.DeleteAdmin(id);
+               return CustomResult("Delete Successful.");
             }
-            catch (Exception ex)
+            catch (CustomException.DataNotFoundException ex)
             {
-                return CustomResult("Delete Fail.", HttpStatusCode.BadRequest);
+                return CustomResult(ex.Message, HttpStatusCode.NotFound);
+            }
+            catch (CustomException.ForbbidenException ex)
+            {
+                return CustomResult(ex.Message, HttpStatusCode.Forbidden);
+            }
+            catch (CustomException.InternalServerErrorException ex)
+            {
+                return CustomResult(ex.Message, HttpStatusCode.InternalServerError);
             }
         }
 
