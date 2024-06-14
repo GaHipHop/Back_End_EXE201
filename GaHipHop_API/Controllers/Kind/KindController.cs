@@ -28,8 +28,8 @@ namespace GaHipHop_API.Controllers.Kind
         {
             try
             {
-                var kind = _kindService.GetAllKind(queryObject);
-                return CustomResult("Get all Data Successfully", kind);
+                var kinds = _kindService.GetAllKind(queryObject);
+                return CustomResult("Get all Data Successfully", kinds);
             }
             catch (CustomException.DataNotFoundException ex)
             {

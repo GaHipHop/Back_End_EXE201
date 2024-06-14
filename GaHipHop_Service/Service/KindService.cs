@@ -138,7 +138,7 @@ namespace GaHipHop_Service.Service
 
             if (!existingKind.Status)
             {
-                throw new CustomException.InvalidDataException($"Kind with ID {id} was DeActive.");
+                throw new CustomException.InvalidDataException($"Kind with ID {id} was InActive.");
             }
 
             // Check for duplicates (excluding the current Kind being updated)

@@ -44,10 +44,6 @@ namespace GaHipHop_Repository.Entity
         {
             base.OnModelCreating(modelBuilder);
 
-            modelBuilder.Entity<Kind>()
-                .Property(k => k.Image)
-                .IsRequired(false);
-
             // Seed data for Roles
             modelBuilder.Entity<Role>().HasData(
                 new Role { Id = 1, RoleName = "Admin" },
@@ -81,7 +77,8 @@ namespace GaHipHop_Repository.Entity
                 new Discount { Id = 2, Percent = 20.0f, ExpiredDate = DateTime.Now.AddMonths(2), Status = true }
             );
 
-            // Seed data for Imgs
+            modelBuilder.Entity<Kind>().Property(k => k.Image).IsRequired(false);
+            // Seed data for Kinds
             modelBuilder.Entity<Kind>().HasData(
                new Kind { Id = 1, ProductId = 1, ColorName = "Red", Image = "image1.jpg", Quantity = 5, Status = true },
                new Kind { Id = 2, ProductId = 1, ColorName = "Blue", Image = "image2.jpg", Quantity = 5, Status = true }

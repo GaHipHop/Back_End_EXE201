@@ -77,7 +77,9 @@ namespace GaHipHop_Service.Service
         public async Task<List<CategoryResponse>> GetAllCategory(QueryObject queryObject)
         {
             var categories = _unitOfWork.CategoryRepository.Get(
-                filter: p => queryObject.SearchText == null || p.CategoryName.Contains(queryObject.SearchText))
+                filter: p => queryObject.SearchText == null || p.CategoryName.Contains(queryObject.SearchText),
+                pageIndex: 1, 
+                pageSize: 5)
                 .Where(k => k.Status == true)
                 .ToList();
 
@@ -94,7 +96,9 @@ namespace GaHipHop_Service.Service
         public async Task<List<CategoryResponse>> GetAllCategoryFalse(QueryObject queryObject)
         {
             var categories = _unitOfWork.CategoryRepository.Get(
-                filter: p => queryObject.SearchText == null || p.CategoryName.Contains(queryObject.SearchText))
+                filter: p => queryObject.SearchText == null || p.CategoryName.Contains(queryObject.SearchText),
+                pageIndex: 1,
+                pageSize: 5)
                 .Where(k => k.Status == false)
                 .ToList();
             if (!categories.Any())
