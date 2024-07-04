@@ -47,16 +47,15 @@ namespace GaHipHop_Repository.Entity
             // Seed data for Roles
             modelBuilder.Entity<Role>().HasData(
                 new Role { Id = 1, RoleName = "Admin" },
-                new Role { Id = 2, RoleName = "Manager" },
-                new Role { Id = 3, RoleName = "Staff" }
+                new Role { Id = 2, RoleName = "Manager" }
             );
 
             // Seed data for Admins
-            //string plaintextPassword = "admin"; // Original password
-            //string hashedPassword = HashPassword(plaintextPassword); // Encrypt password using SHA-512
+            string plaintextPassword = "1"; // Original password
+            string hashedPassword = HashPassword(plaintextPassword); // Encrypt password using SHA-512
 
             modelBuilder.Entity<Admin>().HasData(
-                new Admin { Id = 1, RoleId = 1, Username = "admin", Password = "1", Email = "admin@example.com", FullName = "Admin User", Phone = "123456789", Address = "Admin Address", Status = true }
+                new Admin { Id = 1, RoleId = 1, Username = "admin", Password = hashedPassword, Email = "admin@example.com", FullName = "Admin User", Phone = "123456789", Address = "Admin Address", Status = true }
             );
 
             // Seed data for Categories
@@ -106,7 +105,7 @@ namespace GaHipHop_Repository.Entity
             );
         }
 
-        /*private string HashPassword(string password)
+        private string HashPassword(string password)
         {
             using (var sha512 = new System.Security.Cryptography.SHA512Managed())
             {
@@ -114,8 +113,6 @@ namespace GaHipHop_Repository.Entity
                 var hash = sha512.ComputeHash(bytes);
                 return Convert.ToBase64String(hash);
             }
-        }*/
-
-
+        }
     }
 }
