@@ -34,17 +34,17 @@ namespace GaHipHop_Service.Service
             return _unitOfWork.ContactRepository.GetByID(id);
         }
 
-        public async Task<ContactReponse> CreateContact(CreateContactRequest createContactRequest)
+        public async Task<ContactResponse> CreateContact(CreateContactRequest createContactRequest)
         {
             var createcontact =  _mapper.Map<Contact>(createContactRequest);
 
              _unitOfWork.ContactRepository.Insert(createcontact);
 
-            ContactReponse createContactReponse = _mapper.Map<ContactReponse>(createcontact);
+            ContactResponse createContactReponse = _mapper.Map<ContactResponse>(createcontact);
             return createContactReponse;
         }
 
-        public async Task<ContactReponse> UpdateContact(long id, UpdateContactRequest updateContactRequest)
+        public async Task<ContactResponse> UpdateContact(long id, UpdateContactRequest updateContactRequest)
         {
             var existcontact = _unitOfWork.ContactRepository.GetByID(id);
             if (existcontact == null)
@@ -56,11 +56,11 @@ namespace GaHipHop_Service.Service
 
             _unitOfWork.ContactRepository.Update(existcontact);
             _unitOfWork.Save();
-            var contactresponse = _mapper.Map<ContactReponse>(existcontact);
+            var contactresponse = _mapper.Map<ContactResponse>(existcontact);
             return contactresponse;
         }
 
-        public async Task<ContactReponse> DeleteContact(long id)
+        public async Task<ContactResponse> DeleteContact(long id)
         {
             var deletesubcription = _unitOfWork.ContactRepository.GetByID(id);
             if (deletesubcription == null)
@@ -70,7 +70,7 @@ namespace GaHipHop_Service.Service
             _unitOfWork.ContactRepository.Delete(deletesubcription);
 
             //map vào giá trị response
-            var contactresponse = _mapper.Map<ContactReponse>(deletesubcription);
+            var contactresponse = _mapper.Map<ContactResponse>(deletesubcription);
             return contactresponse;
         }
     }
