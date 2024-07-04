@@ -11,10 +11,10 @@ namespace GaHipHop_Service.Interfaces
 {
     public interface IContactService
     {
-        Task<ContactReponse> CreateContact(CreateContactRequest createContactRequest);
-        Task<ContactReponse> DeleteContact(long id);
+        Task<ContactResponse> CreateContact(CreateContactRequest createContactRequest);
+        Task<ContactResponse> DeleteContact(long id);
         Task<IEnumerable<Contact>> GetAllContacts();
         Task<Contact> GetContactById(long id);
-        Task<ContactReponse> UpdateContact(long id,UpdateContactRequest updateContactRequest);
+        Task<ContactResponse> UpdateContact(long id,UpdateContactRequest updateContactRequest);
     }
 }
