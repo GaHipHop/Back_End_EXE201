@@ -37,7 +37,9 @@ namespace GaHipHop_Service.Service
         public async Task<List<ProductResponse>> GetAllProduct(QueryObject queryObject)
         {
             var products = _unitOfWork.ProductRepository.Get(
-                filter: p => queryObject.SearchText == null || p.ProductName.Contains(queryObject.SearchText))
+                filter: p => queryObject.SearchText == null || p.ProductName.Contains(queryObject.SearchText),
+                pageIndex: 1,
+                pageSize: 5)
                 .Where(k => k.Status == true);
 
             if (!products.Any())
@@ -71,7 +73,9 @@ namespace GaHipHop_Service.Service
         {
 
             var products = _unitOfWork.ProductRepository.Get(
-                filter: p => queryObject.SearchText == null || p.ProductName.Contains(queryObject.SearchText))
+                filter: p => queryObject.SearchText == null || p.ProductName.Contains(queryObject.SearchText),
+                pageIndex: 1,
+                pageSize: 5)
                 .Where(k => k.Status == false);
 
             if (!products.Any())
@@ -113,7 +117,10 @@ namespace GaHipHop_Service.Service
             }
 
             var products = _unitOfWork.ProductRepository.Get(
-                filter: k => k.CategoryId == id && k.Status == true).ToList();
+                filter: k => k.CategoryId == id && k.Status == true,
+                pageIndex: 1,
+                pageSize: 5)
+                .ToList();
             if (!products.Any())
             {
                 throw new CustomException.DataNotFoundException($"Category with ID: {id} does not have any Kind");
