@@ -3,6 +3,7 @@ using CoreApiResponse;
 using GaHipHop_Model.DTO.Request;
 using GaHipHop_Model.DTO.Response;
 using GaHipHop_Service.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
@@ -43,6 +44,7 @@ namespace GaHipHop_API.Controllers.Contact
         }
 
         [HttpGet("GetContactBy/{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> GetContactById(long id)
         {
             try
@@ -70,12 +72,17 @@ namespace GaHipHop_API.Controllers.Contact
 
 
         [HttpPost("CreateContact")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> CreateContact([FromBody] CreateContactRequest createContactRequest)
         {
             try
             {
                 ContactReponse createcontact = await _contactService.CreateContact(createContactRequest);
                 return CustomResult("Create Successfull", createcontact, HttpStatusCode.OK);
+            }
+            catch (CustomException.ForbbidenException ex)
+            {
+                return CustomResult(ex.Message, HttpStatusCode.Forbidden);
             }
             catch (Exception ex)
             {
@@ -84,12 +91,17 @@ namespace GaHipHop_API.Controllers.Contact
         }
 
         [HttpPatch("UpdateContact/{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> UpdateContact(long id, [FromBody] UpdateContactRequest updateContactRequest)
         {
             try
             {
                 ContactReponse subcription = await _contactService.UpdateContact(id, updateContactRequest);
                 return CustomResult("Create Successfull", subcription, HttpStatusCode.OK);
+            }
+            catch (CustomException.ForbbidenException ex)
+            {
+                return CustomResult(ex.Message, HttpStatusCode.Forbidden);
             }
             catch (CustomException.DataNotFoundException ex)
             {
@@ -106,12 +118,17 @@ namespace GaHipHop_API.Controllers.Contact
         }
 
         [HttpDelete("DeleteContact/{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteContact(long id)
         {
             try
             {
                 var deletecontact = await _contactService.DeleteContact(id);
                 return CustomResult("Delete Successfull (Xóa luôn)", DeleteContact, HttpStatusCode.OK);
+            }
+            catch (CustomException.ForbbidenException ex)
+            {
+                return CustomResult(ex.Message, HttpStatusCode.Forbidden);
             }
             catch (Exception ex)
             {

@@ -4,6 +4,8 @@ using GaHipHop_Model.DTO.Response;
 using GaHipHop_Repository.Entity;
 using GaHipHop_Repository.Repository;
 using GaHipHop_Service.Interfaces;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,17 +17,22 @@ namespace GaHipHop_Service.Service
 {
     public class CategoryService : ICategoryService
     {
+        private readonly IConfiguration _configuration;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public CategoryService(IUnitOfWork unitOfWork, IMapper mapper)
+        public CategoryService(IConfiguration configuration, IUnitOfWork unitOfWork, IMapper mapper, IHttpContextAccessor httpContextAccessor)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
+            _httpContextAccessor = httpContextAccessor;
+            _configuration = configuration;
         }
 
         public async Task<CategoryResponse> CreateCategory(CategoryRequest categoryRequest)
         {
+
             var existingCategory = _unitOfWork.CategoryRepository.Get().FirstOrDefault(p => 
                                             p.CategoryName.ToLower() == categoryRequest.CategoryName.ToLower());
 
@@ -93,6 +100,8 @@ namespace GaHipHop_Service.Service
 
         public async Task<List<CategoryResponse>> GetAllCategoryFalse(QueryObject queryObject)
         {
+
+
             var categories = _unitOfWork.CategoryRepository.Get(
                 filter: p => queryObject.SearchText == null || p.CategoryName.Contains(queryObject.SearchText))
                 .Where(k => k.Status == false)
@@ -122,6 +131,7 @@ namespace GaHipHop_Service.Service
 
         public async Task<CategoryResponse> UpdateCategory(long id, CategoryRequest categoryRequest)
         {
+
             var existingCategory = _unitOfWork.CategoryRepository.GetByID(id);
 
             if (existingCategory == null)

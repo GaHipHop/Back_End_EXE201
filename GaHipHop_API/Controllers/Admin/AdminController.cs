@@ -22,14 +22,30 @@ namespace GaHipHop_API.Controllers.Admin
         }
 
         [HttpGet("getAllAdminByStatusTrue")]
+        [Authorize(Roles = "Manager")]
         public IActionResult GetAllAdminByStatusTrue()
         {
-            var admin = _adminService.GetAllAdminByStatusTrue();
-            return CustomResult("Data load Successful", admin);
+            try
+            {
+                var admin = _adminService.GetAllAdminByStatusTrue();
+                return CustomResult("Data load Successful", admin);
+            }
+            catch (CustomException.UnAuthorizedException ex)
+            {
+                return CustomResult("ahihi", HttpStatusCode.Unauthorized);
+            }
+            catch (CustomException.ForbbidenException ex)
+            {
+                return CustomResult(ex.Message, HttpStatusCode.Forbidden);
+            }
+            catch (CustomException.InternalServerErrorException ex)
+            {
+                return CustomResult(ex.Message, HttpStatusCode.InternalServerError);
+            }
         }
 
         [HttpGet("getAllAdminByStatusFalse")]
-        [Authorize]
+        [Authorize(Roles = "Manager")]
         public IActionResult GetAllAdminByStatusFalse()
         {
             try
@@ -49,14 +65,14 @@ namespace GaHipHop_API.Controllers.Admin
         }
 
         [HttpGet("getAdminById/{id}")]
-        [Authorize]
+        [Authorize(Roles = "Manager")]
         public async Task<IActionResult> GetAdminById(long id)
         {
             try
             {
                 var admin = await _adminService.GetAdminById(id);
 
-                return CustomResult("Create admin successful", admin);
+                return CustomResult("get admin successful", admin);
             }
             catch (CustomException.DataNotFoundException ex)
             {
@@ -74,6 +90,7 @@ namespace GaHipHop_API.Controllers.Admin
 
 
         [HttpPost("createAdmin")]
+        [Authorize(Roles = "Manager")]
         public async Task<IActionResult> CreateAdmin([FromBody] AdminRequest adminRequest)
         {
             if (!ModelState.IsValid)
@@ -81,19 +98,34 @@ namespace GaHipHop_API.Controllers.Admin
                 //return BadRequest(ModelState);
                 return CustomResult(ModelState, HttpStatusCode.BadRequest);
             }
-
-            var result = await _adminService.CreateAdmin(adminRequest);
-
-            if (!result.Status)
+            try
             {
-                return CustomResult("Create fail.", new { userName = result.UserName }, HttpStatusCode.Conflict);
-            }
+                var result = await _adminService.CreateAdmin(adminRequest);
 
-            return CustomResult("Create Successful", result);
+                if (!result.Status)
+                {
+                    return CustomResult("Create fail.", new { userName = result.UserName }, HttpStatusCode.Conflict);
+                }
+
+                return CustomResult("Create Successful", result);
+            }
+            catch (CustomException.DataNotFoundException ex)
+            {
+                return CustomResult(ex.Message, HttpStatusCode.NotFound);
+            }
+            catch (CustomException.ForbbidenException ex)
+            {
+                return CustomResult(ex.Message, HttpStatusCode.Forbidden);
+            }
+            catch (CustomException.InternalServerErrorException ex)
+            {
+                return CustomResult(ex.Message, HttpStatusCode.InternalServerError);
+            }
 
         }
 
         [HttpPatch("updateAdmin/{id}")]
+        [Authorize(Roles = "Manager")]
         public async Task<IActionResult> UpdateAdmin(long id, [FromBody] AdminRequest adminRequest)
         {
             if (!ModelState.IsValid)
@@ -107,14 +139,22 @@ namespace GaHipHop_API.Controllers.Admin
                 var result = await _adminService.UpdateAdmin(id, adminRequest);
                 return CustomResult("Update Successful", result);
             }
-            catch (Exception ex)
+            catch (CustomException.DataNotFoundException ex)
             {
-                return CustomResult("Update Admin Fail", HttpStatusCode.BadRequest);
+                return CustomResult(ex.Message, HttpStatusCode.NotFound);
+            }
+            catch (CustomException.ForbbidenException ex)
+            {
+                return CustomResult(ex.Message, HttpStatusCode.Forbidden);
+            }
+            catch (CustomException.InternalServerErrorException ex)
+            {
+                return CustomResult(ex.Message, HttpStatusCode.InternalServerError);
             }
         }
 
         [HttpDelete("deletetAdmin/{id}")]
-        [Authorize]
+        [Authorize(Roles = "Manager")]
         public async Task<IActionResult> DeleteAdmin(long id)
         {
             try

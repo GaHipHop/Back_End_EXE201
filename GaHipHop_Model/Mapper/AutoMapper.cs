@@ -28,6 +28,8 @@ namespace GaHipHop_Model.Mapper
                 .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null && !srcMember.Equals(0)));
             CreateMap<CategoryRequest, Category>().ReverseMap();
 
+            CreateMap<OrderRequest, Order>().ReverseMap();
+
             //Reponse
             CreateMap<Admin, AdminResponse>()
             .ForMember(dest => dest.Role, opt => opt.MapFrom(src => src.Role));
@@ -38,6 +40,13 @@ namespace GaHipHop_Model.Mapper
             CreateMap<Kind, KindResponse>();
             CreateMap<Category, CategoryResponse>();
 
+            CreateMap<Order, OrderResponse>().ReverseMap();
+            CreateMap<OrderDetails, OrderDetailResponse>()
+                .ForMember(dest => dest.ProductName, opt => opt.MapFrom(src => src.Kind.Product.ProductName))
+                .ForMember(dest => dest.ColorName, opt => opt.MapFrom(src => src.Kind.ColorName))
+                .ReverseMap();
+            CreateMap<CartItem, OrderDetails>().ForMember(dest => dest.Id, opt => opt.Ignore());
+            CreateMap<UserInfo, UserInfoResponse>().ReverseMap();
         }
     }
 }

@@ -6,20 +6,25 @@ using GaHipHop_Repository.Repository;
 using Microsoft.Extensions.Configuration;
 using GaHipHop_Service.Interfaces;
 using Tools;
+using Microsoft.AspNetCore.Http;
 
 namespace GaHipHop_Service.Service
 {
     public class KindService : IKindService
     {
+        private readonly IConfiguration _configuration;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
+        private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly Tools.Firebase _firebase;
 
-        public KindService(IUnitOfWork unitOfWork, IMapper mapper, Tools.Firebase firebase)
+        public KindService(IConfiguration configuration, IUnitOfWork unitOfWork, IMapper mapper, IHttpContextAccessor httpContextAccessor, Tools.Firebase firebase)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
             _firebase = firebase;
+            _configuration = configuration;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         public async Task<List<KindResponse>> GetAllKind(QueryObject queryObject)
@@ -40,6 +45,7 @@ namespace GaHipHop_Service.Service
 
         public async Task<List<KindResponse>> GetAllKindFalse(QueryObject queryObject)
         {
+
             var kinds = _unitOfWork.KindRepository.Get(
                 filter: p => queryObject.SearchText == null || p.ColorName.Contains(queryObject.SearchText))
                 .Where(k => k.Quantity != 0 && k.Status == false)
@@ -89,6 +95,7 @@ namespace GaHipHop_Service.Service
 
         public async Task<KindResponse> CreateKind(KindRequest kindRequest)
         {
+
             var existingKind = _unitOfWork.KindRepository.Get().FirstOrDefault(p => p.ProductId == kindRequest.ProductId &&
                                                                 p.ColorName.ToLower() == kindRequest.ColorName.ToLower());
 
@@ -129,6 +136,7 @@ namespace GaHipHop_Service.Service
 
         public async Task<KindResponse> UpdateKind(long id, UpdateKindRequest updateKindRequest)
         {
+
             var existingKind = _unitOfWork.KindRepository.GetByID(id);
 
             if (existingKind == null)
@@ -185,6 +193,7 @@ namespace GaHipHop_Service.Service
         {
             try
             {
+
                 var kind = _unitOfWork.KindRepository.GetByID(id);
                 if (kind == null)
                 {

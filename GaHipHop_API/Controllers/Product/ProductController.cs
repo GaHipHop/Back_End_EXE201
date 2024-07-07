@@ -3,6 +3,7 @@ using GaHipHop_Model.DTO.Request;
 using GaHipHop_Model.DTO.Response;
 using GaHipHop_Service.Interfaces;
 using GaHipHop_Service.Service;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
@@ -41,12 +42,17 @@ namespace GaHipHop_API.Controllers.Product
         }
 
         [HttpGet("GetAllProductFalse")]
+        [Authorize(Roles = "Admin")]
         public IActionResult GetAllProductFalse([FromQuery] QueryObject queryObject)
         {
             try
             {
                 var product = _productService.GetAllProductFalse(queryObject);
                 return CustomResult("Get all data Successfully", product);
+            }
+            catch (CustomException.ForbbidenException ex)
+            {
+                return CustomResult(ex.Message, HttpStatusCode.Forbidden);
             }
             catch (CustomException.DataNotFoundException ex)
             {
@@ -96,6 +102,7 @@ namespace GaHipHop_API.Controllers.Product
         }
 
         [HttpPost("CreateProduct")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> CreateProduct([FromBody] ProductRequest productRequest)
         {
             try
@@ -107,6 +114,10 @@ namespace GaHipHop_API.Controllers.Product
 
                 ProductResponse product = await _productService.CreateProduct(productRequest);
                 return CustomResult("Create Successful", product, HttpStatusCode.OK);
+            }
+            catch (CustomException.ForbbidenException ex)
+            {
+                return CustomResult(ex.Message, HttpStatusCode.Forbidden);
             }
             catch (CustomException.DataNotFoundException ex)
             {
@@ -120,12 +131,17 @@ namespace GaHipHop_API.Controllers.Product
         }
 
         [HttpPatch("UpdateProduct/{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> UpdateProduct(long id, [FromBody] ProductRequest productRequest)
         {
             try
             {
                 ProductResponse product = await _productService.UpdateProduct(id, productRequest);
                 return CustomResult("updated Successful", product, HttpStatusCode.OK);
+            }
+            catch (CustomException.ForbbidenException ex)
+            {
+                return CustomResult(ex.Message, HttpStatusCode.Forbidden);
             }
             catch (CustomException.DataNotFoundException ex)
             {
@@ -142,12 +158,17 @@ namespace GaHipHop_API.Controllers.Product
         }
 
         [HttpDelete("DeleteProduct/{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteProduct(long id)
         {
             try
             {
                 var deleteProduct = await _productService.DeleteProduct(id);
                 return CustomResult("Delete Prodcut Successfull (Status)", deleteProduct, HttpStatusCode.OK);
+            }
+            catch (CustomException.ForbbidenException ex)
+            {
+                return CustomResult(ex.Message, HttpStatusCode.Forbidden);
             }
             catch (CustomException.DataNotFoundException ex)
             {

@@ -4,23 +4,30 @@ using GaHipHop_Model.DTO.Response;
 using GaHipHop_Repository.Entity;
 using GaHipHop_Repository.Repository;
 using GaHipHop_Service.Interfaces;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Tools;
 
 namespace GaHipHop_Service.Service
 {
     public class DiscountService : IDiscountService
     {
+        private readonly IConfiguration _configuration;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public DiscountService (IUnitOfWork unitOfWork, IMapper mapper)
+        public DiscountService (IConfiguration configuration, IUnitOfWork unitOfWork, IMapper mapper, IHttpContextAccessor httpContextAccessor)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
+            _httpContextAccessor = httpContextAccessor;
+            _configuration = configuration;
         }
 
         public async Task<IEnumerable<Discount>> GetAllDiscount()
@@ -31,12 +38,15 @@ namespace GaHipHop_Service.Service
 
         public async Task<Discount> GetDiscountById(long id)
         {
+
+
             var discount = _unitOfWork.DiscountRepository.GetByID(id);
             return discount;
         }
 
         public async Task<DiscountResponse> CreateDiscount(CreateDiscountRequest createDiscountRequest)
         {
+
             var discounts = _mapper.Map<Discount>(createDiscountRequest);
 
             // set trạng thái luôn true
@@ -50,6 +60,7 @@ namespace GaHipHop_Service.Service
 
         public async Task<DiscountResponse> UpdateDiscount(long id, UpdateDiscountRequest updateDiscountRequest)
         {
+
             var existdiscount = _unitOfWork.DiscountRepository.GetByID(id);
             if (existdiscount == null)
             {
@@ -66,6 +77,7 @@ namespace GaHipHop_Service.Service
 
         public async Task<DiscountResponse> DeleteDiscount(long id)
         {
+
             var deleteDiscount = _unitOfWork.DiscountRepository.GetByID(id);
             if (deleteDiscount == null)
             {
