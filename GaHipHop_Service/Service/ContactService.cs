@@ -5,22 +5,29 @@ using GaHipHop_Repository;
 using GaHipHop_Repository.Entity;
 using GaHipHop_Repository.Repository;
 using GaHipHop_Service.Interfaces;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Tools;
 
 namespace GaHipHop_Service.Service
 {
     public class ContactService : IContactService
     {
+        private readonly IConfiguration _configuration;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
-        public ContactService(IUnitOfWork unitOfWork, IMapper mapper)
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        public ContactService(IUnitOfWork unitOfWork, IMapper mapper, IConfiguration configuration, IHttpContextAccessor httpContextAccessor)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
+            _configuration = configuration;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         public async Task<IEnumerable<Contact>> GetAllContacts()
@@ -36,6 +43,7 @@ namespace GaHipHop_Service.Service
 
         public async Task<ContactResponse> CreateContact(CreateContactRequest createContactRequest)
         {
+
             var createcontact =  _mapper.Map<Contact>(createContactRequest);
 
              _unitOfWork.ContactRepository.Insert(createcontact);
@@ -46,6 +54,7 @@ namespace GaHipHop_Service.Service
 
         public async Task<ContactResponse> UpdateContact(long id, UpdateContactRequest updateContactRequest)
         {
+
             var existcontact = _unitOfWork.ContactRepository.GetByID(id);
             if (existcontact == null)
             {
@@ -62,6 +71,7 @@ namespace GaHipHop_Service.Service
 
         public async Task<ContactResponse> DeleteContact(long id)
         {
+
             var deletesubcription = _unitOfWork.ContactRepository.GetByID(id);
             if (deletesubcription == null)
             {

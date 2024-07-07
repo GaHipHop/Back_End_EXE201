@@ -47,8 +47,7 @@ namespace GaHipHop_Repository.Entity
             // Seed data for Roles
             modelBuilder.Entity<Role>().HasData(
                 new Role { Id = 1, RoleName = "Admin" },
-                new Role { Id = 2, RoleName = "Manager" },
-                new Role { Id = 3, RoleName = "Staff" }
+                new Role { Id = 2, RoleName = "Manager" }
             );
 
             // Seed data for Admins
@@ -56,7 +55,7 @@ namespace GaHipHop_Repository.Entity
             //string hashedPassword = HashPassword(plaintextPassword); // Encrypt password using SHA-512
 
             modelBuilder.Entity<Admin>().HasData(
-                new Admin { Id = 1, RoleId = 1, Username = "admin", Password = "1", Email = "admin@example.com", FullName = "Admin User", Phone = "123456789", Address = "Admin Address", Status = true }
+                new Admin { Id = 1, RoleId = 1, Username = "admin", Password = "$2a$12$W6Fr2O.JNK5pxRlm36q1DeLI.hDM5AhHe..ZnhFhofXKwSNUrMTA.", Email = "admin@example.com", FullName = "Admin User", Phone = "123456789", Address = "Admin Address", Status = true }
             );
 
             // Seed data for Categories

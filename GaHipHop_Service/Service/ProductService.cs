@@ -6,6 +6,7 @@ using GaHipHop_Repository.Entity;
 using GaHipHop_Repository.Repository;
 using GaHipHop_Service.Interfaces;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
@@ -19,13 +20,17 @@ namespace GaHipHop_Service.Service
 {
     public class ProductService : IProductService
     {
+        private readonly IConfiguration _configuration;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public ProductService(IUnitOfWork unitOfWork, IMapper mapper)
+        public ProductService(IConfiguration configuration, IUnitOfWork unitOfWork, IMapper mapper, IHttpContextAccessor httpContextAccessor)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
+            _httpContextAccessor = httpContextAccessor;
+            _configuration = configuration;
         }
 
         //Status = TRUE
@@ -66,6 +71,7 @@ namespace GaHipHop_Service.Service
 
         public async Task<List<ProductResponse>> GetAllProductFalse(QueryObject queryObject)
         {
+
             var products = _unitOfWork.ProductRepository.Get(
                 filter: p => queryObject.SearchText == null || p.ProductName.Contains(queryObject.SearchText),
                 pageIndex: 1,
@@ -146,6 +152,7 @@ namespace GaHipHop_Service.Service
 
         public async Task<ProductResponse> CreateProduct(ProductRequest productRequest)
         {
+
             var existingProduct = _unitOfWork.ProductRepository.Get().FirstOrDefault(p => p.ProductName.ToLower() == productRequest.ProductName.ToLower());
 
             if (existingProduct != null)
@@ -255,6 +262,7 @@ namespace GaHipHop_Service.Service
         {
             try
             {
+
                 var product = _unitOfWork.ProductRepository.GetByID(id);
                 if (product == null)
                 {

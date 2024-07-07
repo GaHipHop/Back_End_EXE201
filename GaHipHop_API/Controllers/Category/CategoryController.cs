@@ -3,6 +3,7 @@ using GaHipHop_Model.DTO.Request;
 using GaHipHop_Model.DTO.Response;
 using GaHipHop_Service.Interfaces;
 using GaHipHop_Service.Service;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
@@ -40,12 +41,17 @@ namespace GaHipHop_API.Controllers.Category
         }
 
         [HttpGet("GetAllCategoryFalse")]
+        [Authorize(Roles = "Admin")]
         public IActionResult GetAllCategoryFalse([FromQuery] QueryObject queryObject)
         {
             try
             {
                 var categories = _categoryService.GetAllCategoryFalse(queryObject);
                 return CustomResult("Get all Data Successfully", categories);
+            }
+            catch (CustomException.ForbbidenException ex)
+            {
+                return CustomResult(ex.Message, HttpStatusCode.Forbidden);
             }
             catch (CustomException.DataNotFoundException ex)
             {
@@ -77,6 +83,7 @@ namespace GaHipHop_API.Controllers.Category
         }
 
         [HttpPost("CreateCategory")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> CreateCategory([FromForm] CategoryRequest categoryRequest)
         {
             try
@@ -88,6 +95,10 @@ namespace GaHipHop_API.Controllers.Category
 
                 CategoryResponse category = await _categoryService.CreateCategory(categoryRequest);
                 return CustomResult("Create Successful", category, HttpStatusCode.OK);
+            }
+            catch (CustomException.ForbbidenException ex)
+            {
+                return CustomResult(ex.Message, HttpStatusCode.Forbidden);
             }
             catch (CustomException.DataNotFoundException ex)
             {
@@ -101,12 +112,17 @@ namespace GaHipHop_API.Controllers.Category
         }
 
         [HttpPatch("UpdateCategory/{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> UpdateCategory(long id, [FromForm] CategoryRequest categoryRequest)
         {
             try
             {
                 CategoryResponse category = await _categoryService.UpdateCategory(id, categoryRequest);
                 return CustomResult("Update Sucessfully", category, HttpStatusCode.OK);
+            }
+            catch (CustomException.ForbbidenException ex)
+            {
+                return CustomResult(ex.Message, HttpStatusCode.Forbidden);
             }
             catch (CustomException.DataNotFoundException ex)
             {
@@ -127,12 +143,17 @@ namespace GaHipHop_API.Controllers.Category
         }
 
         [HttpDelete("DeleteCategory/{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteCategory(long id)
         {
             try
             {
                 var category = await _categoryService.DeleteCategory(id);
                 return CustomResult("Delete Category Successfull (Status)", category, HttpStatusCode.OK);
+            }
+            catch (CustomException.ForbbidenException ex)
+            {
+                return CustomResult(ex.Message, HttpStatusCode.Forbidden);
             }
             catch (CustomException.DataNotFoundException ex)
             {

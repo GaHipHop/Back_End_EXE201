@@ -5,6 +5,7 @@ using GaHipHop_Model.DTO.Response;
 using GaHipHop_Repository.Repository;
 using GaHipHop_Service.Interfaces;
 using GaHipHop_Service.Service;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
@@ -42,12 +43,17 @@ namespace GaHipHop_API.Controllers.Kind
         }
 
         [HttpGet("GetAllKindFalse")]
+        [Authorize(Roles = "Admin")]
         public IActionResult GetAllKindFalse([FromQuery] QueryObject queryObject)
         {
             try
             {
                 var kind = _kindService.GetAllKindFalse(queryObject);
                 return CustomResult("Get all Data Successfully", kind);
+            }
+            catch (CustomException.ForbbidenException ex)
+            {
+                return CustomResult(ex.Message, HttpStatusCode.Forbidden);
             }
             catch (CustomException.DataNotFoundException ex)
             {
@@ -97,6 +103,7 @@ namespace GaHipHop_API.Controllers.Kind
         }
 
         [HttpPost("CreateKind")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> CreateKind([FromForm] KindRequest kindRequest)
         {
             try
@@ -108,6 +115,10 @@ namespace GaHipHop_API.Controllers.Kind
 
                 KindResponse kind = await _kindService.CreateKind(kindRequest);
                 return CustomResult("Create Successful", kind, HttpStatusCode.OK);
+            }
+            catch (CustomException.ForbbidenException ex)
+            {
+                return CustomResult(ex.Message, HttpStatusCode.Forbidden);
             }
             catch (CustomException.DataNotFoundException ex)
             {
@@ -121,12 +132,17 @@ namespace GaHipHop_API.Controllers.Kind
         }
 
         [HttpPatch("UpdateKind/{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> UpdateKind(long id, [FromForm] UpdateKindRequest updateKindRequest)
         {
             try
             {
                 KindResponse kind = await _kindService.UpdateKind(id, updateKindRequest);
                 return CustomResult("Update Sucessfully", kind, HttpStatusCode.OK);
+            }
+            catch (CustomException.ForbbidenException ex)
+            {
+                return CustomResult(ex.Message, HttpStatusCode.Forbidden);
             }
             catch (CustomException.DataNotFoundException ex)
             {
@@ -147,12 +163,17 @@ namespace GaHipHop_API.Controllers.Kind
         }
 
         [HttpDelete("DeleteKind/{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteKind(long id)
         {
             try
             {
                 var kind = await _kindService.DeleteKind(id);
                 return CustomResult("Delete Kind Successfull (Status)", kind, HttpStatusCode.OK);
+            }
+            catch (CustomException.ForbbidenException ex)
+            {
+                return CustomResult(ex.Message, HttpStatusCode.Forbidden);
             }
             catch (CustomException.DataNotFoundException ex)
             {

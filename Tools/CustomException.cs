@@ -31,6 +31,14 @@ public class CustomException
         public DataExistException(string message, Exception innerException) : base(message, innerException) { }
     }
 
+    public class UnAuthorizedException : Exception
+    {
+        public UnAuthorizedException() : base() { }
+        public UnAuthorizedException(string message) : base(message) { }
+        public UnAuthorizedException(string statuscode, string message) : base(message) { }
+        public UnAuthorizedException(string message, Exception innerException) : base(message, innerException) { }
+    }
+
     public class ForbbidenException : Exception
     {
         public ForbbidenException() : base() { }

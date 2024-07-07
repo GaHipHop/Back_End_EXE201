@@ -83,4 +83,28 @@ public class Authentication
                throw new CustomException.InternalServerErrorException($"Can not get userId from token");
 
     }
+
+    public static string GetRoleFromHttpContext(HttpContext httpContext)
+    {
+        if (!httpContext.Request.Headers.ContainsKey("Authorization"))
+        {
+            throw new CustomException.InternalServerErrorException("Need Authorization");
+        }
+
+        string? authorizationHeader = httpContext.Request.Headers["Authorization"];
+
+        if (string.IsNullOrWhiteSpace(authorizationHeader) || !authorizationHeader.StartsWith("bearer "))
+        {
+            throw new CustomException.InternalServerErrorException(
+                $"Invalid authorization header: {authorizationHeader}");
+        }
+
+        string jwtToken = authorizationHeader["bearer ".Length..];
+        var tokenHandler = new JwtSecurityTokenHandler();
+        var token = tokenHandler.ReadJwtToken(jwtToken);
+        var roleClaim = token.Claims.FirstOrDefault(claim => claim.Type == "role");
+        return roleClaim?.Value ??
+               throw new CustomException.InternalServerErrorException($"Can not get userId from token");
+
+    }
 }
