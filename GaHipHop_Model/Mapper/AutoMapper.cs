@@ -22,8 +22,9 @@ namespace GaHipHop_Model.Mapper
             CreateMap<CreateDiscountRequest, Discount>().ReverseMap();
             CreateMap<UpdateContactRequest, Discount>().ReverseMap();
             CreateMap<ProductRequest, Product>().ReverseMap();
-            CreateMap<ProductRequest, Product>().ReverseMap();
+            CreateMap<UpdateProductRequest, Product>().ReverseMap();
             CreateMap<KindRequest, Kind>().ReverseMap();
+            CreateMap<ProductRequest, Kind>().ReverseMap();
             CreateMap<UpdateKindRequest, Kind>()
                 .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null && !srcMember.Equals(0)));
             CreateMap<CategoryRequest, Category>().ReverseMap();

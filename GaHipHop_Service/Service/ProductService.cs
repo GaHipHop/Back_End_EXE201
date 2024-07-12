@@ -24,13 +24,15 @@ namespace GaHipHop_Service.Service
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
         private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly Tools.Firebase _firebase;
 
-        public ProductService(IConfiguration configuration, IUnitOfWork unitOfWork, IMapper mapper, IHttpContextAccessor httpContextAccessor)
+        public ProductService(IConfiguration configuration, IUnitOfWork unitOfWork, IMapper mapper, IHttpContextAccessor httpContextAccessor, Tools.Firebase firebase)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
             _httpContextAccessor = httpContextAccessor;
             _configuration = configuration;
+            _firebase = firebase;
         }
 
         //Status = TRUE
@@ -153,17 +155,21 @@ namespace GaHipHop_Service.Service
 
         public async Task<ProductResponse> CreateProduct(ProductRequest productRequest)
         {
+            var accountId = Authentication.GetUserIdFromHttpContext(_httpContextAccessor.HttpContext);
+            if (!long.TryParse(accountId, out long Id))
+            {
+                throw new CustomException.ForbbidenException("User ID claim invalid.");
+            }
+
+            var admin = _unitOfWork.AdminRepository.Get(a => a.Id == Id).FirstOrDefault();
+
+            
 
             var existingProduct = _unitOfWork.ProductRepository.Get().FirstOrDefault(p => p.ProductName.ToLower() == productRequest.ProductName.ToLower());
 
             if (existingProduct != null)
             {
                 throw new CustomException.DataExistException($"Product with name '{productRequest.ProductName}' already exists.");
-            }
-            var admin = _unitOfWork.AdminRepository.GetByID(productRequest.AdminId);
-            if (admin == null)
-            {
-                throw new CustomException.DataNotFoundException("Admin not found.");
             }
 
             var discount = _unitOfWork.DiscountRepository.GetByID(productRequest.DiscountId);
@@ -181,14 +187,31 @@ namespace GaHipHop_Service.Service
             var newProduct = _mapper.Map<Product>(productRequest);
             newProduct.CreateDate = DateTime.UtcNow;
             newProduct.Status = true;
-
-            newProduct.Admin = admin;
+            newProduct.AdminId = admin.Id;
             newProduct.Discount = discount;
             newProduct.Category = category;
 
             var productResponse = CalculateDiscountedPrice(newProduct);
 
             _unitOfWork.ProductRepository.Insert(newProduct);
+
+            var newKind = _mapper.Map<Kind>(productRequest);
+            newKind.ProductId = newProduct.Id;
+            newKind.ColorName = productRequest.ColorName;
+            newKind.Quantity = productRequest.KindQuantity;
+            newKind.Status = true;
+            if (productRequest.File != null)
+            {
+                if (productRequest.File.Length >= 10 * 1024 * 1024)
+                {
+                    throw new CustomException.InvalidDataException("File size exceeds the maximum allowed limit.");
+                }
+                string imageDownloadUrl = await _firebase.UploadImage(productRequest.File);
+                newKind.Image = imageDownloadUrl;
+            }
+
+            _unitOfWork.KindRepository.Insert(newKind);
+            newProduct.StockQuantity = newKind.Quantity;
             _unitOfWork.Save();
 
             _mapper.Map(newProduct, productResponse);

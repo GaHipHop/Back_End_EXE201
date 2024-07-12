@@ -69,13 +69,13 @@ public class Authentication
 
         string? authorizationHeader = httpContext.Request.Headers["Authorization"];
 
-        if (string.IsNullOrWhiteSpace(authorizationHeader) || !authorizationHeader.StartsWith("bearer "))
+        if (string.IsNullOrWhiteSpace(authorizationHeader) || !authorizationHeader.StartsWith("Bearer "))
         {
             throw new CustomException.InternalServerErrorException(
                 $"Invalid authorization header: {authorizationHeader}");
         }
 
-        string jwtToken = authorizationHeader["bearer ".Length..];
+        string jwtToken = authorizationHeader["Bearer ".Length..];
         var tokenHandler = new JwtSecurityTokenHandler();
         var token = tokenHandler.ReadJwtToken(jwtToken);
         var idClaim = token.Claims.FirstOrDefault(claim => claim.Type == JwtRegisteredClaimNames.Sub);
