@@ -38,6 +38,7 @@ namespace GaHipHop_Service.Service
         {
             var products = _unitOfWork.ProductRepository.Get(
                 filter: p => queryObject.SearchText == null || p.ProductName.Contains(queryObject.SearchText),
+                includeProperties: "Kind",
                 pageIndex: 1,
                 pageSize: 5)
                 .Where(k => k.Status == true);

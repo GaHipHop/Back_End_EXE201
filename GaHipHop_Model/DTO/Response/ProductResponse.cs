@@ -19,6 +19,10 @@ namespace GaHipHop_Model.DTO.Response
 
         public string ProductName { get; set; }
 
+        public string Image {  get; set; }
+
+        public string ColorName { get; set; }
+
         public string ProductDescription { get; set; }
 
         public double ProductPrice { get; set; }

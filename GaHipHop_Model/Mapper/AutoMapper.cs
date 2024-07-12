@@ -36,7 +36,9 @@ namespace GaHipHop_Model.Mapper
             /*CreateMap<Admin, AdminResponse>().ForMember(dest => dest.Role, opt => opt.MapFrom(src => src.Role != null ? new RoleResponse { Id = src.Role.Id, RoleName = src.Role.RoleName } : null));*/
             CreateMap<Role, RoleResponse>();
             CreateMap<Admin, LoginResponse>();
-            CreateMap<Product, ProductResponse>();
+            CreateMap<Product, ProductResponse>()
+                .ForMember(dest => dest.Image, opt => opt.MapFrom(src => src.Kind.FirstOrDefault().Image))
+                .ForMember(dest => dest.ColorName, opt => opt.MapFrom(src => src.Kind.FirstOrDefault().ColorName));
             CreateMap<Kind, KindResponse>();
             CreateMap<Category, CategoryResponse>();
 
