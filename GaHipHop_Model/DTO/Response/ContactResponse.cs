@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace GaHipHop_Model.DTO.Response
 {
-    public class ContactReponse
+    public class ContactResponse
     {
         public long Id {  get; set; }
         public string Phone {  get; set; }

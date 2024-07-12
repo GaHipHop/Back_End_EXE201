@@ -32,7 +32,9 @@ namespace GaHipHop_Service.Service
 
         public async Task<IEnumerable<Discount>> GetAllDiscount()
         {
-            var discount = _unitOfWork.DiscountRepository.Get();
+            var discount = _unitOfWork.DiscountRepository.Get(
+                pageIndex: 1,
+                pageSize: 5);
             return discount;
         }
 

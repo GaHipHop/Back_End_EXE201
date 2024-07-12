@@ -25,6 +25,6 @@ namespace GaHipHop_Model.DTO.Request
         [Range(0, int.MaxValue, ErrorMessage = "Product price must be greater than or euqal to 0")]
         public double ProductPrice { get; set; }
 
-        public int StockQuantity { get; set; }
+        //public int StockQuantity { get; set; }
     }
 }

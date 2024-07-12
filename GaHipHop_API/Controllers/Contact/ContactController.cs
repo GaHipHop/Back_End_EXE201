@@ -77,7 +77,7 @@ namespace GaHipHop_API.Controllers.Contact
         {
             try
             {
-                ContactReponse createcontact = await _contactService.CreateContact(createContactRequest);
+                ContactResponse createcontact = await _contactService.CreateContact(createContactRequest);
                 return CustomResult("Create Successfull", createcontact, HttpStatusCode.OK);
             }
             catch (CustomException.ForbbidenException ex)
@@ -96,7 +96,7 @@ namespace GaHipHop_API.Controllers.Contact
         {
             try
             {
-                ContactReponse subcription = await _contactService.UpdateContact(id, updateContactRequest);
+                ContactResponse subcription = await _contactService.UpdateContact(id, updateContactRequest);
                 return CustomResult("Create Successfull", subcription, HttpStatusCode.OK);
             }
             catch (CustomException.ForbbidenException ex)
