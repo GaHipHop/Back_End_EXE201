@@ -103,7 +103,7 @@ namespace GaHipHop_API.Controllers.Product
 
         [HttpPost("CreateProduct")]
         [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> CreateProduct([FromBody] ProductRequest productRequest)
+        public async Task<IActionResult> CreateProduct([FromForm] ProductRequest productRequest)
         {
             try
             {

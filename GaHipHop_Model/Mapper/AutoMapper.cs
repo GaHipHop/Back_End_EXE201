@@ -22,8 +22,9 @@ namespace GaHipHop_Model.Mapper
             CreateMap<CreateDiscountRequest, Discount>().ReverseMap();
             CreateMap<UpdateContactRequest, Discount>().ReverseMap();
             CreateMap<ProductRequest, Product>().ReverseMap();
-            CreateMap<ProductRequest, Product>().ReverseMap();
+            CreateMap<UpdateProductRequest, Product>().ReverseMap();
             CreateMap<KindRequest, Kind>().ReverseMap();
+            CreateMap<ProductRequest, Kind>().ReverseMap();
             CreateMap<UpdateKindRequest, Kind>()
                 .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null && !srcMember.Equals(0)));
             CreateMap<CategoryRequest, Category>().ReverseMap();
@@ -36,7 +37,9 @@ namespace GaHipHop_Model.Mapper
             /*CreateMap<Admin, AdminResponse>().ForMember(dest => dest.Role, opt => opt.MapFrom(src => src.Role != null ? new RoleResponse { Id = src.Role.Id, RoleName = src.Role.RoleName } : null));*/
             CreateMap<Role, RoleResponse>();
             CreateMap<Admin, LoginResponse>();
-            CreateMap<Product, ProductResponse>();
+            CreateMap<Product, ProductResponse>()
+                .ForMember(dest => dest.Image, opt => opt.MapFrom(src => src.Kind.FirstOrDefault().Image))
+                .ForMember(dest => dest.ColorName, opt => opt.MapFrom(src => src.Kind.FirstOrDefault().ColorName));
             CreateMap<Kind, KindResponse>();
             CreateMap<Category, CategoryResponse>();
 

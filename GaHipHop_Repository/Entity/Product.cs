@@ -39,6 +39,6 @@ namespace GaHipHop_Repository.Entity
         [ForeignKey("CategoryId")]
         public virtual Category Category { get; set; }
 
-        //public virtual ICollection<Kind> Images { get; set; }
+        public virtual ICollection<Kind> Kind { get; set; }
     }
 }
