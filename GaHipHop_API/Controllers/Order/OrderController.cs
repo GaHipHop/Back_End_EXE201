@@ -185,36 +185,6 @@ namespace GaHipHop_API.Controllers.Order
             }
         }
 
-        [HttpGet("totalPriceConfirmedOrder")]
-        [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> GetTotalPriceConfirmedOrdersByMonthYear([FromQuery] int month, [FromQuery] int year)
-        {
-            try
-            {
-                var totalAmount = await _orderService.GetTotalPriceConfirmedOrdersByMonthYear(month, year);
-                return CustomResult("Get successfull.", totalAmount);
-            }
-            catch (CustomException.InternalServerErrorException ex)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, new { message = ex.Message });
-            }
-        }
-
-        [HttpGet("countConfirmedOrders")]
-        [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> CountConfirmedOrdersByMonthYear(int month, int year)
-        {
-            try
-            {
-                var count = await _orderService.CountOrdersConfirmedByMonthYear(month, year);
-                return Ok(new { Count = count });
-            }
-            catch (CustomException.InternalServerErrorException ex)
-            {
-                return CustomResult(ex.Message, HttpStatusCode.InternalServerError);
-            }
-        }
-
         [HttpGet("GetOrdersSummaryByMonthYear")]
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> GetOrdersSummaryByMonthYear(int month, int year)

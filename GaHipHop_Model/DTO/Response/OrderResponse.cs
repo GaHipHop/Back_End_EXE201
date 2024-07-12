@@ -30,8 +30,5 @@ namespace GaHipHop_Model.DTO.Response
         public UserInfoResponse UserInfo { get; set; }
 
         public virtual ICollection<OrderDetailResponse> OrderDetails { get; set; } = new List<OrderDetailResponse>();
-
-        public int Count { get; set; }
-        public double TotalAmount { get; set; }
     }
 }
