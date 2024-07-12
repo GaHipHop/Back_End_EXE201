@@ -44,6 +44,7 @@ namespace GaHipHop_Model.Mapper
             CreateMap<OrderDetails, OrderDetailResponse>()
                 .ForMember(dest => dest.ProductName, opt => opt.MapFrom(src => src.Kind.Product.ProductName))
                 .ForMember(dest => dest.ColorName, opt => opt.MapFrom(src => src.Kind.ColorName))
+                .ForMember(dest => dest.Image, opt => opt.MapFrom(src => src.Kind.Image))
                 .ReverseMap();
             CreateMap<CartItem, OrderDetails>().ForMember(dest => dest.Id, opt => opt.Ignore());
             CreateMap<UserInfo, UserInfoResponse>().ReverseMap();

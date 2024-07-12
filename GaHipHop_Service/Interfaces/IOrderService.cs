@@ -24,10 +24,6 @@ namespace GaHipHop_Service.Interfaces
 
         List<OrderResponse> GetAllOrderByStatusReject(string? keyword, int pageIndex, int pageSize);
 
-        Task<double> GetTotalPriceConfirmedOrdersByMonthYear(int month, int year);
-
-        Task<int> CountOrdersConfirmedByMonthYear(int month, int year);
-
-        Task<List<OrderResponse>> GetOrdersSummaryByMonthYear(int month, int year);
+        Task<OrderSummaryResponse> GetOrdersSummaryByMonthYear(int month, int year);
     }
 }

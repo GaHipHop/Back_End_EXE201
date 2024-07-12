@@ -409,83 +409,59 @@ namespace GaHipHop_Service.Service
             }
         }
 
-        public async Task<double> GetTotalPriceConfirmedOrdersByMonthYear(int month, int year)
+        public async Task<OrderSummaryResponse> GetOrdersSummaryByMonthYear(int month, int year)
         {
             try
             {
                 var orders = _unitOfWork.OrderRepository.Get(
-                    filter: o => o.Status == "Confirmed" && o.CreateDate.Month == month && o.CreateDate.Year == year
-                );
+                    filter: o => o.CreateDate.Month == month && o.CreateDate.Year == year && o.Status == "Confirmed",
+                    includeProperties: "UserInfo,OrderDetails,OrderDetails.Kind,OrderDetails.Kind.Product"
+                ).ToList();
 
-                var totalAmount = orders.Sum(o => o.TotalPrice);
+                var previousMonthOrders = _unitOfWork.OrderRepository.Get(
+                    filter: o => o.CreateDate.Month == month - 1 && o.CreateDate.Year == year && o.Status == "Confirmed",
+                    includeProperties: "UserInfo,OrderDetails,OrderDetails.Kind,OrderDetails.Kind.Product"
+                ).ToList();
 
-                return await Task.FromResult(totalAmount);
-            }
-            catch (Exception ex)
-            {
-                throw new CustomException.InternalServerErrorException("An error occurred during data processing.", ex);
-            }
-        }
+                // Tính Count và TotalAmount
+                int count = orders.Count;
+                double totalAmount = orders.Sum(o => o.TotalPrice);
+                int quantitySold = orders.Sum(o => o.OrderDetails.Sum(qs => qs.OrderQuantity));
 
-        public async Task<int> CountOrdersConfirmedByMonthYear(int month, int year)
-        {
-            try
-            {
 
-                var count = _unitOfWork.OrderRepository.Get(
-                    filter: o => o.Status == "Confirmed" && o.CreateDate.Month == month && o.CreateDate.Year == year
-                ).Count();
+                int countPreviousMonth = previousMonthOrders.Count;
+                double totalAmountPreviousMonth = previousMonthOrders.Sum(o => o.TotalPrice);
 
-                return await Task.FromResult(count);
-            }
-            catch (CustomException.InternalServerErrorException ex)
-            {
-                throw new CustomException.InternalServerErrorException("An error occurred during data processing.", ex);
-            }
-        }
+                var mostSoldProductGroup = orders
+                    .SelectMany(o => o.OrderDetails)
+                    .GroupBy(od => od.Kind.Product)
+                    .OrderByDescending(g => g.Sum(od => od.OrderQuantity))
+                    .FirstOrDefault();
 
-        public async Task<List<OrderResponse>> GetOrdersSummaryByMonthYear(int month, int year)
-        {
-            try
-            {
-                var orders = _unitOfWork.OrderRepository.Get(
-                    filter: o => o.CreateDate.Month == month && o.CreateDate.Year == year,
-                    includeProperties: "OrderDetails"
-                );
+                var mostSoldProduct = mostSoldProductGroup?.Key?.ProductName ?? "Not product.";
+                var mostSoldProductQuantity = mostSoldProductGroup?.Sum(od => od.OrderQuantity) ?? 0;
+                var orderResponses = _mapper.Map<List<OrderResponse>>(orders);
 
-                var orderResponses = orders.Select(o => new OrderResponse
+                var orderSummaryResponse = new OrderSummaryResponse
                 {
-                    Id = o.Id,
-                    UserId = o.UserId,
-                    OrderRequirement = o.OrderRequirement,
-                    OrderCode = o.OrderCode,
-                    PaymentMethod = o.PaymentMethod,
-                    CreateDate = o.CreateDate,
-                    TotalPrice = o.TotalPrice,
-                    Status = o.Status,
-                    /*UserInfo = new UserInfoResponse
-                    {
-                        // Map properties of UserInfo here if needed
-                    },*/
-                    OrderDetails = o.OrderDetails.Select(od => new OrderDetailResponse
-                    {
-                        Id = od.Id,
-                        KindId = od.KindId,
-                        OrderId = od.OrderId,
-                        OrderQuantity = od.OrderQuantity,
-                        OrderPrice = od.OrderPrice,
-                    }).ToList(),
-                    Count = orders.Count(),
-                    TotalAmount = orders.Sum(o => o.TotalPrice)
-                }).ToList();
+                    Orders = orderResponses,
+                    Count = count,
+                    TotalAmount = totalAmount,
+                    quantitySold = quantitySold,
+                    MostSoldProduct = mostSoldProduct,
+                    MostSoldProductQuantity = mostSoldProductQuantity,
+                    CountPreviousMonth = countPreviousMonth,
+                    TotalAmountPreviousMonth = totalAmountPreviousMonth
+                };
 
-                return await Task.FromResult(orderResponses);
+                return await Task.FromResult(orderSummaryResponse);
             }
             catch (Exception ex)
             {
                 throw new Exception("Error getting orders summary: " + ex.Message);
             }
         }
+
 
     }
 }

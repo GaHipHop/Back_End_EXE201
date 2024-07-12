@@ -28,7 +28,7 @@ public class Authentication
         List<Claim> claims = new List<Claim>()
         {            
             new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-            new Claim(JwtRegisteredClaimNames.Sub, info.Id.ToString()),
+            new Claim("Id", info.Id.ToString()),
             new Claim(JwtRegisteredClaimNames.Iat, new DateTimeOffset(DateTime.UtcNow).ToUnixTimeSeconds().ToString(), ClaimValueTypes.Integer64),
         };
 
@@ -69,16 +69,16 @@ public class Authentication
 
         string? authorizationHeader = httpContext.Request.Headers["Authorization"];
 
-        if (string.IsNullOrWhiteSpace(authorizationHeader) || !authorizationHeader.StartsWith("bearer "))
+        if (string.IsNullOrWhiteSpace(authorizationHeader) || !authorizationHeader.StartsWith("Bearer "))
         {
             throw new CustomException.InternalServerErrorException(
                 $"Invalid authorization header: {authorizationHeader}");
         }
 
-        string jwtToken = authorizationHeader["bearer ".Length..];
+        string jwtToken = authorizationHeader["Bearer ".Length..];
         var tokenHandler = new JwtSecurityTokenHandler();
         var token = tokenHandler.ReadJwtToken(jwtToken);
-        var idClaim = token.Claims.FirstOrDefault(claim => claim.Type == JwtRegisteredClaimNames.Sub);
+        var idClaim = token.Claims.FirstOrDefault(claim => claim.Type == "Id");
         return idClaim?.Value ??
                throw new CustomException.InternalServerErrorException($"Can not get userId from token");
 
@@ -93,13 +93,13 @@ public class Authentication
 
         string? authorizationHeader = httpContext.Request.Headers["Authorization"];
 
-        if (string.IsNullOrWhiteSpace(authorizationHeader) || !authorizationHeader.StartsWith("bearer "))
+        if (string.IsNullOrWhiteSpace(authorizationHeader) || !authorizationHeader.StartsWith("Bearer "))
         {
             throw new CustomException.InternalServerErrorException(
                 $"Invalid authorization header: {authorizationHeader}");
         }
 
-        string jwtToken = authorizationHeader["bearer ".Length..];
+        string jwtToken = authorizationHeader["Bearer ".Length..];
         var tokenHandler = new JwtSecurityTokenHandler();
         var token = tokenHandler.ReadJwtToken(jwtToken);
         var roleClaim = token.Claims.FirstOrDefault(claim => claim.Type == "role");
