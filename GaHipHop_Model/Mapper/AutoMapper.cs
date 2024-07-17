@@ -38,6 +38,7 @@ namespace GaHipHop_Model.Mapper
             CreateMap<Role, RoleResponse>();
             CreateMap<Admin, LoginResponse>();
             CreateMap<Product, ProductResponse>()
+                .ForMember(dest => dest.Percent, opt => opt.MapFrom(src => src.Discount.Percent))
                 .ForMember(dest => dest.Image, opt => opt.MapFrom(src => src.Kind.FirstOrDefault().Image))
                 .ForMember(dest => dest.ColorName, opt => opt.MapFrom(src => src.Kind.FirstOrDefault().ColorName));
             CreateMap<Kind, KindResponse>();
