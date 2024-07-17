@@ -40,9 +40,9 @@ namespace GaHipHop_Service.Service
         {
             var products = _unitOfWork.ProductRepository.Get(
                 filter: p => queryObject.SearchText == null || p.ProductName.Contains(queryObject.SearchText),
-                includeProperties: "Kind",
+                includeProperties: "Kind,Discount",
                 pageIndex: 1,
-                pageSize: 5)
+                pageSize: 6)
                 .Where(k => k.Status == true);
 
             if (!products.Any())
@@ -121,6 +121,7 @@ namespace GaHipHop_Service.Service
 
             var products = _unitOfWork.ProductRepository.Get(
                 filter: k => k.CategoryId == id && k.Status == true,
+                includeProperties: "Kind",
                 pageIndex: 1,
                 pageSize: 5)
                 .ToList();

@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace GaHipHop_API.Migrations
 {
     /// <inheritdoc />
-    public partial class Kaneki : Migration
+    public partial class GaHipHop : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -154,7 +154,7 @@ namespace GaHipHop_API.Migrations
                     Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     UserId = table.Column<long>(type: "bigint", nullable: false),
-                    AdminId = table.Column<long>(type: "bigint", nullable: false),
+                    AdminId = table.Column<long>(type: "bigint", nullable: true),
                     OrderRequirement = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     OrderCode = table.Column<string>(type: "longtext", nullable: false)
@@ -173,8 +173,7 @@ namespace GaHipHop_API.Migrations
                         name: "FK_Order_Admin_AdminId",
                         column: x => x.AdminId,
                         principalTable: "Admin",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Order_UserInfo_UserId",
                         column: x => x.UserId,
@@ -294,19 +293,17 @@ namespace GaHipHop_API.Migrations
             migrationBuilder.InsertData(
                 table: "Contact",
                 columns: new[] { "Id", "Email", "Facebook", "Instagram", "Phone", "Shoppee", "Tiktok" },
-                values: new object[,]
-                {
-                    { 1L, "contact1@example.com", "facebook1", "instagram1", "123456789", "shoppee1", "tiktok1" },
-                    { 2L, "contact2@example.com", "facebook2", "instagram2", "987654321", "shoppee2", "tiktok2" }
-                });
+                values: new object[] { 1L, "phatdao@gmail.com", "https://www.facebook.com/nguyen.rosie.946", "https://www.instagram.com/ga.hiphop?fbclid=IwZXh0bgNhZW0CMTAAAR29xxUdp_tZ0TqVPfLq5zQVl72SEG7E0SpmIJY8ED62ZmmsKdaTZrc51O4_aem_-LACUZgsYTo5T1fMMgEhjg", "0855005005", "https://shopee.vn/ga.hiphop", "https://www.tiktok.com/@ga.hiphop?fbclid=IwZXh0bgNhZW0CMTAAAR18hmJoFZrOpcozoCaEq74luSuL4Y84xGSBJ3bnlgjRlYhB3xUaRy4YE3Y_aem_494gWYY8v90XRrvald7BQA" });
 
             migrationBuilder.InsertData(
                 table: "Discount",
                 columns: new[] { "Id", "ExpiredDate", "Percent", "Status" },
                 values: new object[,]
                 {
-                    { 1L, new DateTime(2024, 6, 29, 21, 59, 52, 647, DateTimeKind.Local).AddTicks(6829), 10f, true },
-                    { 2L, new DateTime(2024, 7, 29, 21, 59, 52, 647, DateTimeKind.Local).AddTicks(6855), 20f, true }
+                    { 1L, new DateTime(2024, 8, 17, 22, 13, 10, 900, DateTimeKind.Local).AddTicks(2433), 0f, true },
+                    { 2L, new DateTime(2024, 8, 17, 22, 13, 10, 900, DateTimeKind.Local).AddTicks(2476), 10f, true },
+                    { 3L, new DateTime(2024, 8, 17, 22, 13, 10, 900, DateTimeKind.Local).AddTicks(2478), 15f, true },
+                    { 4L, new DateTime(2024, 9, 17, 22, 13, 10, 900, DateTimeKind.Local).AddTicks(2485), 20f, true }
                 });
 
             migrationBuilder.InsertData(
@@ -315,8 +312,7 @@ namespace GaHipHop_API.Migrations
                 values: new object[,]
                 {
                     { 1L, "Admin" },
-                    { 2L, "Manager" },
-                    { 3L, "Staff" }
+                    { 2L, "Manager" }
                 });
 
             migrationBuilder.InsertData(
@@ -327,20 +323,28 @@ namespace GaHipHop_API.Migrations
             migrationBuilder.InsertData(
                 table: "Admin",
                 columns: new[] { "Id", "Address", "Email", "FullName", "Password", "Phone", "RoleId", "Status", "Username" },
-                values: new object[] { 1L, "Admin Address", "admin@example.com", "Admin User", "1", "123456789", 1L, true, "admin" });
+                values: new object[,]
+                {
+                    { 1L, "Admin Address", "admin@example.com", "Admin User", "$2a$12$W6Fr2O.JNK5pxRlm36q1DeLI.hDM5AhHe..ZnhFhofXKwSNUrMTA.", "123456789", 1L, true, "admin" },
+                    { 2L, "Manager Address", "admin@example.com", "Manager User", "$2a$12$W6Fr2O.JNK5pxRlm36q1DeLI.hDM5AhHe..ZnhFhofXKwSNUrMTA.", "123456789", 2L, true, "manager" }
+                });
 
             migrationBuilder.InsertData(
                 table: "Order",
                 columns: new[] { "Id", "AdminId", "CreateDate", "OrderCode", "OrderRequirement", "PaymentMethod", "Status", "TotalPrice", "UserId" },
-                values: new object[] { 1L, 1L, new DateTime(2024, 5, 29, 21, 59, 52, 647, DateTimeKind.Local).AddTicks(6927), "ORD001", "Requirement 1", "Credit Card", "Confirmed", 100.0, 1L });
+                values: new object[] { 1L, 1L, new DateTime(2024, 7, 17, 22, 13, 10, 900, DateTimeKind.Local).AddTicks(3723), "ORD001", "Requirement 1", "Credit Card", "Confirmed", 100.0, 1L });
 
             migrationBuilder.InsertData(
                 table: "Product",
                 columns: new[] { "Id", "AdminId", "CategoryId", "CreateDate", "DiscountId", "ModifiedDate", "ProductDescription", "ProductName", "ProductPrice", "Status", "StockQuantity" },
                 values: new object[,]
                 {
-                    { 1L, 1L, 1L, new DateTime(2024, 5, 29, 21, 59, 52, 647, DateTimeKind.Local).AddTicks(6901), 1L, new DateTime(2024, 5, 29, 21, 59, 52, 647, DateTimeKind.Local).AddTicks(6903), "Nilou", "Figure", 50000000.0, true, 10 },
-                    { 2L, 1L, 1L, new DateTime(2024, 5, 29, 21, 59, 52, 647, DateTimeKind.Local).AddTicks(6906), 2L, new DateTime(2024, 5, 29, 21, 59, 52, 647, DateTimeKind.Local).AddTicks(6907), "Shenhe", "Figure", 1000000.0, true, 100 }
+                    { 1L, 1L, 1L, new DateTime(2024, 7, 17, 22, 13, 10, 900, DateTimeKind.Local).AddTicks(3650), 1L, new DateTime(2024, 7, 17, 22, 13, 10, 900, DateTimeKind.Local).AddTicks(3658), "Nilou", "Figure", 50000.0, true, 100 },
+                    { 2L, 1L, 1L, new DateTime(2024, 7, 17, 22, 13, 10, 900, DateTimeKind.Local).AddTicks(3661), 1L, new DateTime(2024, 7, 17, 22, 13, 10, 900, DateTimeKind.Local).AddTicks(3662), "Shenhe", "Figure", 1000000.0, true, 500 },
+                    { 3L, 1L, 1L, new DateTime(2024, 7, 17, 22, 13, 10, 900, DateTimeKind.Local).AddTicks(3665), 2L, new DateTime(2024, 7, 17, 22, 13, 10, 900, DateTimeKind.Local).AddTicks(3665), "Shenhe", "Figure", 1000000.0, true, 150 },
+                    { 4L, 1L, 2L, new DateTime(2024, 7, 17, 22, 13, 10, 900, DateTimeKind.Local).AddTicks(3667), 3L, new DateTime(2024, 7, 17, 22, 13, 10, 900, DateTimeKind.Local).AddTicks(3668), "Shenhe", "Figure", 1000000.0, true, 250 },
+                    { 5L, 1L, 2L, new DateTime(2024, 7, 17, 22, 13, 10, 900, DateTimeKind.Local).AddTicks(3671), 4L, new DateTime(2024, 7, 17, 22, 13, 10, 900, DateTimeKind.Local).AddTicks(3671), "Shenhe", "Figure", 1000000.0, true, 550 },
+                    { 6L, 1L, 2L, new DateTime(2024, 7, 17, 22, 13, 10, 900, DateTimeKind.Local).AddTicks(3673), 4L, new DateTime(2024, 7, 17, 22, 13, 10, 900, DateTimeKind.Local).AddTicks(3674), "Shenhe", "Figure", 1000000.0, true, 1000 }
                 });
 
             migrationBuilder.InsertData(
@@ -348,8 +352,14 @@ namespace GaHipHop_API.Migrations
                 columns: new[] { "Id", "ColorName", "Image", "ProductId", "Quantity", "Status" },
                 values: new object[,]
                 {
-                    { 1L, "Red", "image1.jpg", 1L, 5, true },
-                    { 2L, "Blue", "image2.jpg", 1L, 5, true }
+                    { 1L, "Red", "https://firebasestorage.googleapis.com/v0/b/gahiphop-4de10.appspot.com/o/images%2F61104088-d946-4d5b-80fc-427f8ab3690a_GaHipHop.jpg?alt=media&token=a9dca6bb-40a1-4935-aaf8-e10d55820ac2", 1L, 50, true },
+                    { 2L, "Blue", "https://firebasestorage.googleapis.com/v0/b/gahiphop-4de10.appspot.com/o/images%2F61104088-d946-4d5b-80fc-427f8ab3690a_GaHipHop.jpg?alt=media&token=a9dca6bb-40a1-4935-aaf8-e10d55820ac2", 1L, 50, true },
+                    { 3L, "White", "https://firebasestorage.googleapis.com/v0/b/gahiphop-4de10.appspot.com/o/images%2F61104088-d946-4d5b-80fc-427f8ab3690a_GaHipHop.jpg?alt=media&token=a9dca6bb-40a1-4935-aaf8-e10d55820ac2", 2L, 500, true },
+                    { 4L, "Yellow", "https://firebasestorage.googleapis.com/v0/b/gahiphop-4de10.appspot.com/o/images%2F61104088-d946-4d5b-80fc-427f8ab3690a_GaHipHop.jpg?alt=media&token=a9dca6bb-40a1-4935-aaf8-e10d55820ac2", 3L, 150, true },
+                    { 5L, "Pink", "https://firebasestorage.googleapis.com/v0/b/gahiphop-4de10.appspot.com/o/images%2F61104088-d946-4d5b-80fc-427f8ab3690a_GaHipHop.jpg?alt=media&token=a9dca6bb-40a1-4935-aaf8-e10d55820ac2", 4L, 250, true },
+                    { 6L, "Purple", "https://firebasestorage.googleapis.com/v0/b/gahiphop-4de10.appspot.com/o/images%2F61104088-d946-4d5b-80fc-427f8ab3690a_GaHipHop.jpg?alt=media&token=a9dca6bb-40a1-4935-aaf8-e10d55820ac2", 5L, 550, true },
+                    { 7L, "Orange", "https://firebasestorage.googleapis.com/v0/b/gahiphop-4de10.appspot.com/o/images%2F61104088-d946-4d5b-80fc-427f8ab3690a_GaHipHop.jpg?alt=media&token=a9dca6bb-40a1-4935-aaf8-e10d55820ac2", 6L, 500, true },
+                    { 8L, "Green", "https://firebasestorage.googleapis.com/v0/b/gahiphop-4de10.appspot.com/o/images%2F61104088-d946-4d5b-80fc-427f8ab3690a_GaHipHop.jpg?alt=media&token=a9dca6bb-40a1-4935-aaf8-e10d55820ac2", 6L, 500, true }
                 });
 
             migrationBuilder.InsertData(

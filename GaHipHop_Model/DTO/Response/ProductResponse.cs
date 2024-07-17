@@ -15,6 +15,8 @@ namespace GaHipHop_Model.DTO.Response
 
         public long DiscountId { get; set; }
 
+        public float Percent { get; set; }
+
         public long CategoryId { get; set; }
 
         public string ProductName { get; set; }
