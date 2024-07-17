@@ -45,7 +45,7 @@ namespace GaHipHop_API.Controllers.Order
         }
 
         [HttpPatch("updateStatusOrderConfirmed/{id}")]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin,Manager")]
         public async Task<IActionResult> UpdateStatusOrderConfirmed(long id)
         {
 
@@ -73,7 +73,7 @@ namespace GaHipHop_API.Controllers.Order
         }
 
         [HttpPatch("updateStatusOrderReject/{id}")]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin,Manager")]
         public async Task<IActionResult> UpdateStatusOrderReject(long id)
         {
 
@@ -102,7 +102,7 @@ namespace GaHipHop_API.Controllers.Order
 
 
         [HttpGet("getOrderByStatusPending")]
-        [Authorize(Roles ="Admin")]
+        [Authorize(Roles ="Admin,Manager")]
         public IActionResult GetAllOrderByStatusPending(string? keyword, int pageIndex, int pageSize)
         {
             try
@@ -122,7 +122,7 @@ namespace GaHipHop_API.Controllers.Order
         }
 
         [HttpGet("getOrderByStatusConfirmed")]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin,Manager")]
         public IActionResult GetAllOrderByStatusConfirmed(string? keyword, int pageIndex, int pageSize)
         {
             try
@@ -142,7 +142,7 @@ namespace GaHipHop_API.Controllers.Order
         }
 
         [HttpGet("getOrderByStatusRejected")]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin,Manager")]
         public IActionResult getAllOrderByStatusReject(string? keyword, int pageIndex, int pageSize)
         {
             try
@@ -162,7 +162,7 @@ namespace GaHipHop_API.Controllers.Order
         }
 
         [HttpGet("getOrderById/{id}")]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin,Manager")]
         public async Task<IActionResult> GetOrderById(long id)
         {
             try
@@ -186,7 +186,7 @@ namespace GaHipHop_API.Controllers.Order
         }
 
         [HttpGet("GetOrdersSummaryByMonthYear")]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin,Manager")]
         public async Task<IActionResult> GetOrdersSummaryByMonthYear(int month, int year)
         {
             try

@@ -93,7 +93,7 @@ namespace GaHipHop_Service.Service
             return kindResponse;
         }
 
-        public async Task<KindResponse> CreateKind(KindRequest kindRequest)
+        /*public async Task<KindResponse> CreateKind(KindRequest kindRequest)
         {
 
             var existingKind = _unitOfWork.KindRepository.Get().FirstOrDefault(p => p.ProductId == kindRequest.ProductId &&
@@ -132,7 +132,7 @@ namespace GaHipHop_Service.Service
 
             _mapper.Map(newKind, kindResponse);
             return kindResponse;
-        }
+        }*/
 
         public async Task<KindResponse> UpdateKind(long id, UpdateKindRequest updateKindRequest)
         {

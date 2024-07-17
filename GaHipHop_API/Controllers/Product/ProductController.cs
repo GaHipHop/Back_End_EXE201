@@ -42,7 +42,7 @@ namespace GaHipHop_API.Controllers.Product
         }
 
         [HttpGet("GetAllProductFalse")]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin,Manager")]
         public IActionResult GetAllProductFalse([FromQuery] QueryObject queryObject)
         {
             try
@@ -102,8 +102,8 @@ namespace GaHipHop_API.Controllers.Product
         }
 
         [HttpPost("CreateProduct")]
-        [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> CreateProduct([FromBody] ProductRequest productRequest)
+        [Authorize(Roles = "Admin,Manager")]
+        public async Task<IActionResult> CreateProduct([FromForm] ProductRequest productRequest)
         {
             try
             {
@@ -112,7 +112,7 @@ namespace GaHipHop_API.Controllers.Product
                     return CustomResult(ModelState, HttpStatusCode.BadRequest);
                 }
 
-                ProductResponse product = await _productService.CreateProduct(productRequest);
+                ProductAnyKindResponse product = await _productService.CreateProduct(productRequest);
                 return CustomResult("Create Successful", product, HttpStatusCode.OK);
             }
             catch (CustomException.ForbbidenException ex)
@@ -131,7 +131,7 @@ namespace GaHipHop_API.Controllers.Product
         }
 
         [HttpPatch("UpdateProduct/{id}")]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin,Manager")]
         public async Task<IActionResult> UpdateProduct(long id, [FromBody] ProductRequest productRequest)
         {
             try
@@ -158,7 +158,7 @@ namespace GaHipHop_API.Controllers.Product
         }
 
         [HttpDelete("DeleteProduct/{id}")]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin,Manager")]
         public async Task<IActionResult> DeleteProduct(long id)
         {
             try

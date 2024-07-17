@@ -44,7 +44,7 @@ namespace GaHipHop_API.Controllers.Contact
         }
 
         [HttpGet("GetContactBy/{id}")]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin,Manager")]
         public async Task<IActionResult> GetContactById(long id)
         {
             try
@@ -72,7 +72,7 @@ namespace GaHipHop_API.Controllers.Contact
 
 
         [HttpPost("CreateContact")]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin,Manager")]
         public async Task<IActionResult> CreateContact([FromBody] CreateContactRequest createContactRequest)
         {
             try
@@ -91,7 +91,7 @@ namespace GaHipHop_API.Controllers.Contact
         }
 
         [HttpPatch("UpdateContact/{id}")]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin,Manager")]
         public async Task<IActionResult> UpdateContact(long id, [FromBody] UpdateContactRequest updateContactRequest)
         {
             try
@@ -118,7 +118,7 @@ namespace GaHipHop_API.Controllers.Contact
         }
 
         [HttpDelete("DeleteContact/{id}")]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin,Manager")]
         public async Task<IActionResult> DeleteContact(long id)
         {
             try

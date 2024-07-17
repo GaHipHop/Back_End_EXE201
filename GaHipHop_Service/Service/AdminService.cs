@@ -105,11 +105,7 @@ namespace GaHipHop_Service.Service
                 bool usernameExists = _unitOfWork.AdminRepository.Exists(a => a.Username == adminRequest.UserName);
                 if (usernameExists)
                 {
-                    return new AdminResponse
-                    {
-                        UserName = "Username already exists.",
-                        Status = false
-                    };
+                    throw new CustomException.InvalidDataException("Username already exists.");
                 }
 
                 var admin = _mapper.Map<Admin>(adminRequest);
