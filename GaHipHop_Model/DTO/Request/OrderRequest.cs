@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GaHipHop_Repository.Entity;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -29,6 +30,8 @@ namespace GaHipHop_Model.DTO.Request
         public string OrderRequirement { get; set; }
 
         public string PaymentMethod { get; set; }
+
+        public List<CartItem> CartItems { get; set; }
 
     }
 }
