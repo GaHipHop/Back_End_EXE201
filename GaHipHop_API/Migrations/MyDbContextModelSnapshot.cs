@@ -201,28 +201,28 @@ namespace GaHipHop_API.Migrations
                         new
                         {
                             Id = 1L,
-                            ExpiredDate = new DateTime(2024, 8, 17, 22, 13, 10, 900, DateTimeKind.Local).AddTicks(2433),
+                            ExpiredDate = new DateTime(2024, 8, 17, 22, 54, 8, 272, DateTimeKind.Local).AddTicks(9737),
                             Percent = 0f,
                             Status = true
                         },
                         new
                         {
                             Id = 2L,
-                            ExpiredDate = new DateTime(2024, 8, 17, 22, 13, 10, 900, DateTimeKind.Local).AddTicks(2476),
+                            ExpiredDate = new DateTime(2024, 8, 17, 22, 54, 8, 272, DateTimeKind.Local).AddTicks(9760),
                             Percent = 10f,
                             Status = true
                         },
                         new
                         {
                             Id = 3L,
-                            ExpiredDate = new DateTime(2024, 8, 17, 22, 13, 10, 900, DateTimeKind.Local).AddTicks(2478),
+                            ExpiredDate = new DateTime(2024, 8, 17, 22, 54, 8, 272, DateTimeKind.Local).AddTicks(9762),
                             Percent = 15f,
                             Status = true
                         },
                         new
                         {
                             Id = 4L,
-                            ExpiredDate = new DateTime(2024, 9, 17, 22, 13, 10, 900, DateTimeKind.Local).AddTicks(2485),
+                            ExpiredDate = new DateTime(2024, 9, 17, 22, 54, 8, 272, DateTimeKind.Local).AddTicks(9764),
                             Percent = 20f,
                             Status = true
                         });
@@ -382,7 +382,7 @@ namespace GaHipHop_API.Migrations
                         {
                             Id = 1L,
                             AdminId = 1L,
-                            CreateDate = new DateTime(2024, 7, 17, 22, 13, 10, 900, DateTimeKind.Local).AddTicks(3723),
+                            CreateDate = new DateTime(2024, 7, 17, 22, 54, 8, 273, DateTimeKind.Local).AddTicks(544),
                             OrderCode = "ORD001",
                             OrderRequirement = "Requirement 1",
                             PaymentMethod = "Credit Card",
@@ -487,12 +487,12 @@ namespace GaHipHop_API.Migrations
                             Id = 1L,
                             AdminId = 1L,
                             CategoryId = 1L,
-                            CreateDate = new DateTime(2024, 7, 17, 22, 13, 10, 900, DateTimeKind.Local).AddTicks(3650),
+                            CreateDate = new DateTime(2024, 7, 17, 22, 54, 8, 273, DateTimeKind.Local).AddTicks(459),
                             DiscountId = 1L,
-                            ModifiedDate = new DateTime(2024, 7, 17, 22, 13, 10, 900, DateTimeKind.Local).AddTicks(3658),
+                            ModifiedDate = new DateTime(2024, 7, 17, 22, 54, 8, 273, DateTimeKind.Local).AddTicks(461),
                             ProductDescription = "Nilou",
                             ProductName = "Figure",
-                            ProductPrice = 50000.0,
+                            ProductPrice = 5000000.0,
                             Status = true,
                             StockQuantity = 100
                         },
@@ -501,11 +501,11 @@ namespace GaHipHop_API.Migrations
                             Id = 2L,
                             AdminId = 1L,
                             CategoryId = 1L,
-                            CreateDate = new DateTime(2024, 7, 17, 22, 13, 10, 900, DateTimeKind.Local).AddTicks(3661),
+                            CreateDate = new DateTime(2024, 7, 17, 22, 54, 8, 273, DateTimeKind.Local).AddTicks(465),
                             DiscountId = 1L,
-                            ModifiedDate = new DateTime(2024, 7, 17, 22, 13, 10, 900, DateTimeKind.Local).AddTicks(3662),
+                            ModifiedDate = new DateTime(2024, 7, 17, 22, 54, 8, 273, DateTimeKind.Local).AddTicks(466),
                             ProductDescription = "Shenhe",
-                            ProductName = "Figure",
+                            ProductName = "Sticker",
                             ProductPrice = 1000000.0,
                             Status = true,
                             StockQuantity = 500
@@ -515,12 +515,12 @@ namespace GaHipHop_API.Migrations
                             Id = 3L,
                             AdminId = 1L,
                             CategoryId = 1L,
-                            CreateDate = new DateTime(2024, 7, 17, 22, 13, 10, 900, DateTimeKind.Local).AddTicks(3665),
+                            CreateDate = new DateTime(2024, 7, 17, 22, 54, 8, 273, DateTimeKind.Local).AddTicks(468),
                             DiscountId = 2L,
-                            ModifiedDate = new DateTime(2024, 7, 17, 22, 13, 10, 900, DateTimeKind.Local).AddTicks(3665),
-                            ProductDescription = "Shenhe",
-                            ProductName = "Figure",
-                            ProductPrice = 1000000.0,
+                            ModifiedDate = new DateTime(2024, 7, 17, 22, 54, 8, 273, DateTimeKind.Local).AddTicks(468),
+                            ProductDescription = "Navia",
+                            ProductName = "Key",
+                            ProductPrice = 1500000.0,
                             Status = true,
                             StockQuantity = 150
                         },
@@ -529,12 +529,12 @@ namespace GaHipHop_API.Migrations
                             Id = 4L,
                             AdminId = 1L,
                             CategoryId = 2L,
-                            CreateDate = new DateTime(2024, 7, 17, 22, 13, 10, 900, DateTimeKind.Local).AddTicks(3667),
+                            CreateDate = new DateTime(2024, 7, 17, 22, 54, 8, 273, DateTimeKind.Local).AddTicks(470),
                             DiscountId = 3L,
-                            ModifiedDate = new DateTime(2024, 7, 17, 22, 13, 10, 900, DateTimeKind.Local).AddTicks(3668),
-                            ProductDescription = "Shenhe",
-                            ProductName = "Figure",
-                            ProductPrice = 1000000.0,
+                            ModifiedDate = new DateTime(2024, 7, 17, 22, 54, 8, 273, DateTimeKind.Local).AddTicks(471),
+                            ProductDescription = "Furina",
+                            ProductName = "Standee",
+                            ProductPrice = 2000000.0,
                             Status = true,
                             StockQuantity = 250
                         },
@@ -543,12 +543,12 @@ namespace GaHipHop_API.Migrations
                             Id = 5L,
                             AdminId = 1L,
                             CategoryId = 2L,
-                            CreateDate = new DateTime(2024, 7, 17, 22, 13, 10, 900, DateTimeKind.Local).AddTicks(3671),
+                            CreateDate = new DateTime(2024, 7, 17, 22, 54, 8, 273, DateTimeKind.Local).AddTicks(473),
                             DiscountId = 4L,
-                            ModifiedDate = new DateTime(2024, 7, 17, 22, 13, 10, 900, DateTimeKind.Local).AddTicks(3671),
-                            ProductDescription = "Shenhe",
-                            ProductName = "Figure",
-                            ProductPrice = 1000000.0,
+                            ModifiedDate = new DateTime(2024, 7, 17, 22, 54, 8, 273, DateTimeKind.Local).AddTicks(474),
+                            ProductDescription = "Xianyun",
+                            ProductName = "Puzzle",
+                            ProductPrice = 2500000.0,
                             Status = true,
                             StockQuantity = 550
                         },
@@ -557,12 +557,12 @@ namespace GaHipHop_API.Migrations
                             Id = 6L,
                             AdminId = 1L,
                             CategoryId = 2L,
-                            CreateDate = new DateTime(2024, 7, 17, 22, 13, 10, 900, DateTimeKind.Local).AddTicks(3673),
+                            CreateDate = new DateTime(2024, 7, 17, 22, 54, 8, 273, DateTimeKind.Local).AddTicks(476),
                             DiscountId = 4L,
-                            ModifiedDate = new DateTime(2024, 7, 17, 22, 13, 10, 900, DateTimeKind.Local).AddTicks(3674),
-                            ProductDescription = "Shenhe",
-                            ProductName = "Figure",
-                            ProductPrice = 1000000.0,
+                            ModifiedDate = new DateTime(2024, 7, 17, 22, 54, 8, 273, DateTimeKind.Local).AddTicks(476),
+                            ProductDescription = "Chiori",
+                            ProductName = "Poster",
+                            ProductPrice = 3000000.0,
                             Status = true,
                             StockQuantity = 1000
                         });
