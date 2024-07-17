@@ -102,8 +102,8 @@ namespace GaHipHop_API.Controllers.Kind
             }
         }
 
-        /*[HttpPost("CreateKind")]
-        [Authorize(Roles = "Admin")]
+        [HttpPost("CreateKind")]
+        [Authorize(Roles = "Admin,Manager")]
         public async Task<IActionResult> CreateKind([FromForm] KindRequest kindRequest)
         {
             try
@@ -129,7 +129,7 @@ namespace GaHipHop_API.Controllers.Kind
                 return CustomResult(ex.Message, HttpStatusCode.InternalServerError);
             }
 
-        }*/
+        }
 
         [HttpPatch("UpdateKind/{id}")]
         [Authorize(Roles = "Admin,Manager")]

@@ -30,6 +30,6 @@ namespace GaHipHop_Model.DTO.Request
 
         public IFormFile? File { get; set; }*/
 
-        public List<KindRequest> Kinds { get; set; }
+        /*public List<KindRequest> Kinds { get; set; }*/
     }
 }

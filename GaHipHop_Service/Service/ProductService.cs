@@ -261,7 +261,7 @@ namespace GaHipHop_Service.Service
 
             _unitOfWork.ProductRepository.Insert(newProduct);
 
-            foreach (var kindRequest in productRequest.Kinds)
+            /*foreach (var kindRequest in productRequest.Kinds)
             {
                 var newKind = _mapper.Map<Kind>(kindRequest);
                 newKind.ProductId = newProduct.Id;
@@ -279,7 +279,7 @@ namespace GaHipHop_Service.Service
 
                 _unitOfWork.KindRepository.Insert(newKind);
                 newProduct.StockQuantity += newKind.Quantity;
-            }
+            }*/
 
             _unitOfWork.Save();
 

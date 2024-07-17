@@ -10,8 +10,8 @@ namespace GaHipHop_Model.DTO.Request
 {
     public class KindRequest
     {
-        /*[Required(ErrorMessage = "ProudctId is required")]
-        public long ProductId { get; set; }*/
+        [Required(ErrorMessage = "ProudctId is required")]
+        public long ProductId { get; set; }
 
         [Required(ErrorMessage = "Color name is required")]
         public string ColorName { get; set; }

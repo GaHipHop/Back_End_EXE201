@@ -117,6 +117,10 @@ namespace GaHipHop_API.Controllers.Admin
             {
                 return CustomResult(ex.Message, HttpStatusCode.Forbidden);
             }
+            catch (CustomException.InvalidDataException ex)
+            {
+                return CustomResult(ex.Message, HttpStatusCode.Conflict);
+            }
             catch (CustomException.InternalServerErrorException ex)
             {
                 return CustomResult(ex.Message, HttpStatusCode.InternalServerError);
