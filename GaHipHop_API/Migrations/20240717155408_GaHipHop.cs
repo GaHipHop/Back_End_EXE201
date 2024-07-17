@@ -300,10 +300,10 @@ namespace GaHipHop_API.Migrations
                 columns: new[] { "Id", "ExpiredDate", "Percent", "Status" },
                 values: new object[,]
                 {
-                    { 1L, new DateTime(2024, 8, 17, 22, 13, 10, 900, DateTimeKind.Local).AddTicks(2433), 0f, true },
-                    { 2L, new DateTime(2024, 8, 17, 22, 13, 10, 900, DateTimeKind.Local).AddTicks(2476), 10f, true },
-                    { 3L, new DateTime(2024, 8, 17, 22, 13, 10, 900, DateTimeKind.Local).AddTicks(2478), 15f, true },
-                    { 4L, new DateTime(2024, 9, 17, 22, 13, 10, 900, DateTimeKind.Local).AddTicks(2485), 20f, true }
+                    { 1L, new DateTime(2024, 8, 17, 22, 54, 8, 272, DateTimeKind.Local).AddTicks(9737), 0f, true },
+                    { 2L, new DateTime(2024, 8, 17, 22, 54, 8, 272, DateTimeKind.Local).AddTicks(9760), 10f, true },
+                    { 3L, new DateTime(2024, 8, 17, 22, 54, 8, 272, DateTimeKind.Local).AddTicks(9762), 15f, true },
+                    { 4L, new DateTime(2024, 9, 17, 22, 54, 8, 272, DateTimeKind.Local).AddTicks(9764), 20f, true }
                 });
 
             migrationBuilder.InsertData(
@@ -332,19 +332,19 @@ namespace GaHipHop_API.Migrations
             migrationBuilder.InsertData(
                 table: "Order",
                 columns: new[] { "Id", "AdminId", "CreateDate", "OrderCode", "OrderRequirement", "PaymentMethod", "Status", "TotalPrice", "UserId" },
-                values: new object[] { 1L, 1L, new DateTime(2024, 7, 17, 22, 13, 10, 900, DateTimeKind.Local).AddTicks(3723), "ORD001", "Requirement 1", "Credit Card", "Confirmed", 100.0, 1L });
+                values: new object[] { 1L, 1L, new DateTime(2024, 7, 17, 22, 54, 8, 273, DateTimeKind.Local).AddTicks(544), "ORD001", "Requirement 1", "Credit Card", "Confirmed", 100.0, 1L });
 
             migrationBuilder.InsertData(
                 table: "Product",
                 columns: new[] { "Id", "AdminId", "CategoryId", "CreateDate", "DiscountId", "ModifiedDate", "ProductDescription", "ProductName", "ProductPrice", "Status", "StockQuantity" },
                 values: new object[,]
                 {
-                    { 1L, 1L, 1L, new DateTime(2024, 7, 17, 22, 13, 10, 900, DateTimeKind.Local).AddTicks(3650), 1L, new DateTime(2024, 7, 17, 22, 13, 10, 900, DateTimeKind.Local).AddTicks(3658), "Nilou", "Figure", 50000.0, true, 100 },
-                    { 2L, 1L, 1L, new DateTime(2024, 7, 17, 22, 13, 10, 900, DateTimeKind.Local).AddTicks(3661), 1L, new DateTime(2024, 7, 17, 22, 13, 10, 900, DateTimeKind.Local).AddTicks(3662), "Shenhe", "Figure", 1000000.0, true, 500 },
-                    { 3L, 1L, 1L, new DateTime(2024, 7, 17, 22, 13, 10, 900, DateTimeKind.Local).AddTicks(3665), 2L, new DateTime(2024, 7, 17, 22, 13, 10, 900, DateTimeKind.Local).AddTicks(3665), "Shenhe", "Figure", 1000000.0, true, 150 },
-                    { 4L, 1L, 2L, new DateTime(2024, 7, 17, 22, 13, 10, 900, DateTimeKind.Local).AddTicks(3667), 3L, new DateTime(2024, 7, 17, 22, 13, 10, 900, DateTimeKind.Local).AddTicks(3668), "Shenhe", "Figure", 1000000.0, true, 250 },
-                    { 5L, 1L, 2L, new DateTime(2024, 7, 17, 22, 13, 10, 900, DateTimeKind.Local).AddTicks(3671), 4L, new DateTime(2024, 7, 17, 22, 13, 10, 900, DateTimeKind.Local).AddTicks(3671), "Shenhe", "Figure", 1000000.0, true, 550 },
-                    { 6L, 1L, 2L, new DateTime(2024, 7, 17, 22, 13, 10, 900, DateTimeKind.Local).AddTicks(3673), 4L, new DateTime(2024, 7, 17, 22, 13, 10, 900, DateTimeKind.Local).AddTicks(3674), "Shenhe", "Figure", 1000000.0, true, 1000 }
+                    { 1L, 1L, 1L, new DateTime(2024, 7, 17, 22, 54, 8, 273, DateTimeKind.Local).AddTicks(459), 1L, new DateTime(2024, 7, 17, 22, 54, 8, 273, DateTimeKind.Local).AddTicks(461), "Nilou", "Figure", 5000000.0, true, 100 },
+                    { 2L, 1L, 1L, new DateTime(2024, 7, 17, 22, 54, 8, 273, DateTimeKind.Local).AddTicks(465), 1L, new DateTime(2024, 7, 17, 22, 54, 8, 273, DateTimeKind.Local).AddTicks(466), "Shenhe", "Sticker", 1000000.0, true, 500 },
+                    { 3L, 1L, 1L, new DateTime(2024, 7, 17, 22, 54, 8, 273, DateTimeKind.Local).AddTicks(468), 2L, new DateTime(2024, 7, 17, 22, 54, 8, 273, DateTimeKind.Local).AddTicks(468), "Navia", "Key", 1500000.0, true, 150 },
+                    { 4L, 1L, 2L, new DateTime(2024, 7, 17, 22, 54, 8, 273, DateTimeKind.Local).AddTicks(470), 3L, new DateTime(2024, 7, 17, 22, 54, 8, 273, DateTimeKind.Local).AddTicks(471), "Furina", "Standee", 2000000.0, true, 250 },
+                    { 5L, 1L, 2L, new DateTime(2024, 7, 17, 22, 54, 8, 273, DateTimeKind.Local).AddTicks(473), 4L, new DateTime(2024, 7, 17, 22, 54, 8, 273, DateTimeKind.Local).AddTicks(474), "Xianyun", "Puzzle", 2500000.0, true, 550 },
+                    { 6L, 1L, 2L, new DateTime(2024, 7, 17, 22, 54, 8, 273, DateTimeKind.Local).AddTicks(476), 4L, new DateTime(2024, 7, 17, 22, 54, 8, 273, DateTimeKind.Local).AddTicks(476), "Chiori", "Poster", 3000000.0, true, 1000 }
                 });
 
             migrationBuilder.InsertData(

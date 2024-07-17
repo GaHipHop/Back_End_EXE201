@@ -85,12 +85,12 @@ namespace GaHipHop_Repository.Entity
             );
 
             modelBuilder.Entity<Product>().HasData(
-                new Product { Id = 1, AdminId = 1, DiscountId = 1, CategoryId = 1, ProductName = "Figure", ProductDescription = "Nilou", ProductPrice = 50000.00, StockQuantity = 100, CreateDate = DateTime.Now, ModifiedDate = DateTime.Now, Status = true },
-                new Product { Id = 2, AdminId = 1, DiscountId = 1, CategoryId = 1, ProductName = "Figure", ProductDescription = "Shenhe", ProductPrice = 1000000.00, StockQuantity = 500, CreateDate = DateTime.Now, ModifiedDate = DateTime.Now, Status = true },
-                new Product { Id = 3, AdminId = 1, DiscountId = 2, CategoryId = 1, ProductName = "Figure", ProductDescription = "Shenhe", ProductPrice = 1000000.00, StockQuantity = 150, CreateDate = DateTime.Now, ModifiedDate = DateTime.Now, Status = true },
-                new Product { Id = 4, AdminId = 1, DiscountId = 3, CategoryId = 2, ProductName = "Figure", ProductDescription = "Shenhe", ProductPrice = 1000000.00, StockQuantity = 250, CreateDate = DateTime.Now, ModifiedDate = DateTime.Now, Status = true },
-                new Product { Id = 5, AdminId = 1, DiscountId = 4, CategoryId = 2, ProductName = "Figure", ProductDescription = "Shenhe", ProductPrice = 1000000.00, StockQuantity = 550, CreateDate = DateTime.Now, ModifiedDate = DateTime.Now, Status = true },
-                new Product { Id = 6, AdminId = 1, DiscountId = 4, CategoryId = 2, ProductName = "Figure", ProductDescription = "Shenhe", ProductPrice = 1000000.00, StockQuantity = 1000, CreateDate = DateTime.Now, ModifiedDate = DateTime.Now, Status = true }
+                new Product { Id = 1, AdminId = 1, DiscountId = 1, CategoryId = 1, ProductName = "Figure", ProductDescription = "Nilou", ProductPrice = 5000000.00, StockQuantity = 100, CreateDate = DateTime.Now, ModifiedDate = DateTime.Now, Status = true },
+                new Product { Id = 2, AdminId = 1, DiscountId = 1, CategoryId = 1, ProductName = "Sticker", ProductDescription = "Shenhe", ProductPrice = 1000000.00, StockQuantity = 500, CreateDate = DateTime.Now, ModifiedDate = DateTime.Now, Status = true },
+                new Product { Id = 3, AdminId = 1, DiscountId = 2, CategoryId = 1, ProductName = "Key", ProductDescription = "Navia", ProductPrice = 1500000.00, StockQuantity = 150, CreateDate = DateTime.Now, ModifiedDate = DateTime.Now, Status = true },
+                new Product { Id = 4, AdminId = 1, DiscountId = 3, CategoryId = 2, ProductName = "Standee", ProductDescription = "Furina", ProductPrice = 2000000.00, StockQuantity = 250, CreateDate = DateTime.Now, ModifiedDate = DateTime.Now, Status = true },
+                new Product { Id = 5, AdminId = 1, DiscountId = 4, CategoryId = 2, ProductName = "Puzzle", ProductDescription = "Xianyun", ProductPrice = 2500000.00, StockQuantity = 550, CreateDate = DateTime.Now, ModifiedDate = DateTime.Now, Status = true },
+                new Product { Id = 6, AdminId = 1, DiscountId = 4, CategoryId = 2, ProductName = "Poster", ProductDescription = "Chiori", ProductPrice = 3000000.00, StockQuantity = 1000, CreateDate = DateTime.Now, ModifiedDate = DateTime.Now, Status = true }
             );
 
             modelBuilder.Entity<Order>().HasData(
