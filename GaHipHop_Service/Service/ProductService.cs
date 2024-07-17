@@ -121,6 +121,7 @@ namespace GaHipHop_Service.Service
 
             var products = _unitOfWork.ProductRepository.Get(
                 filter: k => k.CategoryId == id && k.Status == true,
+                includeProperties: "Kind",
                 pageIndex: 1,
                 pageSize: 5)
                 .ToList();

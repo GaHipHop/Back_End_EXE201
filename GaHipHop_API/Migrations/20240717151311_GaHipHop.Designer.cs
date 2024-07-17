@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GaHipHop_API.Migrations
 {
     [DbContext(typeof(MyDbContext))]
-    [Migration("20240529145953_Kaneki")]
-    partial class Kaneki
+    [Migration("20240717151311_GaHipHop")]
+    partial class GaHipHop
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -76,11 +76,23 @@ namespace GaHipHop_API.Migrations
                             Address = "Admin Address",
                             Email = "admin@example.com",
                             FullName = "Admin User",
-                            Password = "1",
+                            Password = "$2a$12$W6Fr2O.JNK5pxRlm36q1DeLI.hDM5AhHe..ZnhFhofXKwSNUrMTA.",
                             Phone = "123456789",
                             RoleId = 1L,
                             Status = true,
                             Username = "admin"
+                        },
+                        new
+                        {
+                            Id = 2L,
+                            Address = "Manager Address",
+                            Email = "admin@example.com",
+                            FullName = "Manager User",
+                            Password = "$2a$12$W6Fr2O.JNK5pxRlm36q1DeLI.hDM5AhHe..ZnhFhofXKwSNUrMTA.",
+                            Phone = "123456789",
+                            RoleId = 2L,
+                            Status = true,
+                            Username = "manager"
                         });
                 });
 
@@ -158,22 +170,12 @@ namespace GaHipHop_API.Migrations
                         new
                         {
                             Id = 1L,
-                            Email = "contact1@example.com",
-                            Facebook = "facebook1",
-                            Instagram = "instagram1",
-                            Phone = "123456789",
-                            Shoppee = "shoppee1",
-                            Tiktok = "tiktok1"
-                        },
-                        new
-                        {
-                            Id = 2L,
-                            Email = "contact2@example.com",
-                            Facebook = "facebook2",
-                            Instagram = "instagram2",
-                            Phone = "987654321",
-                            Shoppee = "shoppee2",
-                            Tiktok = "tiktok2"
+                            Email = "phatdao@gmail.com",
+                            Facebook = "https://www.facebook.com/nguyen.rosie.946",
+                            Instagram = "https://www.instagram.com/ga.hiphop?fbclid=IwZXh0bgNhZW0CMTAAAR29xxUdp_tZ0TqVPfLq5zQVl72SEG7E0SpmIJY8ED62ZmmsKdaTZrc51O4_aem_-LACUZgsYTo5T1fMMgEhjg",
+                            Phone = "0855005005",
+                            Shoppee = "https://shopee.vn/ga.hiphop",
+                            Tiktok = "https://www.tiktok.com/@ga.hiphop?fbclid=IwZXh0bgNhZW0CMTAAAR18hmJoFZrOpcozoCaEq74luSuL4Y84xGSBJ3bnlgjRlYhB3xUaRy4YE3Y_aem_494gWYY8v90XRrvald7BQA"
                         });
                 });
 
@@ -202,14 +204,28 @@ namespace GaHipHop_API.Migrations
                         new
                         {
                             Id = 1L,
-                            ExpiredDate = new DateTime(2024, 6, 29, 21, 59, 52, 647, DateTimeKind.Local).AddTicks(6829),
-                            Percent = 10f,
+                            ExpiredDate = new DateTime(2024, 8, 17, 22, 13, 10, 900, DateTimeKind.Local).AddTicks(2433),
+                            Percent = 0f,
                             Status = true
                         },
                         new
                         {
                             Id = 2L,
-                            ExpiredDate = new DateTime(2024, 7, 29, 21, 59, 52, 647, DateTimeKind.Local).AddTicks(6855),
+                            ExpiredDate = new DateTime(2024, 8, 17, 22, 13, 10, 900, DateTimeKind.Local).AddTicks(2476),
+                            Percent = 10f,
+                            Status = true
+                        },
+                        new
+                        {
+                            Id = 3L,
+                            ExpiredDate = new DateTime(2024, 8, 17, 22, 13, 10, 900, DateTimeKind.Local).AddTicks(2478),
+                            Percent = 15f,
+                            Status = true
+                        },
+                        new
+                        {
+                            Id = 4L,
+                            ExpiredDate = new DateTime(2024, 9, 17, 22, 13, 10, 900, DateTimeKind.Local).AddTicks(2485),
                             Percent = 20f,
                             Status = true
                         });
@@ -250,18 +266,72 @@ namespace GaHipHop_API.Migrations
                         {
                             Id = 1L,
                             ColorName = "Red",
-                            Image = "image1.jpg",
+                            Image = "https://firebasestorage.googleapis.com/v0/b/gahiphop-4de10.appspot.com/o/images%2F61104088-d946-4d5b-80fc-427f8ab3690a_GaHipHop.jpg?alt=media&token=a9dca6bb-40a1-4935-aaf8-e10d55820ac2",
                             ProductId = 1L,
-                            Quantity = 5,
+                            Quantity = 50,
                             Status = true
                         },
                         new
                         {
                             Id = 2L,
                             ColorName = "Blue",
-                            Image = "image2.jpg",
+                            Image = "https://firebasestorage.googleapis.com/v0/b/gahiphop-4de10.appspot.com/o/images%2F61104088-d946-4d5b-80fc-427f8ab3690a_GaHipHop.jpg?alt=media&token=a9dca6bb-40a1-4935-aaf8-e10d55820ac2",
                             ProductId = 1L,
-                            Quantity = 5,
+                            Quantity = 50,
+                            Status = true
+                        },
+                        new
+                        {
+                            Id = 3L,
+                            ColorName = "White",
+                            Image = "https://firebasestorage.googleapis.com/v0/b/gahiphop-4de10.appspot.com/o/images%2F61104088-d946-4d5b-80fc-427f8ab3690a_GaHipHop.jpg?alt=media&token=a9dca6bb-40a1-4935-aaf8-e10d55820ac2",
+                            ProductId = 2L,
+                            Quantity = 500,
+                            Status = true
+                        },
+                        new
+                        {
+                            Id = 4L,
+                            ColorName = "Yellow",
+                            Image = "https://firebasestorage.googleapis.com/v0/b/gahiphop-4de10.appspot.com/o/images%2F61104088-d946-4d5b-80fc-427f8ab3690a_GaHipHop.jpg?alt=media&token=a9dca6bb-40a1-4935-aaf8-e10d55820ac2",
+                            ProductId = 3L,
+                            Quantity = 150,
+                            Status = true
+                        },
+                        new
+                        {
+                            Id = 5L,
+                            ColorName = "Pink",
+                            Image = "https://firebasestorage.googleapis.com/v0/b/gahiphop-4de10.appspot.com/o/images%2F61104088-d946-4d5b-80fc-427f8ab3690a_GaHipHop.jpg?alt=media&token=a9dca6bb-40a1-4935-aaf8-e10d55820ac2",
+                            ProductId = 4L,
+                            Quantity = 250,
+                            Status = true
+                        },
+                        new
+                        {
+                            Id = 6L,
+                            ColorName = "Purple",
+                            Image = "https://firebasestorage.googleapis.com/v0/b/gahiphop-4de10.appspot.com/o/images%2F61104088-d946-4d5b-80fc-427f8ab3690a_GaHipHop.jpg?alt=media&token=a9dca6bb-40a1-4935-aaf8-e10d55820ac2",
+                            ProductId = 5L,
+                            Quantity = 550,
+                            Status = true
+                        },
+                        new
+                        {
+                            Id = 7L,
+                            ColorName = "Orange",
+                            Image = "https://firebasestorage.googleapis.com/v0/b/gahiphop-4de10.appspot.com/o/images%2F61104088-d946-4d5b-80fc-427f8ab3690a_GaHipHop.jpg?alt=media&token=a9dca6bb-40a1-4935-aaf8-e10d55820ac2",
+                            ProductId = 6L,
+                            Quantity = 500,
+                            Status = true
+                        },
+                        new
+                        {
+                            Id = 8L,
+                            ColorName = "Green",
+                            Image = "https://firebasestorage.googleapis.com/v0/b/gahiphop-4de10.appspot.com/o/images%2F61104088-d946-4d5b-80fc-427f8ab3690a_GaHipHop.jpg?alt=media&token=a9dca6bb-40a1-4935-aaf8-e10d55820ac2",
+                            ProductId = 6L,
+                            Quantity = 500,
                             Status = true
                         });
                 });
@@ -274,7 +344,7 @@ namespace GaHipHop_API.Migrations
 
                     MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<long>("Id"));
 
-                    b.Property<long>("AdminId")
+                    b.Property<long?>("AdminId")
                         .HasColumnType("bigint");
 
                     b.Property<DateTime>("CreateDate")
@@ -315,7 +385,7 @@ namespace GaHipHop_API.Migrations
                         {
                             Id = 1L,
                             AdminId = 1L,
-                            CreateDate = new DateTime(2024, 5, 29, 21, 59, 52, 647, DateTimeKind.Local).AddTicks(6927),
+                            CreateDate = new DateTime(2024, 7, 17, 22, 13, 10, 900, DateTimeKind.Local).AddTicks(3723),
                             OrderCode = "ORD001",
                             OrderRequirement = "Requirement 1",
                             PaymentMethod = "Credit Card",
@@ -420,28 +490,84 @@ namespace GaHipHop_API.Migrations
                             Id = 1L,
                             AdminId = 1L,
                             CategoryId = 1L,
-                            CreateDate = new DateTime(2024, 5, 29, 21, 59, 52, 647, DateTimeKind.Local).AddTicks(6901),
+                            CreateDate = new DateTime(2024, 7, 17, 22, 13, 10, 900, DateTimeKind.Local).AddTicks(3650),
                             DiscountId = 1L,
-                            ModifiedDate = new DateTime(2024, 5, 29, 21, 59, 52, 647, DateTimeKind.Local).AddTicks(6903),
+                            ModifiedDate = new DateTime(2024, 7, 17, 22, 13, 10, 900, DateTimeKind.Local).AddTicks(3658),
                             ProductDescription = "Nilou",
                             ProductName = "Figure",
-                            ProductPrice = 50000000.0,
+                            ProductPrice = 50000.0,
                             Status = true,
-                            StockQuantity = 10
+                            StockQuantity = 100
                         },
                         new
                         {
                             Id = 2L,
                             AdminId = 1L,
                             CategoryId = 1L,
-                            CreateDate = new DateTime(2024, 5, 29, 21, 59, 52, 647, DateTimeKind.Local).AddTicks(6906),
-                            DiscountId = 2L,
-                            ModifiedDate = new DateTime(2024, 5, 29, 21, 59, 52, 647, DateTimeKind.Local).AddTicks(6907),
+                            CreateDate = new DateTime(2024, 7, 17, 22, 13, 10, 900, DateTimeKind.Local).AddTicks(3661),
+                            DiscountId = 1L,
+                            ModifiedDate = new DateTime(2024, 7, 17, 22, 13, 10, 900, DateTimeKind.Local).AddTicks(3662),
                             ProductDescription = "Shenhe",
                             ProductName = "Figure",
                             ProductPrice = 1000000.0,
                             Status = true,
-                            StockQuantity = 100
+                            StockQuantity = 500
+                        },
+                        new
+                        {
+                            Id = 3L,
+                            AdminId = 1L,
+                            CategoryId = 1L,
+                            CreateDate = new DateTime(2024, 7, 17, 22, 13, 10, 900, DateTimeKind.Local).AddTicks(3665),
+                            DiscountId = 2L,
+                            ModifiedDate = new DateTime(2024, 7, 17, 22, 13, 10, 900, DateTimeKind.Local).AddTicks(3665),
+                            ProductDescription = "Shenhe",
+                            ProductName = "Figure",
+                            ProductPrice = 1000000.0,
+                            Status = true,
+                            StockQuantity = 150
+                        },
+                        new
+                        {
+                            Id = 4L,
+                            AdminId = 1L,
+                            CategoryId = 2L,
+                            CreateDate = new DateTime(2024, 7, 17, 22, 13, 10, 900, DateTimeKind.Local).AddTicks(3667),
+                            DiscountId = 3L,
+                            ModifiedDate = new DateTime(2024, 7, 17, 22, 13, 10, 900, DateTimeKind.Local).AddTicks(3668),
+                            ProductDescription = "Shenhe",
+                            ProductName = "Figure",
+                            ProductPrice = 1000000.0,
+                            Status = true,
+                            StockQuantity = 250
+                        },
+                        new
+                        {
+                            Id = 5L,
+                            AdminId = 1L,
+                            CategoryId = 2L,
+                            CreateDate = new DateTime(2024, 7, 17, 22, 13, 10, 900, DateTimeKind.Local).AddTicks(3671),
+                            DiscountId = 4L,
+                            ModifiedDate = new DateTime(2024, 7, 17, 22, 13, 10, 900, DateTimeKind.Local).AddTicks(3671),
+                            ProductDescription = "Shenhe",
+                            ProductName = "Figure",
+                            ProductPrice = 1000000.0,
+                            Status = true,
+                            StockQuantity = 550
+                        },
+                        new
+                        {
+                            Id = 6L,
+                            AdminId = 1L,
+                            CategoryId = 2L,
+                            CreateDate = new DateTime(2024, 7, 17, 22, 13, 10, 900, DateTimeKind.Local).AddTicks(3673),
+                            DiscountId = 4L,
+                            ModifiedDate = new DateTime(2024, 7, 17, 22, 13, 10, 900, DateTimeKind.Local).AddTicks(3674),
+                            ProductDescription = "Shenhe",
+                            ProductName = "Figure",
+                            ProductPrice = 1000000.0,
+                            Status = true,
+                            StockQuantity = 1000
                         });
                 });
 
@@ -471,11 +597,6 @@ namespace GaHipHop_API.Migrations
                         {
                             Id = 2L,
                             RoleName = "Manager"
-                        },
-                        new
-                        {
-                            Id = 3L,
-                            RoleName = "Staff"
                         });
                 });
 
@@ -542,7 +663,7 @@ namespace GaHipHop_API.Migrations
             modelBuilder.Entity("GaHipHop_Repository.Entity.Kind", b =>
                 {
                     b.HasOne("GaHipHop_Repository.Entity.Product", "Product")
-                        .WithMany()
+                        .WithMany("Kind")
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -554,9 +675,7 @@ namespace GaHipHop_API.Migrations
                 {
                     b.HasOne("GaHipHop_Repository.Entity.Admin", "Admin")
                         .WithMany()
-                        .HasForeignKey("AdminId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("AdminId");
 
                     b.HasOne("GaHipHop_Repository.Entity.UserInfo", "UserInfo")
                         .WithMany()
@@ -578,7 +697,7 @@ namespace GaHipHop_API.Migrations
                         .IsRequired();
 
                     b.HasOne("GaHipHop_Repository.Entity.Order", "Order")
-                        .WithMany()
+                        .WithMany("OrderDetails")
                         .HasForeignKey("OrderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -613,6 +732,16 @@ namespace GaHipHop_API.Migrations
                     b.Navigation("Category");
 
                     b.Navigation("Discount");
+                });
+
+            modelBuilder.Entity("GaHipHop_Repository.Entity.Order", b =>
+                {
+                    b.Navigation("OrderDetails");
+                });
+
+            modelBuilder.Entity("GaHipHop_Repository.Entity.Product", b =>
+                {
+                    b.Navigation("Kind");
                 });
 #pragma warning restore 612, 618
         }
