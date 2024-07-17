@@ -198,7 +198,7 @@ namespace GaHipHop_Service.Service
                     }).ToList()
                 };
 
-                await _emailService.SendConfirmedOrderEmailAsync(userInfo.Email, orderResponse);
+                //await _emailService.SendConfirmedOrderEmailAsync(userInfo.Email, orderResponse);
 
                 /*var orderResponse = _mapper.Map<OrderResponse>(existingOrder);
                 return orderResponse;*/

@@ -72,7 +72,7 @@ namespace GaHipHop_Service.Service
             return productResponses;
         }
 
-        public async Task<List<ProductResponse>> GetAllProductFalse(QueryObject queryObject)
+        public async Task<List<ProductAnyKindResponse>> GetAllProductFalse(QueryObject queryObject)
         {
 
             var products = _unitOfWork.ProductRepository.Get(
@@ -86,10 +86,10 @@ namespace GaHipHop_Service.Service
                 throw new CustomException.DataNotFoundException("No Product False in Database");
             }
 
-            var productResponses = new List<ProductResponse>();
+            var productResponses = new List<ProductAnyKindResponse>();
             foreach (var product in products)
             {
-                var productResponse = _mapper.Map<ProductResponse>(product);
+                var productResponse = _mapper.Map<ProductAnyKindResponse>(product);
 
                 // Discount calculation logic
                 var discount = _unitOfWork.DiscountRepository.GetByID(product.DiscountId); 
@@ -133,17 +133,20 @@ namespace GaHipHop_Service.Service
             return productResponses;
         }
 
-        public async Task<ProductResponse> GetProductById(long id)
+        public async Task<ProductAnyKindResponse> GetProductById(long id)
         {
             try
             {
-                var product = _unitOfWork.ProductRepository.Get(filter: p => p.Id == id).FirstOrDefault();
+                var product = _unitOfWork.ProductRepository.Get(filter: p => p.Id == id
+                                                              , includeProperties: "Kind,Discount,Category").FirstOrDefault();
 
                 if (product == null)
                 {
                     throw new CustomException.DataNotFoundException("Product not found");
                 }
-                var productResponse = CalculateDiscountedPrice(product);
+                var productResponse = _mapper.Map<ProductAnyKindResponse>(product);
+                    productResponse = CalculateDiscountedPriceAboutKind(product);
+
                 _mapper.Map(product, productResponse);
                 return productResponse;
             }
@@ -153,7 +156,7 @@ namespace GaHipHop_Service.Service
             }
         }
 
-        public async Task<ProductResponse> CreateProduct(ProductRequest productRequest)
+        /*public async Task<ProductResponse> CreateProduct(ProductRequest productRequest)
         {
             var accountId = Authentication.GetUserIdFromHttpContext(_httpContextAccessor.HttpContext);
             if (!long.TryParse(accountId, out long Id))
@@ -216,7 +219,74 @@ namespace GaHipHop_Service.Service
 
             _mapper.Map(newProduct, productResponse);
             return productResponse;
+        }*/
+
+        public async Task<ProductAnyKindResponse> CreateProduct(ProductRequest productRequest)
+        {
+            var accountId = Authentication.GetUserIdFromHttpContext(_httpContextAccessor.HttpContext);
+            if (!long.TryParse(accountId, out long Id))
+            {
+                throw new CustomException.ForbbidenException("User ID claim invalid.");
+            }
+
+            var admin = _unitOfWork.AdminRepository.Get(a => a.Id == Id).FirstOrDefault();
+
+            var existingProduct = _unitOfWork.ProductRepository.Get().FirstOrDefault(p => p.ProductName.ToLower() == productRequest.ProductName.ToLower());
+
+            if (existingProduct != null)
+            {
+                throw new CustomException.DataExistException($"Product with name '{productRequest.ProductName}' already exists.");
+            }
+
+            var discount = _unitOfWork.DiscountRepository.GetByID(productRequest.DiscountId);
+            if (discount == null)
+            {
+                throw new CustomException.DataNotFoundException("Discount not found.");
+            }
+
+            var category = _unitOfWork.CategoryRepository.GetByID(productRequest.CategoryId);
+            if (category == null)
+            {
+                throw new CustomException.DataNotFoundException("Category not found.");
+            }
+
+            var newProduct = _mapper.Map<Product>(productRequest);
+            newProduct.CreateDate = DateTime.UtcNow;
+            newProduct.Status = true;
+            newProduct.AdminId = admin.Id;
+            newProduct.Discount = discount;
+            newProduct.Category = category;
+
+            var productResponse = CalculateDiscountedPriceAboutKind(newProduct);
+
+            _unitOfWork.ProductRepository.Insert(newProduct);
+
+            foreach (var kindRequest in productRequest.Kinds)
+            {
+                var newKind = _mapper.Map<Kind>(kindRequest);
+                newKind.ProductId = newProduct.Id;
+                newKind.Status = true;
+
+                if (kindRequest.File != null)
+                {
+                    if (kindRequest.File.Length >= 10 * 1024 * 1024)
+                    {
+                        throw new CustomException.InvalidDataException("File size exceeds the maximum allowed limit.");
+                    }
+                    string imageDownloadUrl = await _firebase.UploadImage(kindRequest.File);
+                    newKind.Image = imageDownloadUrl;
+                }
+
+                _unitOfWork.KindRepository.Insert(newKind);
+                newProduct.StockQuantity += newKind.Quantity;
+            }
+
+            _unitOfWork.Save();
+
+            _mapper.Map(newProduct, productResponse);
+            return productResponse;
         }
+
 
 
         public async Task<ProductResponse> UpdateProduct(long id, ProductRequest productRequest)
@@ -259,6 +329,33 @@ namespace GaHipHop_Service.Service
         private ProductResponse CalculateDiscountedPrice(Product existingProduct)
         {
             var productResponse = _mapper.Map<ProductResponse>(existingProduct);
+
+            if (existingProduct.DiscountId != null)
+            {
+                var discount = _unitOfWork.DiscountRepository.GetByID(existingProduct.DiscountId); // Fetch discount
+
+                if (discount != null && discount.ExpiredDate >= DateTime.Now && discount.Status)
+                {
+                    var discountedPrice = existingProduct.ProductPrice * (1 - discount.Percent / 100);
+                    productResponse.CurrentPrice = Math.Round(discountedPrice, 3);
+                }
+                else
+                {
+                    productResponse.CurrentPrice = existingProduct.ProductPrice;
+                }
+            }
+            else
+            {
+                productResponse.CurrentPrice = existingProduct.ProductPrice; // No discount
+            }
+
+            return productResponse;
+        }
+
+
+        private ProductAnyKindResponse CalculateDiscountedPriceAboutKind(Product existingProduct)
+        {
+            var productResponse = _mapper.Map<ProductAnyKindResponse>(existingProduct);
 
             if (existingProduct.DiscountId != null)
             {

@@ -14,6 +14,7 @@ namespace GaHipHop_Service.Interfaces
         Task<DiscountResponse> CreateDiscount(CreateDiscountRequest createDiscountRequest);
         Task<DiscountResponse> DeleteDiscount(long id);
         Task<IEnumerable<Discount>> GetAllDiscount();
+        Task<IEnumerable<Discount>> GetAllDiscountFalse();
         Task<Discount> GetDiscountById(long id);
         Task<DiscountResponse> UpdateDiscount(long id, UpdateDiscountRequest updateDiscountRequest);
     }

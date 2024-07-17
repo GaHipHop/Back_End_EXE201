@@ -24,10 +24,12 @@ namespace GaHipHop_Model.DTO.Request
         [Range(0, int.MaxValue, ErrorMessage = "Product price must be greater than or euqal to 0")]
         public double ProductPrice { get; set; }
 
-        public string ColorName { get; set; }
+        /*public string ColorName { get; set; }
 
         public int KindQuantity { get; set; }
 
-        public IFormFile? File { get; set; }
+        public IFormFile? File { get; set; }*/
+
+        public List<KindRequest> Kinds { get; set; }
     }
 }

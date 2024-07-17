@@ -16,7 +16,7 @@ namespace GaHipHop_Service.Interfaces
         Task<List<KindResponse>> GetAllKindFalse(QueryObject queryObject);
         Task<KindResponse> GetKindById(long id);
         Task<List<KindResponse>> GetAllKindByProductId(long id);
-        Task<KindResponse> CreateKind(KindRequest kindRequest);
+        /*Task<KindResponse> CreateKind(KindRequest kindRequest);*/
         Task<KindResponse> UpdateKind(long id, UpdateKindRequest updateKindRequest);
         Task<bool> DeleteKind(long id);
     }

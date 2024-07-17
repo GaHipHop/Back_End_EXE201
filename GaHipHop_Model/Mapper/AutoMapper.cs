@@ -20,7 +20,7 @@ namespace GaHipHop_Model.Mapper
             CreateMap<CreateContactRequest, Contact>().ReverseMap();
             CreateMap<UpdateContactRequest, Contact>().ReverseMap();
             CreateMap<CreateDiscountRequest, Discount>().ReverseMap();
-            CreateMap<UpdateContactRequest, Discount>().ReverseMap();
+            CreateMap<UpdateDiscountRequest, Discount>().ReverseMap();
             CreateMap<ProductRequest, Product>().ReverseMap();
             CreateMap<UpdateProductRequest, Product>().ReverseMap();
             CreateMap<KindRequest, Kind>().ReverseMap();
@@ -41,6 +41,13 @@ namespace GaHipHop_Model.Mapper
                 .ForMember(dest => dest.Percent, opt => opt.MapFrom(src => src.Discount.Percent))
                 .ForMember(dest => dest.Image, opt => opt.MapFrom(src => src.Kind.FirstOrDefault().Image))
                 .ForMember(dest => dest.ColorName, opt => opt.MapFrom(src => src.Kind.FirstOrDefault().ColorName));
+
+            CreateMap<Product, ProductAnyKindResponse>()
+                .ForMember(dest => dest.Discount, opt => opt.MapFrom(src => src.Discount))
+                .ForMember(dest => dest.Kinds, opt => opt.MapFrom(src => src.Kind))
+                .ForMember(dest => dest.Category, opt => opt.MapFrom(src => src.Category))
+                .ReverseMap();
+            CreateMap<Discount,  DiscountResponse>();
             CreateMap<Kind, KindResponse>();
             CreateMap<Category, CategoryResponse>();
 
@@ -52,6 +59,7 @@ namespace GaHipHop_Model.Mapper
                 .ReverseMap();
             CreateMap<CartItem, OrderDetails>().ForMember(dest => dest.Id, opt => opt.Ignore());
             CreateMap<UserInfo, UserInfoResponse>().ReverseMap();
+            CreateMap<Contact, ContactResponse>().ReverseMap();
         }
     }
 }

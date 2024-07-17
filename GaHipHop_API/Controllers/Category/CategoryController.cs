@@ -41,7 +41,7 @@ namespace GaHipHop_API.Controllers.Category
         }
 
         [HttpGet("GetAllCategoryFalse")]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin,Manager")]
         public IActionResult GetAllCategoryFalse([FromQuery] QueryObject queryObject)
         {
             try
@@ -83,7 +83,7 @@ namespace GaHipHop_API.Controllers.Category
         }
 
         [HttpPost("CreateCategory")]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin,Manager")]
         public async Task<IActionResult> CreateCategory([FromForm] CategoryRequest categoryRequest)
         {
             try
@@ -112,7 +112,7 @@ namespace GaHipHop_API.Controllers.Category
         }
 
         [HttpPatch("UpdateCategory/{id}")]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin,Manager")]
         public async Task<IActionResult> UpdateCategory(long id, [FromForm] CategoryRequest categoryRequest)
         {
             try
@@ -143,7 +143,7 @@ namespace GaHipHop_API.Controllers.Category
         }
 
         [HttpDelete("DeleteCategory/{id}")]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin,Manager")]
         public async Task<IActionResult> DeleteCategory(long id)
         {
             try

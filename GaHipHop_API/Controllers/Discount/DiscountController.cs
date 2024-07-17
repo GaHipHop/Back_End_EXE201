@@ -43,8 +43,31 @@ namespace GaHipHop_API.Controllers.Discont
             }
         }
 
+        [HttpGet("GetAllDiscountFalse")]
+        [Authorize(Roles = "Admin,Manager")]
+        public async Task<IActionResult> GetAllDiscountFalse()
+        {
+            try
+            {
+                var discount = await _discountService.GetAllDiscountFalse();
+                return CustomResult("Load Successfull", discount, HttpStatusCode.OK);
+            }
+            catch (CustomException.DataNotFoundException ex)
+            {
+                return CustomResult(ex.Message, HttpStatusCode.NotFound);
+            }
+            catch (CustomException.InvalidDataException ex)
+            {
+                return CustomResult(ex.Message, HttpStatusCode.BadRequest);
+            }
+            catch (Exception ex)
+            {
+                return CustomResult(ex.Message, HttpStatusCode.InternalServerError);
+            }
+        }
+
         [HttpGet("GetDiscountBy/{id}")]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin,Manager")]
         public async Task<IActionResult> GetDiscountById(long id)
         {
             try
@@ -75,7 +98,7 @@ namespace GaHipHop_API.Controllers.Discont
         }
 
         [HttpPost("CreateDiscount")]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin,Manager")]
         public async Task<IActionResult> CreateDiscount([FromBody] CreateDiscountRequest createDiscountRequest)
         {
             try
@@ -94,7 +117,7 @@ namespace GaHipHop_API.Controllers.Discont
         }
 
         [HttpPatch("UpdateDiscount/{id}")]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin,Manager")]
         public async Task<IActionResult> UpdateDiscount(long id, [FromBody] UpdateDiscountRequest updateDiscountRequest)
         {
             try
@@ -121,7 +144,7 @@ namespace GaHipHop_API.Controllers.Discont
         }
 
         [HttpDelete("DeleteDiscount/{id}")]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin,Manager")]
         public async Task<IActionResult> DeleteDiscount(long id)
         {
             try

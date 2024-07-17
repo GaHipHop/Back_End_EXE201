@@ -43,7 +43,7 @@ namespace GaHipHop_API.Controllers.Kind
         }
 
         [HttpGet("GetAllKindFalse")]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin,Manager")]
         public IActionResult GetAllKindFalse([FromQuery] QueryObject queryObject)
         {
             try
@@ -102,7 +102,7 @@ namespace GaHipHop_API.Controllers.Kind
             }
         }
 
-        [HttpPost("CreateKind")]
+        /*[HttpPost("CreateKind")]
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> CreateKind([FromForm] KindRequest kindRequest)
         {
@@ -129,10 +129,10 @@ namespace GaHipHop_API.Controllers.Kind
                 return CustomResult(ex.Message, HttpStatusCode.InternalServerError);
             }
 
-        }
+        }*/
 
         [HttpPatch("UpdateKind/{id}")]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin,Manager")]
         public async Task<IActionResult> UpdateKind(long id, [FromForm] UpdateKindRequest updateKindRequest)
         {
             try
@@ -163,7 +163,7 @@ namespace GaHipHop_API.Controllers.Kind
         }
 
         [HttpDelete("DeleteKind/{id}")]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin,Manager")]
         public async Task<IActionResult> DeleteKind(long id)
         {
             try
