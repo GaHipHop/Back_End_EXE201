@@ -36,6 +36,12 @@ namespace GaHipHop_Service.Service
 
         public IEnumerable<AdminResponse> GetAllAdminByStatusTrue()
         {
+            /*var accountId = Authentication.GetRoleFromHttpContext(_httpContextAccessor.HttpContext);
+            if (string.IsNullOrEmpty(accountId))
+            {
+                throw new CustomException.ForbbidenException("User ID claim invalid.");
+            }*/
+
             var listAdmin = _unitOfWork.AdminRepository.Get(
                 filter: s => s.Status == true && s.RoleId == 1,
                 includeProperties: "Role"
@@ -48,23 +54,6 @@ namespace GaHipHop_Service.Service
         {
             try
             {
-                var accountId = Authentication.GetUserIdFromHttpContext(_httpContextAccessor.HttpContext);
-                if (string.IsNullOrEmpty(accountId))
-                {
-                    throw new CustomException.ForbbidenException("User ID claim invalid.");
-                }
-
-                if (!long.TryParse(accountId, out long Id))
-                {
-                    throw new CustomException.ForbbidenException("User ID claim invalid.");
-                }
-
-                var checkmanager = _unitOfWork.AdminRepository.Get( a => a.Id == Id ).FirstOrDefault();
-
-                if (checkmanager == null || checkmanager.RoleId != 2)
-                {
-                    throw new CustomException.ForbbidenException("you don't have permission to use it.");
-                }
 
                 var listAdmin = _unitOfWork.AdminRepository.Get(
                     filter: s => s.Status == true && s.RoleId == 0,
@@ -85,23 +74,6 @@ namespace GaHipHop_Service.Service
         {
             try
             {
-                var accountId = Authentication.GetUserIdFromHttpContext(_httpContextAccessor.HttpContext);
-                if (string.IsNullOrEmpty(accountId))
-                {
-                    throw new CustomException.ForbbidenException("User ID claim invalid.");
-                }
-
-                if (!long.TryParse(accountId, out long Id))
-                {
-                    throw new CustomException.ForbbidenException("User ID claim invalid.");
-                }
-
-                var checkmanager = _unitOfWork.AdminRepository.Get(a => a.Id == Id).FirstOrDefault();
-
-                if (checkmanager == null || checkmanager.RoleId != 2)
-                {
-                    throw new CustomException.ForbbidenException("you don't have permission to use it.");
-                }
 
                 var admin = _unitOfWork.AdminRepository.Get(
                     filter: a => a.Id == id && a.Status == true && a.RoleId == 1, includeProperties: "Role"
@@ -127,16 +99,13 @@ namespace GaHipHop_Service.Service
         {
             try
             {
+
                 Authentication authentication = new(_configuration, _unitOfWork);
 
                 bool usernameExists = _unitOfWork.AdminRepository.Exists(a => a.Username == adminRequest.UserName);
                 if (usernameExists)
                 {
-                    return new AdminResponse
-                    {
-                        UserName = "Username already exists.",
-                        Status = false
-                    };
+                    throw new CustomException.InvalidDataException("Username already exists.");
                 }
 
                 var admin = _mapper.Map<Admin>(adminRequest);
@@ -151,9 +120,9 @@ namespace GaHipHop_Service.Service
                 var adminResponse = _mapper.Map<AdminResponse>(admin);
                 return adminResponse;
             }
-            catch (Exception ex)
+            catch (CustomException.InternalServerErrorException ex)
             {
-                throw ex;
+                throw new CustomException.InternalServerErrorException("An error occurred during data processing.", ex);
             }
         }
 
@@ -180,9 +149,9 @@ namespace GaHipHop_Service.Service
                 var adminResponse = _mapper.Map<AdminResponse>(existingAdmin);
                 return adminResponse;
             }
-            catch (Exception ex)
+            catch (CustomException.InternalServerErrorException ex)
             {
-                throw ex;
+                throw new CustomException.InternalServerErrorException("An error occurred during data processing.", ex);
             }
         }
 
@@ -199,13 +168,6 @@ namespace GaHipHop_Service.Service
                 if (!long.TryParse(accountId, out long Id))
                 {
                     throw new CustomException.ForbbidenException("User ID claim invalid.");
-                }
-
-                var checkmanager = _unitOfWork.AdminRepository.Get(a => a.Id == Id).FirstOrDefault();
-
-                if (checkmanager == null || checkmanager.RoleId != 2)
-                {
-                    throw new CustomException.ForbbidenException("you don't have permission to use it.");
                 }
 
                 var admin = _unitOfWork.AdminRepository.GetByID(id);

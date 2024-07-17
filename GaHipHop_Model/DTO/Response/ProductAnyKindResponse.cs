@@ -1,5 +1,4 @@
-﻿using GaHipHop_Repository.Entity;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -7,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace GaHipHop_Model.DTO.Response
 {
-    public class ProductResponse
+    public class ProductAnyKindResponse
     {
         public long Id { get; set; }
 
@@ -15,15 +14,9 @@ namespace GaHipHop_Model.DTO.Response
 
         public long DiscountId { get; set; }
 
-        public float Percent { get; set; }
-
         public long CategoryId { get; set; }
 
         public string ProductName { get; set; }
-
-        public string Image {  get; set; }
-
-        public string ColorName { get; set; }
 
         public string ProductDescription { get; set; }
 
@@ -38,5 +31,11 @@ namespace GaHipHop_Model.DTO.Response
         public DateTime ModifiedDate { get; set; }
 
         public bool Status { get; set; }
+
+        public CategoryResponse Category { get; set; }
+
+        public DiscountResponse Discount { get; set; }
+
+        public List<KindResponse> Kinds { get; set; }
     }
 }

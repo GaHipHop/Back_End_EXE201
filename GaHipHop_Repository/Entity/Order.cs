@@ -12,7 +12,7 @@ namespace GaHipHop_Repository.Entity
 
         public long UserId { get; set; }
 
-        public long AdminId { get; set; }
+        public long? AdminId { get; set; }
 
         public string OrderRequirement { get; set; }
 
@@ -31,5 +31,7 @@ namespace GaHipHop_Repository.Entity
 
         [ForeignKey("AdminId")]
         public virtual Admin Admin { get; set; }
+
+        public virtual ICollection<OrderDetails> OrderDetails { get; set; } = new List<OrderDetails>();
     }
 }

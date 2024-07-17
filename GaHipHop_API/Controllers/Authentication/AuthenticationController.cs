@@ -2,6 +2,7 @@
 using GaHipHop_Model.DTO.Request;
 using GaHipHop_Service.Interfaces;
 using GaHipHop_Service.Service;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 
@@ -9,6 +10,7 @@ namespace GaHipHop_API.Controllers.Authentication
 {
     [Route("api/[controller]")]
     [ApiController]
+    [AllowAnonymous]
     public class AuthenticationController : BaseController
     {
         private readonly IAuthenticationService _authenticationService;

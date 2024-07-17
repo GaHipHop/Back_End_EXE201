@@ -10,8 +10,13 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Swashbuckle.AspNetCore.Filters;
+using Microsoft.AspNetCore.Mvc.Authorization;
+using Tools;
+using Tools.Quartz;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddInfrastructure();
 
 builder.Services.AddControllers();
 
@@ -25,7 +30,7 @@ builder.Services.AddSwaggerGen(options =>
 {
     options.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
     {
-        Description = "Standard Authorization header using the Bearer scheme (\"bearer {token}\")",
+        Description = "Standard Authorization header using the Bearer scheme (\"Bearer {token}\")",
         In = ParameterLocation.Header,
         Name = "Authorization",
         Type = SecuritySchemeType.ApiKey
@@ -63,6 +68,10 @@ builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<IDiscountService, DiscountService>();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
 builder.Services.AddScoped<IKindService, KindService>();
+
+builder.Services.AddScoped<IOrderService, OrderService>();
+
+builder.Services.AddScoped<IEmailService, EmailService>();
 /*builder.Services.AddSingleton<ICartService, CartService>();*/
 
 //Mapper
@@ -90,23 +99,35 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-var app = builder.Build();
-
 //Build CORS
-/*builder.Services.AddCors(p => p.AddPolicy("MyCors", build =>
+builder.Services.AddCors(p => p.AddPolicy("MyCors", build =>
 {
     // Dòng ở dưới là đường cứng
     //build.WithOrigins("https:localhost:3000", "https:localhost:7022");
 
     //Dòng dưới là nhận hết
     build.WithOrigins("*").AllowAnyMethod().AllowAnyHeader();
-}));*/
+}));
+
+var app = builder.Build();
+
+
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
+}
+else
+{
+    app.UseSwagger();
+    app.UseSwaggerUI(c =>
+    {
+        c.SwaggerEndpoint("/swagger/v1/swagger.json", "GaHipHop_API");
+        c.RoutePrefix = "";
+        c.EnableTryItOutByDefault();
+    });
 }
 app.UseAuthentication();
 app.UseHttpsRedirection();
