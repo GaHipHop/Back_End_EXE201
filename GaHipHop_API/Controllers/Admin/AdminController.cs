@@ -113,7 +113,7 @@ namespace GaHipHop_API.Controllers.Admin
             }
         }
 
-        [HttpDelete("deletetAdmin/{id}")]
+        [HttpDelete("deleteAdmin/{id}")]
         [Authorize]
         public async Task<IActionResult> DeleteAdmin(long id)
         {
