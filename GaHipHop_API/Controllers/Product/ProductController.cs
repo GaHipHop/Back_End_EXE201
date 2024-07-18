@@ -76,6 +76,10 @@ namespace GaHipHop_API.Controllers.Product
             {
                 return CustomResult(ex.Message, HttpStatusCode.NotFound);
             }
+            catch (CustomException.InvalidDataException ex)
+            {
+                return CustomResult(ex.Message, HttpStatusCode.BadRequest);
+            }
             catch (Exception ex)
             {
                 return CustomResult(ex.Message, HttpStatusCode.InternalServerError);

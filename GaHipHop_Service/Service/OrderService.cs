@@ -31,7 +31,7 @@ namespace GaHipHop_Service.Service
             _httpContextAccessor = httpContextAccessor;
             _emailService = emailService;
         }
-        public async Task<OrderResponse> CreateOrder(OrderRequest orderRequest)
+        /*public async Task<OrderResponse> CreateOrder(OrderRequest orderRequest)
         {
 
             Random rand = new Random();
@@ -58,7 +58,7 @@ namespace GaHipHop_Service.Service
             order.UserId = userInfo.Id;
             order.OrderRequirement = orderRequest.OrderRequirement;
             order.PaymentMethod = orderRequest.PaymentMethod;
-/*            order.AdminId = 1;*/
+*//*            order.AdminId = 1;*//*
 
             while (_unitOfWork.OrderRepository.Get(filter: cod => cod.OrderCode == order.OrderCode).Any())
             {
@@ -94,7 +94,65 @@ namespace GaHipHop_Service.Service
             _cartService.ClearCart();
 
             return await Task.FromResult(_mapper.Map<OrderResponse>(order));
+        }*/
+
+        public async Task<OrderResponse> CreateOrder(OrderRequest orderRequest)
+        {
+            Random rand = new Random();
+            int randomNumber = rand.Next(10000, 99999);
+
+            var userInfo = new UserInfo
+            {
+                UserName = orderRequest.UserName,
+                Email = orderRequest.Email,
+                Phone = orderRequest.Phone,
+                Address = orderRequest.Address,
+                Province = orderRequest.Province,
+                Wards = orderRequest.Wards
+            };
+            _unitOfWork.UserInfoRepository.Insert(userInfo);
+            _unitOfWork.Save();
+
+            var order = _mapper.Map<Order>(orderRequest);
+
+            var checkOrderCode = _unitOfWork.OrderRepository.Get(filter: cod => cod.OrderCode == order.OrderCode);
+
+            order.UserId = userInfo.Id;
+            order.OrderRequirement = orderRequest.OrderRequirement;
+            order.PaymentMethod = orderRequest.PaymentMethod;
+
+            while (_unitOfWork.OrderRepository.Get(filter: cod => cod.OrderCode == order.OrderCode).Any())
+            {
+                randomNumber = new Random().Next(10000, 99999);
+                order.OrderCode = "ORD" + randomNumber.ToString("D5");
+            }
+
+            order.OrderCode = "ORD" + randomNumber.ToString("D5");
+            order.CreateDate = DateTime.Now;
+            order.TotalPrice = orderRequest.CartItems.Sum(item => item.ProductPrice * item.Quantity);
+            order.Status = "Pending";
+
+            _unitOfWork.OrderRepository.Insert(order);
+            _unitOfWork.Save();
+
+            foreach (var cartItem in orderRequest.CartItems)
+            {
+                var orderDetail = new OrderDetails
+                {
+                    OrderId = order.Id,
+                    OrderPrice = cartItem.ProductPrice,
+                    OrderQuantity = cartItem.Quantity,
+                    KindId = cartItem.Id
+                };
+
+                _unitOfWork.OrderDetailsRepository.Insert(orderDetail);
+            }
+
+            _unitOfWork.Save();
+
+            return await Task.FromResult(_mapper.Map<OrderResponse>(order));
         }
+
 
         public async Task<bool> UpdateStatusOrderConfirmed(long id)
         {
