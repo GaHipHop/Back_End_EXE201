@@ -13,6 +13,13 @@ using Swashbuckle.AspNetCore.Filters;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using Tools;
 using Tools.Quartz;
+using Net.payOS;
+
+
+IConfiguration configuration = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build();
+PayOS payOS = new PayOS(configuration["Environment:PAYOS_CLIENT_ID"],
+    configuration["Environment:PAYOS_API_KEY"],
+    configuration["Environment:PAYOS_CHECKSUM_KEY"]);
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -74,6 +81,7 @@ builder.Services.AddScoped<IOrderService, OrderService>();
 builder.Services.AddScoped<IEmailService, EmailService>();
 /*builder.Services.AddSingleton<ICartService, CartService>();*/
 
+builder.Services.AddSingleton(payOS);
 //Mapper
 var config = new MapperConfiguration(cfg =>
 {
